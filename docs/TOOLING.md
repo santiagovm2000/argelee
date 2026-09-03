@@ -18,7 +18,14 @@ What to reach for, and when. Verified against the versions installed on 2026-09-
 | ----------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `chrome-devtools-mcp`   | `claude mcp add chrome-devtools -- npx -y chrome-devtools-mcp@latest` | Drives a real Chrome: screenshots at each breakpoint, console and network inspection, Core Web Vitals traces. This is how "fully responsive" and "good LCP" get _verified_ rather than asserted. The highest-value addition for a landing page. |
 | `@playwright/mcp`       | `claude mcp add playwright -- npx -y @playwright/mcp@latest`          | Accessibility-tree-based browser control. Better than DevTools MCP for repeatable interaction flows and for auditing semantics/ARIA. Some overlap — add it when the page grows real interaction.                                                |
-| `@upstash/context7-mcp` | `claude mcp add context7 -- npx -y @upstash/context7-mcp@latest`      | Version-accurate docs for libraries with no first-party MCP. Useful here for PrimeNG 22 and Transloco 8, whose APIs changed recently.                                                                                                           |
+| `@upstash/context7-mcp` | `claude mcp add context7 -- npx -y @upstash/context7-mcp@latest`      | Version-accurate docs for libraries with no first-party MCP. Note: its PrimeNG index currently stops at v20, so for v22 specifics prefer primeng.dev directly.                                                                                  |
+
+### Browser binary
+
+This machine has no Google Chrome, so both browser servers are pointed at Edge (Chromium 152,
+CDP 1.3) in `.mcp.json`: `chrome-devtools` via `--executablePath`, `playwright` via
+`--browser msedge`. If Chrome ever gets installed, drop both flags — they are the only reason
+those entries carry arguments.
 
 Not wanted on this project: the Figma MCP.
 
