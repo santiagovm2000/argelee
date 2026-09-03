@@ -80,8 +80,13 @@ There is no Node server. `app.config.server.ts` swaps the Transloco loader for o
 locale JSON directly, because during prerender there is no HTTP server to fetch it from. Without
 that swap the prerendered HTML would ship with empty strings and the page would have no SEO content.
 
-Adding a route that must be prerendered: add it to the feature's routes file. `app.routes.server.ts`
-prerenders everything by default.
+Routes are per-language: `app.routes.ts` builds one tree per entry in `SUPPORTED_LANGUAGES`, with
+the default language at the root and the rest path-prefixed (`/en`). A `CanActivateFn` applies the
+route's language before render, so each prerendered file carries the right `<html lang>` and copy.
+
+Adding a route that must be prerendered: add it to the feature's routes file — it is picked up for
+every language automatically. `app.routes.server.ts` prerenders everything by default. See
+`docs/SEO.md` for why one-language routes are forbidden.
 
 ## The Tailwind / PrimeNG seam
 

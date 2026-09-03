@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { ROUTE_LINKS } from '../../core/config/routes';
 import { T } from '../../core/i18n/translation-keys.generated';
+import { LanguageService } from '../../core/i18n/language.service';
 
 @Component({
   selector: 'arg-not-found-page',
@@ -11,5 +11,5 @@ import { T } from '../../core/i18n/translation-keys.generated';
 })
 export class NotFoundPage {
   protected readonly t = T;
-  protected readonly links = ROUTE_LINKS;
+  protected readonly language = inject(LanguageService);
 }

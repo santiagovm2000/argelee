@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "bun run license && ng serve",
-    "build": "bun run license && ng build",
+    "build": "bun run license && ng build && bun run sitemap",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint .",
@@ -19,7 +19,8 @@
     "images": "bun run scripts/images.ts",
     "check:templates": "bun run scripts/check-templates.ts",
     "verify": "bun run i18n:check && bun run contrast && bun run check:templates && bun run check:structure && bun run lint && bun run test && bun run build",
-    "check:structure": "bun run scripts/check-structure.ts"
+    "check:structure": "bun run scripts/check-structure.ts",
+    "sitemap": "bun run scripts/sitemap.ts"
   },
   "private": true,
   "packageManager": "bun@1.3.10",

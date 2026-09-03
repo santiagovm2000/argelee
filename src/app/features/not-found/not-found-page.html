@@ -5,7 +5,7 @@
     </h1>
     <p class="mt-4 text-body text-ink-muted">{{ translate(t.errors.notFound.body) }}</p>
     <a
-      [routerLink]="links.home"
+      [routerLink]="language.homeUrl()"
       class="duration-quick mt-8 rounded-control bg-accent px-5 py-2.5 text-body-sm font-medium text-accent-ink transition-colors hover:bg-accent-hover"
     >
       {{ translate(t.errors.notFound.action) }}

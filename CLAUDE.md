@@ -42,7 +42,10 @@ These are project law. If a change would break one, stop and say so instead of w
 11. **All tests live in `tests/`.** One folder, mirroring the source tree, never a spec file
     sitting next to the code it covers. Import through the path aliases (`@core/...`).
     Schematics are configured with `skipTests: true` so generators cannot scatter them.
-12. **Conventional Commits, always.** `feat:`, `fix:`, `refactor:`, `style:`, `docs:`, `chore:`,
+12. **Every page exists in every language.** Routes are per-language (`/` es, `/en` en). Never add
+    a route to one language only — it breaks the reciprocal hreflang set. Every page calls
+    `SeoService.apply()` with typed keys and its path `segments`. See `docs/SEO.md`.
+13. **Conventional Commits, always.** `feat:`, `fix:`, `refactor:`, `style:`, `docs:`, `chore:`,
     `test:`, `perf:`, `build:`, `ci:`. Scope when it helps: `feat(landing): add pricing section`.
 
 ## Angular rules
@@ -75,6 +78,7 @@ bun run i18n           # regenerate typed translation keys after editing a local
 bun run images         # regenerate responsive AVIF derivatives + manifest
 bun run palette        # re-derive the colour scale after changing the brand hex
 bun run contrast       # WCAG AA check on the token pairings
+bun run sitemap        # regenerate sitemap.xml from the prerendered routes (runs inside build)
 bun run check:templates # no hardcoded text, no native CSS in templates
 bun run check:structure # tests only in tests/, no project name in a filename
 bun run test           # vitest, reads only from tests/

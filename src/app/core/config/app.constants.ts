@@ -1,6 +1,5 @@
 export const STORAGE_KEYS = {
   theme: 'argelee.theme',
-  language: 'argelee.language',
 } as const;
 
 export const DARK_THEME_CLASS = 'arg-dark';

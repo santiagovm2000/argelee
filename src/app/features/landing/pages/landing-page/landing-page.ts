@@ -2,7 +2,6 @@ import { Component, inject, type OnInit } from '@angular/core';
 import { HeroSection } from '../../sections/hero-section/hero-section';
 import { SeoService } from '../../../../core/seo/seo.service';
 import { T } from '../../../../core/i18n/translation-keys.generated';
-import { ROUTE_LINKS } from '../../../../core/config/routes';
 
 @Component({
   selector: 'arg-landing-page',
@@ -16,7 +15,6 @@ export class LandingPage implements OnInit {
     this.seo.apply({
       titleKey: T.meta.home.title,
       descriptionKey: T.meta.home.description,
-      path: ROUTE_LINKS.home,
     });
   }
 }

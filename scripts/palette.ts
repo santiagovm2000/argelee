@@ -44,19 +44,19 @@ function hexToOklch(hex: string): Oklch {
 
 const round = (value: number, places: number): number => Number(value.toFixed(places));
 
-/** Lightness targets per step, and how much of the base chroma each step keeps. */
-const STEPS: readonly (readonly [name: number, lightness: number, chromaRatio: number])[] = [
-  [50, 0.975, 0.12],
-  [100, 0.945, 0.24],
-  [200, 0.895, 0.45],
-  [300, 0.835, 0.68],
-  [400, 0.775, 0.9],
-  [500, 0.71, 1.0],
-  [600, 0.63, 0.98],
-  [700, 0.53, 0.88],
-  [800, 0.43, 0.74],
-  [900, 0.34, 0.58],
-  [950, 0.24, 0.42],
+/** Step 500 is anchored to BRAND_HEX itself; the rest ramp around it. */
+const STEPS: readonly (readonly [name: number, lightness: number | null, chromaRatio: number])[] = [
+  [50, 0.98, 0.12],
+  [100, 0.955, 0.24],
+  [200, 0.918, 0.45],
+  [300, 0.872, 0.68],
+  [400, 0.825, 0.88],
+  [500, null, 1.0],
+  [600, 0.7, 0.99],
+  [700, 0.6, 0.92],
+  [800, 0.49, 0.8],
+  [900, 0.38, 0.64],
+  [950, 0.26, 0.46],
 ];
 
 const base = hexToOklch(BRAND_HEX);
@@ -66,8 +66,10 @@ console.log(
   `/* Brand scale derived from ${BRAND_HEX} (oklch L ${round(base.l, 3)} C ${round(base.c, 3)} H ${hue}) */`,
 );
 for (const [name, lightness, chromaRatio] of STEPS) {
+  const l = lightness ?? round(base.l, 3);
+  const anchor = lightness === null ? ' /* BRAND_HEX exactly */' : '';
   console.log(
-    `  --color-brand-${name}: oklch(${lightness} ${round(base.c * chromaRatio, 3)} ${hue});`,
+    `  --color-brand-${name}: oklch(${l} ${round(base.c * chromaRatio, 3)} ${hue});${anchor}`,
   );
 }
 

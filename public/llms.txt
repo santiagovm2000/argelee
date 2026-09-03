@@ -1,0 +1,18 @@
+# Argelee
+
+> Marketing landing page for Argelee. Static, prerendered, available in Spanish and English.
+
+Argelee's site is a single landing page served as static HTML. Spanish is the default
+language and lives at the root; English lives under /en. Both are fully prerendered, so
+the complete content is present in the initial HTML response without executing JavaScript.
+
+## Pages
+
+- [Argelee (Español)](https://argelee.com/): Landing page, Spanish.
+- [Argelee (English)](https://argelee.com/en): Landing page, English.
+
+## Notes
+
+- Canonical URLs and reciprocal hreflang annotations are published on every page.
+- Structured data (Organization, WebSite, WebPage) is embedded as JSON-LD.
+- There is no API and no user-generated content.

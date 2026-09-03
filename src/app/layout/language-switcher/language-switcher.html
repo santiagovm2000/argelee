@@ -5,19 +5,19 @@
     [attr.aria-label]="translate(t.a11y.changeLanguage)"
   >
     @for (code of language.available; track code) {
-      <button
-        type="button"
+      <a
+        [routerLink]="language.alternates()[code]"
+        [attr.hreflang]="code"
+        [attr.aria-current]="language.current() === code ? 'true' : null"
         class="duration-quick rounded-[0.375rem] px-2.5 py-1 text-caption font-medium uppercase transition-colors"
         [class.bg-accent]="language.current() === code"
         [class.text-accent-ink]="language.current() === code"
         [class.text-ink-muted]="language.current() !== code"
         [class.hover:text-ink]="language.current() !== code"
-        [attr.aria-current]="language.current() === code ? 'true' : null"
-        (click)="select(code)"
       >
         {{ code }}
         <span class="sr-only">{{ translate(labelKey(code)) }}</span>
-      </button>
+      </a>
     }
   </div>
 </ng-container>

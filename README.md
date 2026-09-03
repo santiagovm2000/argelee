@@ -37,7 +37,8 @@ bun start                # http://localhost:4200
 `bun run build` produces plain static files. Point any static host (Vercel, Netlify, Cloudflare
 Pages, S3, nginx) at `dist/argelee/browser`. There is no server to run.
 
-Set `PRIMENG_LICENSE_KEY` in the host's environment so the build can inject it.
+Set `PRIMENG_LICENSE_KEY` in the host's environment so the build can inject it. Enable Brotli/gzip
+and long-lived caching on hashed assets — see `docs/SEO.md`.
 
 ## Documentation
 

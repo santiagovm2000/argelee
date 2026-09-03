@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { LanguageSwitcher } from '../language-switcher/language-switcher';
 import { ThemeToggle } from '../theme-toggle/theme-toggle';
-import { ROUTE_LINKS } from '../../core/config/routes';
 import { SITE } from '../../core/config/app.constants';
+import { LanguageService } from '../../core/i18n/language.service';
 import { T } from '../../core/i18n/translation-keys.generated';
 
 @Component({
@@ -14,6 +14,6 @@ import { T } from '../../core/i18n/translation-keys.generated';
 })
 export class SiteHeader {
   protected readonly t = T;
-  protected readonly links = ROUTE_LINKS;
+  protected readonly language = inject(LanguageService);
   protected readonly site = SITE;
 }
