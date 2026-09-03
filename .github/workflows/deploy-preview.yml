@@ -38,6 +38,10 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      # build-config.generated.ts is git-ignored, and lint/test are type-aware and
+      # import it, so it has to exist before any check runs.
+      - run: bun run config
+
       # The same gates as `bun run verify`, minus its build — the Pages build below
       # replaces it because it needs a different base href.
       - run: bun run i18n:check
