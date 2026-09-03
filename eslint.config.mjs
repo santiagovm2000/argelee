@@ -132,6 +132,15 @@ export default tseslint.config(
     rules: { '@typescript-eslint/no-magic-numbers': 'off' },
   },
 
+  // Assertions are literal by nature.
+  {
+    files: ['tests/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-magic-numbers': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
+  },
+
   // Scripts run in Bun, outside the app tsconfig.
   {
     files: ['scripts/**/*.ts'],

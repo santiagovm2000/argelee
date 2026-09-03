@@ -4,7 +4,7 @@ import {
   isSupportedLanguage,
   LANGUAGE_TAGS,
   SUPPORTED_LANGUAGES,
-} from './i18n.constants';
+} from '@core/i18n/i18n.constants';
 
 describe('i18n constants', () => {
   it('narrows a supported code and rejects anything else', () => {

@@ -125,6 +125,26 @@ A number or string that carries meaning gets a name. Scope decides where:
 `0`, `1` and `-1` are exempt. Route paths live in `core/config/routes.ts` and templates bind
 `[routerLink]="links.home"`, never a literal `"/"`.
 
+## Tests
+
+Every test lives under `tests/`, mirroring the source tree. Nothing is colocated with source.
+
+```
+src/app/core/i18n/i18n.constants.ts   ->   tests/core/i18n/i18n.constants.spec.ts
+src/app/features/landing/...          ->   tests/features/landing/...
+```
+
+Import the code under test through the path aliases, never a relative climb:
+
+```ts
+import { isSupportedLanguage } from '@core/i18n/i18n.constants';
+```
+
+The runner is configured with `include: ["../tests/**/*.spec.ts"]` — the glob resolves against
+`sourceRoot` (`src/`), not the project root, which is why it starts with `../`. Schematics run with
+`skipTests: true`, so `ng generate` never drops a spec beside the file it created; write the spec in
+`tests/` yourself. `bun run check:structure` fails the build if a spec appears anywhere else.
+
 ## Commits
 
 Conventional Commits: `feat:`, `fix:`, `refactor:`, `style:`, `docs:`, `chore:`, `test:`.

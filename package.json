@@ -18,7 +18,8 @@
     "contrast": "bun run scripts/contrast.ts",
     "images": "bun run scripts/images.ts",
     "check:templates": "bun run scripts/check-templates.ts",
-    "verify": "bun run i18n:check && bun run contrast && bun run check:templates && bun run lint && bun run build"
+    "verify": "bun run i18n:check && bun run contrast && bun run check:templates && bun run check:structure && bun run lint && bun run test && bun run build",
+    "check:structure": "bun run scripts/check-structure.ts"
   },
   "private": true,
   "packageManager": "bun@1.3.10",

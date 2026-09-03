@@ -65,7 +65,8 @@ public/
   images/                        generated AVIF derivatives (committed)
 
 assets-src/images/               original images, source for the pipeline
-scripts/                         i18n, palette, contrast, images, license, templates
+tests/                           every spec, mirroring src/app (no colocated tests)
+scripts/                         i18n, palette, contrast, images, license, checks
 docs/                            this folder
 ```
 

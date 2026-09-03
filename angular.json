@@ -13,19 +13,19 @@
           "style": "none",
           "inlineTemplate": false,
           "inlineStyle": false,
-          "skipTests": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "skipTests": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "skipTests": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "skipTests": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "skipTests": false
+          "skipTests": true
         }
       },
       "root": "",
@@ -87,7 +87,10 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "include": ["../tests/**/*.spec.ts"]
+          }
         }
       }
     }

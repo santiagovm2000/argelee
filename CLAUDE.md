@@ -39,7 +39,10 @@ These are project law. If a change would break one, stop and say so instead of w
 9. **Accessibility is a floor, not a feature.** WCAG AA contrast, visible keyboard focus,
    `prefers-reduced-motion` respected, real semantics. `bun run contrast` must pass.
 10. **Never put the project name in a filename.** `theme.preset.ts`, not `argelee.preset.ts`.
-11. **Conventional Commits, always.** `feat:`, `fix:`, `refactor:`, `style:`, `docs:`, `chore:`,
+11. **All tests live in `tests/`.** One folder, mirroring the source tree, never a spec file
+    sitting next to the code it covers. Import through the path aliases (`@core/...`).
+    Schematics are configured with `skipTests: true` so generators cannot scatter them.
+12. **Conventional Commits, always.** `feat:`, `fix:`, `refactor:`, `style:`, `docs:`, `chore:`,
     `test:`, `perf:`, `build:`, `ci:`. Scope when it helps: `feat(landing): add pricing section`.
 
 ## Angular rules
@@ -66,13 +69,15 @@ to this brand and defensible. The palette is derived from the primary `#3AC5F7`;
 bun install
 bun start              # dev server
 bun run build          # prerendered static build -> dist/argelee/browser
-bun run verify         # i18n + contrast + templates + lint + build. Run before every commit.
+bun run verify         # i18n + contrast + templates + structure + lint + test + build.
 
 bun run i18n           # regenerate typed translation keys after editing a locale JSON
 bun run images         # regenerate responsive AVIF derivatives + manifest
 bun run palette        # re-derive the colour scale after changing the brand hex
 bun run contrast       # WCAG AA check on the token pairings
 bun run check:templates # no hardcoded text, no native CSS in templates
+bun run check:structure # tests only in tests/, no project name in a filename
+bun run test           # vitest, reads only from tests/
 ```
 
 `bun run verify` is the gate. A change is not done until it passes.
