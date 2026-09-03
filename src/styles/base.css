@@ -91,6 +91,15 @@
     text-wrap: pretty;
   }
 
+  /* Tailwind v4's preflight leaves buttons on the default arrow, unlike v3.
+     Anything that behaves like a button gets the pointer here, so it is never
+     something a template has to remember. Disabled controls keep the arrow. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary {
+    cursor: pointer;
+  }
+
   /* Keyboard focus is always visible. Restyle it here, never remove it. */
   :focus-visible {
     outline: 2px solid var(--color-focus-ring);

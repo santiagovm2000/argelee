@@ -79,6 +79,9 @@ Mobile-first, no exceptions. Every screen works from 320px.
 - Verify at 360, 768, 1280 and 1920. Check that nothing overflows horizontally at 320.
 - Tailwind breakpoints match `BREAKPOINTS` in `core/config/app.constants.ts`: 640 / 768 / 1024 / 1280.
 - Touch targets are at least 44x44 CSS px.
+- Anything clickable shows `cursor: pointer`. Tailwind v4's preflight dropped this for `button`
+  (v3 had it), so `base.css` restores it for `button`, `[role="button"]` and `summary`, excluding
+  disabled controls. Do not add `cursor-pointer` in templates — it is already global.
 
 ## Accessibility floor
 

@@ -24,6 +24,8 @@ These are project law. If a change would break one, stop and say so instead of w
 2. **No native CSS in HTML.** No `style="..."`, no `[style.x]`, no `[ngStyle]`. Use Tailwind
    utilities; if a utility genuinely cannot express it, add a class in `src/styles/` and use that.
    Components have **no** stylesheet file — the schematics are configured with `style: none`.
+   Every button shows `cursor: pointer` — Tailwind v4's preflight does not, so `base.css` sets it
+   for `button`, `[role="button"]` and `summary`. It is global: never repeat it per button.
 3. **No hardcoded text, in any language.** Every string a visitor can read comes from
    `public/i18n/<lang>.json` through a typed key from `T`. One JSON file per language, no splitting.
 4. **No magic values.** Numbers and strings that carry meaning get a name in
