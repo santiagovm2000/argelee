@@ -72,13 +72,14 @@ to this brand and defensible. The palette is derived from the primary `#3AC5F7`;
 bun install
 bun start              # dev server
 bun run build          # prerendered static build -> dist/argelee/browser
+bun run build:pages    # same, with the /argelee/ base href for the GitHub Pages preview
 bun run verify         # i18n + contrast + templates + structure + lint + test + build.
 
 bun run i18n           # regenerate typed translation keys after editing a locale JSON
 bun run images         # regenerate responsive AVIF derivatives + manifest
 bun run palette        # re-derive the colour scale after changing the brand hex
 bun run contrast       # WCAG AA check on the token pairings
-bun run sitemap        # regenerate sitemap.xml from the prerendered routes (runs inside build)
+bun run finalize       # sitemap + robots + llms + 404.html (runs inside build)
 bun run check:templates # no hardcoded text, no native CSS in templates
 bun run check:structure # tests only in tests/, no project name in a filename
 bun run test           # vitest, reads only from tests/
@@ -92,4 +93,6 @@ bun run test           # vitest, reads only from tests/
   configured schematics apply.
 - After editing a locale JSON, run `bun run i18n` — a missing key in one language fails the build.
 - Never edit a `*.generated.ts` file. Change its source and re-run the generator.
-- `.env` holds `PRIMENG_LICENSE_KEY` and is git-ignored. Never commit a key.
+- `.env` holds `PRIMENG_LICENSE_KEY`, `SITE_ORIGIN` and `SITE_INDEXABLE`, and is git-ignored.
+  Never commit a key — and never treat a value in the bundle as secret: minification is
+  not encryption, so anything the browser needs is public.

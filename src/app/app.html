@@ -1,7 +1,8 @@
 <!-- `*transloco` waits for the active language to load, then re-renders on switch. -->
 <ng-container *transloco="let translate">
   <a
-    href="#main"
+    [routerLink]="[]"
+    fragment="main"
     class="sr-only rounded-control bg-accent px-4 py-2 text-accent-ink focus-visible:not-sr-only focus-visible:absolute focus-visible:top-4 focus-visible:left-4 focus-visible:z-50"
   >
     {{ translate(t.a11y.skipToContent) }}

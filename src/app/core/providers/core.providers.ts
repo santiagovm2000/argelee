@@ -6,7 +6,7 @@ import {
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from '../../app.routes';
-import { PRIMENG_LICENSE_KEY } from '../config/license.generated';
+import { PRIMENG_LICENSE_KEY } from '../config/build-config.generated';
 import { provideI18n } from '../i18n/i18n.providers';
 import { provideImages } from '../images/image.loader';
 import { ThemePreset } from '../theme/theme.preset';

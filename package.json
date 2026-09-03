@@ -3,15 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "bun run license && ng serve",
-    "build": "bun run license && ng build && bun run sitemap",
+    "start": "bun run config && ng serve",
+    "build": "bun run config && ng build && bun run finalize",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "license": "bun run scripts/license.ts",
     "i18n": "bun run scripts/i18n.ts",
     "i18n:check": "bun run scripts/i18n.ts --check",
     "palette": "bun run scripts/palette.ts",
@@ -20,7 +19,9 @@
     "check:templates": "bun run scripts/check-templates.ts",
     "verify": "bun run i18n:check && bun run contrast && bun run check:templates && bun run check:structure && bun run lint && bun run test && bun run build",
     "check:structure": "bun run scripts/check-structure.ts",
-    "sitemap": "bun run scripts/sitemap.ts"
+    "config": "bun run scripts/config.ts",
+    "build:pages": "bun run config && ng build --configuration production,pages && bun run finalize",
+    "finalize": "bun run scripts/finalize.ts"
   },
   "private": true,
   "packageManager": "bun@1.3.10",

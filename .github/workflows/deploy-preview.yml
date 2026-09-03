@@ -1,0 +1,64 @@
+# Publishes the prerendered build to GitHub Pages as a PUBLIC PREVIEW.
+#
+# The preview is deliberately not indexable: SITE_INDEXABLE=false makes the build
+# emit `robots.txt` with `Disallow: /` and a `noindex, nofollow` meta on every
+# page. Without that, the temporary github.io URL competes with the real domain
+# as duplicate content once the site launches.
+name: Deploy preview to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race; queue instead of cancelling a half-finished one.
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PRIMENG_LICENSE_KEY: ${{ secrets.PRIMENG_LICENSE_KEY }}
+      # Includes the /argelee subpath: canonical, hreflang and sitemap URLs derive from it.
+      SITE_ORIGIN: https://santiagovm2000.github.io/argelee
+      SITE_INDEXABLE: 'false'
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.10
+
+      - run: bun install --frozen-lockfile
+
+      # The same gates as `bun run verify`, minus its build — the Pages build below
+      # replaces it because it needs a different base href.
+      - run: bun run i18n:check
+      - run: bun run contrast
+      - run: bun run check:templates
+      - run: bun run check:structure
+      - run: bun run lint
+      - run: bun run test
+
+      - run: bun run build:pages
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist/argelee/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

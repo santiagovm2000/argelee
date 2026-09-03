@@ -3,6 +3,7 @@ import { inject, Service } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { TranslocoService } from '@jsverse/transloco';
 import { SITE } from '../config/app.constants';
+import { DEPLOYMENT } from '../config/build-config.generated';
 import { localizedUrl } from '../config/routes';
 import { LANGUAGE_TAGS, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '../i18n/i18n.constants';
 import { LanguageService } from '../i18n/language.service';
@@ -35,6 +36,7 @@ export class SeoService {
 
     this.title.setTitle(pageTitle);
     this.meta.updateTag({ name: 'description', content: description });
+    this.setIndexability();
 
     this.meta.updateTag({ property: 'og:type', content: 'website' });
     this.meta.updateTag({ property: 'og:site_name', content: SITE.name });
@@ -64,7 +66,20 @@ export class SeoService {
   }
 
   private absolute(path: string): string {
-    return `${SITE.origin}${path}`;
+    return `${DEPLOYMENT.origin}${path}`;
+  }
+
+  /**
+   * Keeps preview deployments out of the index. A public preview that gets crawled
+   * competes with the real domain as duplicate content, and the temporary URL can
+   * outrank it.
+   */
+  private setIndexability(): void {
+    if (DEPLOYMENT.indexable) {
+      this.meta.removeTag("name='robots'");
+      return;
+    }
+    this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
   }
 
   /** Tells search engines which URL is authoritative for this page. */
@@ -114,16 +129,16 @@ export class SeoService {
       '@graph': [
         {
           '@type': 'Organization',
-          '@id': `${SITE.origin}/#organization`,
+          '@id': `${DEPLOYMENT.origin}/#organization`,
           name: SITE.name,
-          url: SITE.origin,
+          url: DEPLOYMENT.origin,
         },
         {
           '@type': 'WebSite',
-          '@id': `${SITE.origin}/#website`,
+          '@id': `${DEPLOYMENT.origin}/#website`,
           name: SITE.name,
-          url: SITE.origin,
-          publisher: { '@id': `${SITE.origin}/#organization` },
+          url: DEPLOYMENT.origin,
+          publisher: { '@id': `${DEPLOYMENT.origin}/#organization` },
           inLanguage: LANGUAGE_TAGS[this.language.current()],
         },
         {
@@ -131,7 +146,7 @@ export class SeoService {
           url,
           name: pageTitle,
           description,
-          isPartOf: { '@id': `${SITE.origin}/#website` },
+          isPartOf: { '@id': `${DEPLOYMENT.origin}/#website` },
           inLanguage: LANGUAGE_TAGS[this.language.current()],
         },
       ],

@@ -37,8 +37,20 @@ bun start                # http://localhost:4200
 `bun run build` produces plain static files. Point any static host (Vercel, Netlify, Cloudflare
 Pages, S3, nginx) at `dist/argelee/browser`. There is no server to run.
 
-Set `PRIMENG_LICENSE_KEY` in the host's environment so the build can inject it. Enable Brotli/gzip
-and long-lived caching on hashed assets — see `docs/SEO.md`.
+Set these in the host's environment:
+
+| Variable              | Purpose                                                  |
+| --------------------- | -------------------------------------------------------- |
+| `PRIMENG_LICENSE_KEY` | PrimeNG licence, injected at build time                  |
+| `SITE_ORIGIN`         | absolute origin for canonical, hreflang and sitemap URLs |
+| `SITE_INDEXABLE`      | `false` on previews — emits `noindex` and `Disallow: /`  |
+
+Enable Brotli/gzip and long-lived caching on hashed assets — see `docs/SEO.md`.
+
+### Public preview
+
+Every push to `main` publishes a non-indexable preview to GitHub Pages at
+<https://santiagovm2000.github.io/argelee/> via `.github/workflows/deploy-preview.yml`.
 
 ## Documentation
 

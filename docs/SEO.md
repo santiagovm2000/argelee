@@ -75,8 +75,9 @@ new page cannot go missing. Each page is emitted once per language with `xhtml:l
 
 ## Still open before launch
 
-- **`SITE.origin` is `https://argelee.com`.** Every canonical, hreflang and sitemap URL derives from
-  it. Change it in `core/config/app.constants.ts` and re-run `bun run sitemap`.
+- **Set `SITE_ORIGIN` for production.** Every canonical, hreflang and sitemap URL derives from it,
+  including any subpath. It defaults to `http://localhost:4200`, so a build without it is not
+  publishable.
 - **No `og:image`.** `SeoService` supports one (`image`, sized by `OG_IMAGE_SIZE`, 1200x630), but no
   card exists yet. Shared links currently render without a preview image. Add
   `public/images/og/<page>.png` when the visual identity is decided.

@@ -9,7 +9,9 @@ export const LANGUAGE_TAGS: Readonly<Record<SupportedLanguage, string>> = {
   en: 'en-US',
 };
 
-export const TRANSLATION_ASSET_PATH = '/i18n/';
+// Relative on purpose: the browser resolves it against <base href>, so it keeps
+// working when the site is served from a subpath (e.g. GitHub Pages project sites).
+export const TRANSLATION_ASSET_PATH = 'i18n/';
 
 /** Narrows an arbitrary string to a language the app actually ships. */
 export function isSupportedLanguage(value: string): value is SupportedLanguage {

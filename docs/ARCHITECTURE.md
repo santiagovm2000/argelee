@@ -64,9 +64,11 @@ public/
   i18n/es.json  i18n/en.json     one file per language, fetched at runtime
   images/                        generated AVIF derivatives (committed)
 
+.github/workflows/               CI: builds and publishes the GitHub Pages preview
+
 assets-src/images/               original images, source for the pipeline
 tests/                           every spec, mirroring src/app (no colocated tests)
-scripts/                         i18n, palette, contrast, images, license, checks
+scripts/                         config, i18n, palette, contrast, images, finalize, checks
 docs/                            this folder
 ```
 
@@ -122,4 +124,4 @@ Never edited by hand; each has one generator and one source.
 | `shared/images/image-manifest.generated.ts` | `assets-src/images/`          | `bun run images`  |
 | `core/config/license.generated.ts`          | `PRIMENG_LICENSE_KEY` env var | `bun run license` |
 
-The license file is git-ignored and written before every `start` and `build`.
+`build-config.generated.ts` is git-ignored and written before every `start` and `build`.

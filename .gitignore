@@ -49,7 +49,7 @@ Thumbs.db
 !.env.example
 
 # Generated at build time — never commit
-src/app/core/config/license.generated.ts
+src/app/core/config/build-config.generated.ts
 
 # Browser MCP scratch output (snapshots, console logs, screenshots)
 .playwright-mcp/

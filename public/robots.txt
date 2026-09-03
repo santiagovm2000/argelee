@@ -1,7 +1,0 @@
-# Argelee — https://argelee.com
-# Every route is prerendered static HTML, so crawlers need no JavaScript.
-
-User-agent: *
-Allow: /
-
-Sitemap: https://argelee.com/sitemap.xml

@@ -13,6 +13,5 @@ export const BREAKPOINTS = {
 
 export const SITE = {
   name: 'Argelee',
-  origin: 'https://argelee.com',
   twitterHandle: '@argelee',
 } as const;
