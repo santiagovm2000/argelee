@@ -1,0 +1,95 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "bun"
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "argelee": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "none",
+          "inlineTemplate": false,
+          "inlineStyle": false,
+          "skipTests": false
+        },
+        "@schematics/angular:directive": {
+          "skipTests": false
+        },
+        "@schematics/angular:service": {
+          "skipTests": false
+        },
+        "@schematics/angular:guard": {
+          "skipTests": false
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": false
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "arg",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": ["src/styles/styles.css"],
+            "server": "src/main.server.ts",
+            "outputMode": "static",
+            "security": {
+              "allowedHosts": []
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "580kB",
+                  "maximumError": "700kB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "argelee:build:production"
+            },
+            "development": {
+              "buildTarget": "argelee:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test"
+        }
+      }
+    }
+  }
+}

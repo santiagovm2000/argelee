@@ -1,0 +1,12 @@
+{
+  "printWidth": 100,
+  "singleQuote": true,
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/styles/styles.css",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": { "parser": "angular" }
+    }
+  ]
+}

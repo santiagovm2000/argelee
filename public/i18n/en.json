@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "home": {
+      "title": "Argelee",
+      "description": "Page description for search engines and social cards."
+    }
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "mainNavigation": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "changeLanguage": "Change language",
+    "switchToDarkTheme": "Switch to dark theme",
+    "switchToLightTheme": "Switch to light theme"
+  },
+  "common": {
+    "actions": {
+      "back": "Back",
+      "retry": "Try again",
+      "close": "Close"
+    },
+    "language": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "navigation": {
+    "home": "Home"
+  },
+  "landing": {
+    "hero": {
+      "headline": "Argelee",
+      "subheadline": "Replace this copy once the landing message is defined.",
+      "primaryAction": "Get started",
+      "secondaryAction": "See how it works"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "This page doesn't exist",
+      "body": "The link you followed is broken, or the page moved.",
+      "action": "Go to home"
+    }
+  }
+}

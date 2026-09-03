@@ -1,0 +1,11 @@
+/* Build-time scripts run in Bun, not in the browser, so they get their own project. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["bun"],
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "bundler"
+  },
+  "include": ["scripts/**/*.ts", "eslint.config.mjs"]
+}

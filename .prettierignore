@@ -1,0 +1,6 @@
+# Generated files are owned by their generator, not by prettier.
+*.generated.ts
+bun.lock
+dist
+.angular
+public/i18n

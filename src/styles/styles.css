@@ -1,0 +1,13 @@
+/* Layer order is load-bearing: PrimeNG must sit after base and before utilities,
+   or its component CSS outranks Tailwind utilities. See docs/ARCHITECTURE.md. */
+@layer theme, base, primeng, components, utilities;
+
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
+
+/* Must stay in sync with PRIMENG_DARK_MODE_SELECTOR in core/theme/theme.constants.ts. */
+@custom-variant dark (&:where(.arg-dark, .arg-dark *));
+
+@import './tokens.css';
+@import './base.css';

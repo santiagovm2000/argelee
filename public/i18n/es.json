@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "home": {
+      "title": "Argelee",
+      "description": "Descripción de la página para buscadores y redes sociales."
+    }
+  },
+  "a11y": {
+    "skipToContent": "Saltar al contenido",
+    "mainNavigation": "Navegación principal",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "changeLanguage": "Cambiar idioma",
+    "switchToDarkTheme": "Activar tema oscuro",
+    "switchToLightTheme": "Activar tema claro"
+  },
+  "common": {
+    "actions": {
+      "back": "Volver",
+      "retry": "Reintentar",
+      "close": "Cerrar"
+    },
+    "language": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "navigation": {
+    "home": "Inicio"
+  },
+  "landing": {
+    "hero": {
+      "headline": "Argelee",
+      "subheadline": "Reemplaza este texto cuando definamos el mensaje de la landing.",
+      "primaryAction": "Empezar",
+      "secondaryAction": "Ver cómo funciona"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "Esta página no existe",
+      "body": "El enlace que seguiste está roto o la página se movió.",
+      "action": "Ir al inicio"
+    }
+  }
+}

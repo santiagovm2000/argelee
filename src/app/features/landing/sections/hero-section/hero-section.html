@@ -1,0 +1,20 @@
+<ng-container *transloco="let translate">
+  <section class="mx-auto max-w-content px-6 py-24">
+    <h1 class="max-w-prose font-display text-display font-semibold text-ink">
+      {{ translate(t.landing.hero.headline) }}
+    </h1>
+
+    <p class="mt-6 max-w-prose text-body-lg text-ink-muted">
+      {{ translate(t.landing.hero.subheadline) }}
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center gap-3">
+      <p-button [label]="translate(t.landing.hero.primaryAction)" />
+      <p-button
+        [label]="translate(t.landing.hero.secondaryAction)"
+        severity="secondary"
+        [text]="true"
+      />
+    </div>
+  </section>
+</ng-container>
