@@ -50,3 +50,6 @@ Thumbs.db
 
 # Generated at build time — never commit
 src/app/core/config/license.generated.ts
+
+# Browser MCP scratch output (snapshots, console logs, screenshots)
+.playwright-mcp/
