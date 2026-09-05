@@ -18,7 +18,7 @@ export class LandingPage implements OnInit {
     this.seo.apply({
       titleKey: T.meta.home.title,
       descriptionKey: T.meta.home.description,
-      image: IMAGES.catalogTropicalFruitRing.social,
+      image: IMAGES.brandWordmark.social,
     });
   }
 }

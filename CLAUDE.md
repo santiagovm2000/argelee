@@ -93,6 +93,7 @@ bun run verify         # i18n + contrast + templates + structure + lint + test +
 bun run i18n           # regenerate typed translation keys after editing a locale JSON
 bun run images         # regenerate responsive AVIF derivatives + social cards + manifest
 bun run favicon        # regenerate favicon.svg / .ico / apple-touch-icon from the wordmark font
+bun run social-card    # redraw the brand card behind the home link preview, then run images
 bun run palette        # re-derive the colour scale after changing the brand hex
 bun run contrast       # WCAG AA check on the token pairings
 bun run finalize       # sitemap + robots + llms + 404.html (runs inside build)

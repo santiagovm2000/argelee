@@ -109,6 +109,11 @@ browser's colour scheme like the wordmark follows the site's), a transparent `fa
 `apple-touch-icon.png` on a pale brand tile because iOS refuses transparency. Re-run it after
 changing the wordmark font or the tokens.
 
+`bun run social-card` draws the brand card behind link previews of the home page: the wordmark
+outlined from the same file, in wine over the page surface with the ornament under it, at the Open
+Graph size, into `assets-src/images/brand/wordmark.png`. It then runs `bun run images`, so the card
+gets its `-social.jpg` and its manifest entry, `IMAGES.brandWordmark`. Pieces keep their own photo.
+
 - Output naming is `<name>-<width>w.avif` and `<name>-social.jpg`, driven by `IMAGE_WIDTHS` and
   `OG_IMAGE_SIZE`.
 - Manifest paths are relative (`images/catalog/...`) so they resolve against `<base href>` and

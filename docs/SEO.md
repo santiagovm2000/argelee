@@ -51,6 +51,8 @@ render, and writing the tags earlier would put a raw key into `<title>`.
 The social card is a JPEG, not AVIF: WhatsApp and Facebook do not render AVIF previews. The image
 pipeline emits `<name>-social.jpg` at `OG_IMAGE_SIZE` for every source image, so any manifest entry
 can be handed to `apply({ image })`.
+The home page hands it the brand card, `IMAGES.brandWordmark`, drawn by `bun run social-card`;
+each piece hands its own photo, so a shared piece previews as that piece.
 
 Adding a page:
 

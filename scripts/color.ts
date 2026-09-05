@@ -55,3 +55,12 @@ export function rgbToHex({ r, g, b }: Rgb): string {
       .padStart(HEX_WIDTH, '0');
   return '#' + channel(r) + channel(g) + channel(b);
 }
+
+/** The `#rrggbb` of a `--color-<name>` token in the given tokens.css source. */
+export function tokenHex(tokensCss: string, name: string): string {
+  const pattern = new RegExp('--color-' + name + ': *([^;]+);');
+  const match = pattern.exec(tokensCss);
+  const rgb = match?.[1] === undefined ? null : parseOklch(match[1]);
+  if (rgb === null) throw new Error('token --color-' + name + ' not found or not oklch()');
+  return rgbToHex(rgb);
+}

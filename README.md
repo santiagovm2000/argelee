@@ -31,6 +31,7 @@ bun start                # http://localhost:4200
 | `bun run i18n`              | Regenerates typed translation keys from `public/i18n/es.json`                    |
 | `bun run images`            | Builds responsive AVIF derivatives and social cards from `assets-src/`           |
 | `bun run favicon`           | Outlines the wordmark's "A" into `favicon.svg`, `favicon.ico` and the touch icon |
+| `bun run social-card`       | Draws the brand card behind the home page link preview, then runs `images`       |
 | `bun run palette`           | Re-derives the colour scale from the brand hex                                   |
 | `bun run contrast`          | WCAG AA check across every token pairing, both themes                            |
 

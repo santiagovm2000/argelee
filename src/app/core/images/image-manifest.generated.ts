@@ -14,6 +14,14 @@ export interface ResponsiveImage {
 }
 
 export const IMAGES = {
+  brandWordmark: {
+    path: 'images/brand/wordmark',
+    social: 'images/brand/wordmark-social.jpg',
+    width: 1200,
+    height: 630,
+    widths: [420, 640, 960],
+    placeholder: 'data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAABQAwCdASoUAAsAPu1kqU2ppaOiMAgBMB2JZwDImCHfuB5gAAD+8cTYyUXwDULHotBXAAAA',
+  },
   catalogGrapeBundt: {
     path: 'images/catalog/grape-bundt',
     social: 'images/catalog/grape-bundt-social.jpg',

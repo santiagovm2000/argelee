@@ -13,7 +13,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import * as fontkit from 'fontkit';
 import sharp from 'sharp';
-import { parseOklch, rgbToHex } from './color';
+import { tokenHex } from './color';
 
 const ROOT = resolve(import.meta.dir, '..');
 const FONT_FILE = join(ROOT, 'src', 'styles', 'fonts', 'parisienne-latin.woff2');
@@ -40,17 +40,12 @@ const ICO_BITS_PER_PIXEL = 32;
 
 const tokensCss = readFileSync(TOKENS_FILE, 'utf8');
 
-function tokenHex(name: string): string {
-  const pattern = new RegExp('--color-' + name + ': *([^;]+);');
-  const match = pattern.exec(tokensCss);
-  const rgb = match?.[1] === undefined ? null : parseOklch(match[1]);
-  if (rgb === null) throw new Error('token --color-' + name + ' not found or not oklch()');
-  return rgbToHex(rgb);
-}
-
 const colors = {
-  mark: { light: tokenHex(PALETTE.mark.light), dark: tokenHex(PALETTE.mark.dark) },
-  tile: tokenHex(PALETTE.tile),
+  mark: {
+    light: tokenHex(tokensCss, PALETTE.mark.light),
+    dark: tokenHex(tokensCss, PALETTE.mark.dark),
+  },
+  tile: tokenHex(tokensCss, PALETTE.tile),
 };
 
 const font = fontkit.openSync(FONT_FILE);
