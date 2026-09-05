@@ -1,19 +1,21 @@
 <ng-container *transloco="let translate">
   <div
-    class="flex items-center gap-0.5 rounded-control border border-line p-0.5"
+    class="flex h-11 items-stretch overflow-hidden rounded-control border border-current/30"
     role="group"
     [attr.aria-label]="translate(t.a11y.changeLanguage)"
   >
-    @for (code of language.available; track code) {
+    @for (code of language.available; track code; let first = $first) {
       <a
         [routerLink]="language.alternates()[code]"
         [attr.hreflang]="code"
         [attr.aria-current]="language.current() === code ? 'true' : null"
-        class="duration-quick rounded-[0.375rem] px-2.5 py-1 text-caption font-medium uppercase transition-colors"
-        [class.bg-accent]="language.current() === code"
-        [class.text-accent-ink]="language.current() === code"
-        [class.text-ink-muted]="language.current() !== code"
-        [class.hover:text-ink]="language.current() !== code"
+        class="inline-flex items-center px-3.5 text-label font-medium text-current uppercase transition-[opacity,background-color] duration-quick hover:bg-current/12"
+        [class.border-l]="!first"
+        [class.border-current/30]="!first"
+        [class.bg-current/12]="language.current() === code"
+        [class.opacity-100]="language.current() === code"
+        [class.opacity-55]="language.current() !== code"
+        [class.hover:opacity-100]="language.current() !== code"
       >
         {{ code }}
         <span class="sr-only">{{ translate(labelKey(code)) }}</span>

@@ -132,6 +132,12 @@ export default tseslint.config(
     rules: { '@typescript-eslint/no-magic-numbers': 'off' },
   },
 
+  // A *.data.ts file is the source of its numbers, the same way a constants file is.
+  {
+    files: ['**/*.data.ts'],
+    rules: { '@typescript-eslint/no-magic-numbers': 'off' },
+  },
+
   // Assertions are literal by nature.
   {
     files: ['tests/**/*.ts'],

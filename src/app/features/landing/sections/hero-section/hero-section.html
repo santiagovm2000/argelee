@@ -1,20 +1,72 @@
 <ng-container *transloco="let translate">
-  <section class="mx-auto max-w-content px-6 py-24">
-    <h1 class="max-w-prose font-display text-display font-semibold text-ink">
-      {{ translate(t.landing.hero.headline) }}
-    </h1>
+  <section
+    class="hero-stage arg-dark relative isolate -mt-header min-h-hero overflow-hidden bg-surface"
+  >
+    <img
+      [ngSrc]="poster.path"
+      fill
+      [ngSrcset]="posterSrcset"
+      priority
+      [placeholder]="poster.placeholder"
+      [sizes]="posterSizes"
+      class="object-cover"
+      alt=""
+      aria-hidden="true"
+    />
+    <video
+      class="hero-video absolute inset-0 size-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-hidden="true"
+      tabindex="-1"
+    >
+      <source [src]="video.webm" type="video/webm" />
+      <source [src]="video.mp4" type="video/mp4" />
+    </video>
+    <div
+      class="absolute inset-0 bg-linear-to-r from-surface/85 via-surface/45 to-surface/10"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="absolute inset-x-0 top-0 h-2/5 bg-linear-to-b from-surface/70 to-transparent"
+      aria-hidden="true"
+    ></div>
 
-    <p class="mt-6 max-w-prose text-body-lg text-ink-muted">
-      {{ translate(t.landing.hero.subheadline) }}
-    </p>
-
-    <div class="mt-10 flex flex-wrap items-center gap-3">
-      <p-button [label]="translate(t.landing.hero.primaryAction)" />
-      <p-button
-        [label]="translate(t.landing.hero.secondaryAction)"
-        severity="secondary"
-        [text]="true"
-      />
+    <div
+      class="relative mx-auto flex min-h-hero max-w-wide flex-col justify-end px-6 pt-hero-top pb-16 sm:px-10 lg:px-14 lg:pb-24"
+    >
+      <div class="max-w-prose">
+        <p class="text-body-sm font-medium tracking-eyebrow text-ink uppercase">
+          {{ translate(t.landing.hero.eyebrow) }}
+        </p>
+        <h1 class="mt-6 font-display text-display text-ink">
+          {{ translate(t.landing.hero.headline) }}
+        </h1>
+        <div class="ornament mt-8" aria-hidden="true"><span></span></div>
+        <p class="mt-7 max-w-[44ch] text-body-lg text-ink">
+          {{ translate(t.landing.hero.body) }}
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3.5">
+          <a
+            [routerLink]="language.homeUrl()"
+            [fragment]="sections.catalog"
+            class="button button--primary"
+          >
+            {{ translate(t.landing.hero.primaryAction) }}
+          </a>
+          <a
+            [href]="order.chatUrl()"
+            target="_blank"
+            rel="noopener"
+            class="button button--secondary"
+          >
+            {{ translate(t.landing.hero.secondaryAction) }}
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 </ng-container>

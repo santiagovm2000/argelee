@@ -1,0 +1,127 @@
+<ng-container *transloco="let translate">
+  @if (product(); as product) {
+    @if (selection(); as selection) {
+      @if (image(); as image) {
+        <article class="mx-auto max-w-content px-6 py-8 sm:px-10 lg:px-14 lg:py-14">
+          <a
+            [routerLink]="language.homeUrl()"
+            [fragment]="sections.catalog"
+            class="mb-6 inline-flex min-h-11 items-center gap-2 text-eyebrow font-medium text-ink-muted uppercase transition-colors duration-quick hover:text-ink"
+          >
+            <svg
+              class="size-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m7-7-7 7 7 7" />
+            </svg>
+            {{ translate(t.catalog.customizer.back) }}
+          </a>
+
+          <div
+            class="grid gap-10 rounded-panel border border-line-tint bg-surface-raised p-5 sm:p-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14"
+          >
+            <div>
+              <div
+                [attr.data-piece]="product.id"
+                class="relative aspect-[4/5] overflow-hidden rounded-card bg-surface-tint"
+              >
+                <img
+                  [ngSrc]="image.path"
+                  fill
+                  [ngSrcset]="srcset()"
+                  priority
+                  [placeholder]="image.placeholder"
+                  [sizes]="sizes"
+                  class="object-cover"
+                  [alt]="translate(t.catalog.products[product.id].imageAlt)"
+                />
+              </div>
+            </div>
+
+            <div class="min-w-0 lg:pt-1.5">
+              <div class="flex items-center gap-3">
+                <span class="h-px w-8 bg-line-tint" aria-hidden="true"></span>
+                <span class="text-eyebrow font-medium text-accent-text uppercase">
+                  {{ translate(t.catalog.customizer.eyebrow) }}
+                </span>
+              </div>
+              <h1 class="mt-3.5 font-display text-headline text-ink">
+                {{ translate(t.catalog.products[product.id].name) }}
+              </h1>
+              <p class="mt-4 max-w-[50ch] text-body text-ink-muted">
+                {{ translate(t.catalog.products[product.id].description) }}
+              </p>
+
+              <div class="mt-9 flex flex-col gap-7">
+                <arg-choice-group
+                  [legend]="translate(t.catalog.groups.portions)"
+                  [name]="names.portions"
+                  [options]="portionOptions()"
+                  [selected]="portionSelected()"
+                  [single]="true"
+                  (selectedChange)="setPortions($event)"
+                />
+
+                @if (product.layers) {
+                  <arg-choice-group
+                    [legend]="translate(t.catalog.groups.layers)"
+                    [hint]="layerHint()"
+                    [name]="names.layers"
+                    [options]="layerOptions()"
+                    [selected]="selection.layers"
+                    (selectedChange)="setLayers($event)"
+                  />
+                }
+
+                @if (product.fruits) {
+                  <arg-choice-group
+                    [legend]="translate(t.catalog.groups.fruit)"
+                    [hint]="fruitHint()"
+                    [name]="names.fruits"
+                    [options]="fruitOptions()"
+                    [selected]="selection.fruits"
+                    (selectedChange)="setFruits($event)"
+                  />
+                }
+              </div>
+
+              <div
+                class="mt-9 flex flex-col gap-5 border-t border-line-tint pt-6 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div class="min-w-0 flex-1">
+                  <p class="font-display text-price text-ink" aria-live="polite">
+                    <span class="sr-only">
+                      {{ translate(t.a11y.priceUpdated, { total: total() }) }}
+                    </span>
+                    <span aria-hidden="true">{{ total() }}</span>
+                  </p>
+                  <p class="mt-2 text-caption text-ink-muted">{{ summary() }}</p>
+                </div>
+                <a
+                  [href]="orderUrl()"
+                  target="_blank"
+                  rel="noopener"
+                  class="button button--primary shrink-0"
+                >
+                  {{ translate(t.catalog.customizer.order) }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+      }
+    }
+  } @else {
+    <arg-empty-state
+      [titleKey]="t.catalog.missing.title"
+      [bodyKey]="t.catalog.missing.body"
+      [actionKey]="t.catalog.missing.action"
+      [link]="language.homeUrl()"
+      [fragment]="sections.catalog"
+    />
+  }
+</ng-container>

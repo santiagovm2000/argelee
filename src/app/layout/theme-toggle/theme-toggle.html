@@ -1,12 +1,12 @@
 <ng-container *transloco="let translate">
   <button
     type="button"
-    class="duration-quick grid size-9 place-items-center rounded-control border border-line text-ink-muted transition-colors hover:border-line-strong hover:text-ink"
+    class="grid size-11 place-items-center rounded-control border border-current/30 text-current transition-[border-color,background-color] duration-quick hover:border-current/70 hover:bg-current/12"
     [attr.aria-label]="
       theme.isDark() ? translate(t.a11y.switchToLightTheme) : translate(t.a11y.switchToDarkTheme)
     "
     [attr.aria-pressed]="theme.isDark()"
-    (click)="theme.toggle()"
+    (click)="flip($event)"
   >
     @if (theme.isDark()) {
       <svg
@@ -14,7 +14,7 @@
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="1.75"
+        stroke-width="1.5"
         aria-hidden="true"
       >
         <circle cx="12" cy="12" r="4" />
@@ -29,7 +29,7 @@
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="1.75"
+        stroke-width="1.5"
         aria-hidden="true"
       >
         <path

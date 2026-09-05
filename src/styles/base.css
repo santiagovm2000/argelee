@@ -4,11 +4,15 @@
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-surface-sunken: var(--surface-sunken);
+  --color-surface-tint: var(--surface-tint);
+  --color-surface-selected: var(--surface-selected);
+  --color-surface-hover: var(--surface-hover);
   --color-ink: var(--ink);
   --color-ink-muted: var(--ink-muted);
   --color-ink-subtle: var(--ink-subtle);
   --color-ink-inverse: var(--ink-inverse);
   --color-line: var(--line);
+  --color-line-tint: var(--line-tint);
   --color-line-strong: var(--line-strong);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
@@ -16,29 +20,38 @@
   --color-accent-text: var(--accent-text);
   --color-accent-soft: var(--accent-soft);
   --color-focus-ring: var(--focus-ring);
+  --color-wordmark: var(--wordmark);
 }
 
-/* The primary is a bright cyan, so white text on it fails AA. The brand is split
-   into three roles that must not be mixed: --accent (fill, paired with the dark
-   --accent-ink), --accent-text (brand text on a surface), --focus-ring (outline).
-   Likewise --line is decorative and --line-strong bounds interactive controls.
+/* Roles, not colours. The page sits on a barely-blue white; panels and cards are
+   pure white; --surface-tint is the pale blue that holds the menu. The primary
+   call to action is ink, not blue: blue is for labels, links and rules.
+   --surface-selected is the fill of a chosen chip and --surface-hover the fill
+   of any quiet control under the pointer: pale on light, a clear step up from
+   the panel on dark. --line is a hairline, --line-tint the decorative blue rule and border, and
+   --line-strong the boundary of a control that has no text to identify it.
    `bun run contrast` enforces every pairing in both themes. */
 :root {
-  --surface: var(--color-neutral-0);
+  --surface: var(--color-brand-50);
   --surface-raised: var(--color-neutral-0);
-  --surface-sunken: var(--color-neutral-50);
+  --surface-sunken: var(--color-neutral-100);
+  --surface-tint: var(--color-brand-100);
+  --surface-selected: var(--color-brand-100);
+  --surface-hover: var(--color-brand-100);
   --ink: var(--color-neutral-900);
-  --ink-muted: var(--color-neutral-600);
+  --ink-muted: var(--color-neutral-500);
   --ink-subtle: var(--color-neutral-500);
   --ink-inverse: var(--color-neutral-0);
   --line: var(--color-neutral-200);
-  --line-strong: var(--color-neutral-500);
-  --accent: var(--color-brand-500);
-  --accent-hover: var(--color-brand-600);
-  --accent-ink: var(--color-neutral-950);
-  --accent-text: var(--color-brand-800);
-  --accent-soft: var(--color-brand-50);
-  --focus-ring: var(--color-brand-700);
+  --line-tint: var(--color-brand-200);
+  --line-strong: var(--color-brand-600);
+  --accent: var(--color-neutral-900);
+  --accent-hover: var(--color-neutral-800);
+  --accent-ink: var(--color-neutral-0);
+  --accent-text: var(--color-brand-700);
+  --accent-soft: var(--color-brand-100);
+  --focus-ring: var(--color-brand-600);
+  --wordmark: var(--color-vino);
 
   color-scheme: light;
 }
@@ -46,27 +59,43 @@
 .arg-dark {
   --surface: var(--color-neutral-950);
   --surface-raised: var(--color-neutral-900);
-  --surface-sunken: oklch(0.1 0.006 227.2);
-  --ink: var(--color-neutral-50);
+  --surface-sunken: var(--color-brand-950);
+  --surface-tint: var(--color-brand-950);
+  --surface-selected: var(--color-brand-800);
+  --surface-hover: var(--color-brand-900);
+  --ink: var(--color-neutral-100);
   --ink-muted: var(--color-neutral-400);
   --ink-subtle: var(--color-neutral-500);
   --ink-inverse: var(--color-neutral-950);
   --line: var(--color-neutral-800);
-  --line-strong: var(--color-neutral-500);
-  --accent: var(--color-brand-400);
-  --accent-hover: var(--color-brand-300);
+  --line-tint: var(--color-brand-400);
+  --line-strong: var(--color-brand-400);
+  --accent: var(--color-neutral-100);
+  --accent-hover: var(--color-neutral-0);
   --accent-ink: var(--color-neutral-950);
-  --accent-text: var(--color-brand-300);
-  --accent-soft: oklch(0.24 0.056 227.2);
-  --focus-ring: var(--color-brand-400);
+  --accent-text: var(--color-brand-200);
+  --accent-soft: var(--color-brand-950);
+  --focus-ring: var(--color-brand-300);
+  --wordmark: var(--color-vino-soft);
 
   color-scheme: dark;
 }
 
 @layer base {
+  /* The scrollbar belongs to the palette: a thin azul thumb on no track. The
+     standard properties are what Chromium honours now, so no ::-webkit rules. */
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line-tint) transparent;
+  }
+
+  /* While the router swaps pages inside a view transition its own scroll (to
+     the top, or back to the anchor) must land before the new page is captured;
+     animated, it would drag the whole live snapshot under the transition. */
+  :root.arg-page-change {
+    scroll-behavior: auto;
   }
 
   body {
@@ -75,6 +104,7 @@
     font-family: var(--font-body);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
+    font-weight: 300;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -84,6 +114,7 @@
   h3,
   h4 {
     font-family: var(--font-display);
+    font-weight: 400;
     text-wrap: balance;
   }
 
@@ -103,12 +134,8 @@
   /* Keyboard focus is always visible. Restyle it here, never remove it. */
   :focus-visible {
     outline: 2px solid var(--color-focus-ring);
-    outline-offset: 2px;
+    outline-offset: 3px;
     border-radius: 2px;
-  }
-
-  :target {
-    scroll-margin-top: 6rem;
   }
 
   img,
@@ -121,6 +148,8 @@
   }
 }
 
+/* A scroll timeline ignores animation-duration, so the reset below also detaches
+   every animation from scroll; motion.css then removes the ones it owns outright. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -131,6 +160,7 @@
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    animation-timeline: auto !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }

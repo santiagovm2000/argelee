@@ -10,37 +10,9 @@
  */
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { parseOklch, type Rgb } from './color';
 
 const STYLES = resolve(import.meta.dir, '..', 'src', 'styles');
-
-interface Rgb {
-  r: number;
-  g: number;
-  b: number;
-}
-
-function oklchToRgb(l: number, c: number, hDeg: number): Rgb {
-  const h = (hDeg * Math.PI) / 180;
-  const a = c * Math.cos(h);
-  const bb = c * Math.sin(h);
-
-  const lms = [
-    (l + 0.3963377774 * a + 0.2158037573 * bb) ** 3,
-    (l - 0.1055613458 * a - 0.0638541728 * bb) ** 3,
-    (l - 0.0894841775 * a - 1.291485548 * bb) ** 3,
-  ] as const;
-
-  const toGamma = (v: number): number => {
-    const clamped = Math.min(1, Math.max(0, v));
-    return clamped <= 0.0031308 ? 12.92 * clamped : 1.055 * clamped ** (1 / 2.4) - 0.055;
-  };
-
-  return {
-    r: toGamma(4.0767416621 * lms[0] - 3.3077115913 * lms[1] + 0.2309699292 * lms[2]),
-    g: toGamma(-1.2684380046 * lms[0] + 2.6097574011 * lms[1] - 0.3413193965 * lms[2]),
-    b: toGamma(-0.0041960863 * lms[0] - 0.7034186147 * lms[1] + 1.707614701 * lms[2]),
-  };
-}
 
 function relativeLuminance({ r, g, b }: Rgb): number {
   const channel = (v: number): number => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
@@ -94,9 +66,9 @@ function resolveColor(name: string, themeVars: Map<string, string>): Rgb {
     value = themeVars.get(inner) ?? scales.get(inner);
   }
   if (value === undefined) throw new Error(`could not resolve ${name}`);
-  const match = /oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)/.exec(value);
-  if (match === null) throw new Error(`${name} is not an oklch() value: ${value}`);
-  return oklchToRgb(Number(match[1]), Number(match[2]), Number(match[3]));
+  const rgb = parseOklch(value);
+  if (rgb === null) throw new Error(`${name} is not an oklch() value: ${value}`);
+  return rgb;
 }
 
 type Check = readonly [foreground: string, background: string, minimum: number, label: string];
@@ -111,6 +83,14 @@ const CHECKS: readonly Check[] = [
   ['--accent-text', '--surface', 4.5, 'brand-coloured text/link on page'],
   ['--focus-ring', '--surface', 3.0, 'focus ring on page'],
   ['--line-strong', '--surface', 3.0, 'interactive boundary on page'],
+  ['--ink', '--surface-tint', 4.5, 'body text on tinted section'],
+  ['--ink-muted', '--surface-tint', 4.5, 'secondary text on tinted section'],
+  ['--accent-text', '--surface-tint', 4.5, 'brand-coloured text on tinted section'],
+  ['--line-strong', '--surface-tint', 3.0, 'interactive boundary on tinted section'],
+  ['--wordmark', '--surface', 3.0, 'wordmark (large text) on page'],
+  ['--ink', '--surface-selected', 4.5, 'label on a selected chip'],
+  ['--ink', '--surface-hover', 4.5, 'label on a hovered control'],
+  ['--accent-text', '--surface-raised', 3.0, 'selected chip border on a panel'],
 ];
 
 let failures = 0;

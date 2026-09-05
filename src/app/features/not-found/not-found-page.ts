@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
 import { T } from '../../core/i18n/translation-keys.generated';
 import { LanguageService } from '../../core/i18n/language.service';
+import { EmptyState } from '../../shared/ui/empty-state/empty-state';
 
 @Component({
   selector: 'arg-not-found-page',
-  imports: [RouterLink, TranslocoDirective],
+  imports: [EmptyState],
   templateUrl: './not-found-page.html',
 })
 export class NotFoundPage {

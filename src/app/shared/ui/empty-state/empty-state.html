@@ -1,0 +1,9 @@
+<ng-container *transloco="let translate">
+  <section class="mx-auto flex max-w-prose flex-col items-start px-6 py-32 sm:px-10">
+    <h1 class="font-display text-headline text-ink">{{ translate(titleKey()) }}</h1>
+    <p class="mt-4 text-body text-ink-muted">{{ translate(bodyKey()) }}</p>
+    <a [routerLink]="link()" [fragment]="fragment()" class="button button--primary mt-8">
+      {{ translate(actionKey()) }}
+    </a>
+  </section>
+</ng-container>

@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { inject, Service } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { TranslocoService } from '@jsverse/transloco';
+import { take } from 'rxjs';
 import { SITE } from '../config/app.constants';
 import { DEPLOYMENT } from '../config/build-config.generated';
 import { localizedUrl } from '../config/routes';
@@ -10,11 +11,23 @@ import { LanguageService } from '../i18n/language.service';
 import type { TranslationKey } from '../i18n/translation-keys.generated';
 import { ALTERNATE_LINK_MARKER, JSON_LD_ID, OG_IMAGE_SIZE } from './seo.constants';
 
+export interface ProductSeo {
+  readonly nameKey: TranslationKey;
+  readonly descriptionKey: TranslationKey;
+  readonly lowPrice: number;
+  readonly currency: string;
+}
+
 export interface PageSeo {
   readonly titleKey: TranslationKey;
   readonly descriptionKey: TranslationKey;
+  /** Interpolation values for title and description, given as keys and resolved once translations load. */
+  readonly paramKeys?: Readonly<Record<string, TranslationKey>>;
+  /** Path without the language prefix; the canonical and every alternate derive from it. */
   readonly segments?: readonly string[];
+  /** Site-relative path of the social card (JPEG, OG_IMAGE_SIZE). */
   readonly image?: string;
+  readonly product?: ProductSeo;
 }
 
 @Service()
@@ -25,12 +38,26 @@ export class SeoService {
   private readonly language = inject(LanguageService);
   private readonly document = inject(DOCUMENT);
 
-  /** Writes localized title, description, canonical, hreflang, social tags and JSON-LD. */
+  /**
+   * Writes localized title, description, canonical, hreflang, social tags and JSON-LD.
+   * Waits for the active translation so the tags never carry a raw key: on the
+   * client the locale file arrives over HTTP after the first render.
+   */
   apply(seo: PageSeo): void {
+    this.transloco
+      .selectTranslation(this.language.current())
+      .pipe(take(1))
+      .subscribe(() => {
+        this.write(seo);
+      });
+  }
+
+  private write(seo: PageSeo): void {
     const segments = seo.segments ?? [];
     const active = this.language.current();
-    const pageTitle = this.transloco.translate(seo.titleKey);
-    const description = this.transloco.translate(seo.descriptionKey);
+    const params = this.resolveParams(seo.paramKeys);
+    const pageTitle = this.transloco.translate(seo.titleKey, params);
+    const description = this.transloco.translate(seo.descriptionKey, params);
     const url = this.absolute(localizedUrl(active, segments));
     const image = seo.image === undefined ? undefined : this.absolute(seo.image);
 
@@ -62,11 +89,20 @@ export class SeoService {
 
     this.setCanonical(url);
     this.setAlternates(segments);
-    this.setStructuredData(pageTitle, description, url);
+    this.setStructuredData(pageTitle, description, url, image, seo.product);
   }
 
+  private resolveParams(
+    paramKeys: Readonly<Record<string, TranslationKey>> | undefined,
+  ): Record<string, string> {
+    return Object.fromEntries(
+      Object.entries(paramKeys ?? {}).map(([name, key]) => [name, this.transloco.translate(key)]),
+    );
+  }
+
+  /** Prefixes the deployment origin, which may itself include a subpath. */
   private absolute(path: string): string {
-    return `${DEPLOYMENT.origin}${path}`;
+    return `${DEPLOYMENT.origin}/${path.replace(/^\/+/, '')}`;
   }
 
   /**
@@ -116,41 +152,62 @@ export class SeoService {
     }
   }
 
-  /** Publishes Organization and WebSite entities so results can show a rich snippet. */
-  private setStructuredData(pageTitle: string, description: string, url: string): void {
+  /** Publishes Organization, WebSite and WebPage entities, plus a Product on product pages. */
+  private setStructuredData(
+    pageTitle: string,
+    description: string,
+    url: string,
+    image: string | undefined,
+    product: ProductSeo | undefined,
+  ): void {
     const existing = this.document.getElementById(JSON_LD_ID);
     existing?.remove();
+
+    const organizationId = `${DEPLOYMENT.origin}/#organization`;
+    const websiteId = `${DEPLOYMENT.origin}/#website`;
+    const inLanguage = LANGUAGE_TAGS[this.language.current()];
+    const graph: Record<string, unknown>[] = [
+      { '@type': 'Organization', '@id': organizationId, name: SITE.name, url: DEPLOYMENT.origin },
+      {
+        '@type': 'WebSite',
+        '@id': websiteId,
+        name: SITE.name,
+        url: DEPLOYMENT.origin,
+        publisher: { '@id': organizationId },
+        inLanguage,
+      },
+      {
+        '@type': 'WebPage',
+        url,
+        name: pageTitle,
+        description,
+        isPartOf: { '@id': websiteId },
+        inLanguage,
+        ...(image === undefined ? {} : { primaryImageOfPage: image }),
+      },
+    ];
+
+    if (product !== undefined) {
+      graph.push({
+        '@type': 'Product',
+        name: this.transloco.translate(product.nameKey),
+        description: this.transloco.translate(product.descriptionKey),
+        url,
+        ...(image === undefined ? {} : { image }),
+        brand: { '@id': organizationId },
+        offers: {
+          '@type': 'AggregateOffer',
+          lowPrice: product.lowPrice,
+          priceCurrency: product.currency,
+          availability: 'https://schema.org/InStock',
+        },
+      });
+    }
 
     const script = this.document.createElement('script');
     script.id = JSON_LD_ID;
     script.type = 'application/ld+json';
-    script.textContent = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'Organization',
-          '@id': `${DEPLOYMENT.origin}/#organization`,
-          name: SITE.name,
-          url: DEPLOYMENT.origin,
-        },
-        {
-          '@type': 'WebSite',
-          '@id': `${DEPLOYMENT.origin}/#website`,
-          name: SITE.name,
-          url: DEPLOYMENT.origin,
-          publisher: { '@id': `${DEPLOYMENT.origin}/#organization` },
-          inLanguage: LANGUAGE_TAGS[this.language.current()],
-        },
-        {
-          '@type': 'WebPage',
-          url,
-          name: pageTitle,
-          description,
-          isPartOf: { '@id': `${DEPLOYMENT.origin}/#website` },
-          inLanguage: LANGUAGE_TAGS[this.language.current()],
-        },
-      ],
-    });
+    script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
     this.document.head.appendChild(script);
   }
 

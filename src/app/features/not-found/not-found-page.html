@@ -1,14 +1,6 @@
-<ng-container *transloco="let translate">
-  <section class="mx-auto flex max-w-prose flex-col items-start px-6 py-32">
-    <h1 class="font-display text-headline font-semibold text-ink">
-      {{ translate(t.errors.notFound.title) }}
-    </h1>
-    <p class="mt-4 text-body text-ink-muted">{{ translate(t.errors.notFound.body) }}</p>
-    <a
-      [routerLink]="language.homeUrl()"
-      class="duration-quick mt-8 rounded-control bg-accent px-5 py-2.5 text-body-sm font-medium text-accent-ink transition-colors hover:bg-accent-hover"
-    >
-      {{ translate(t.errors.notFound.action) }}
-    </a>
-  </section>
-</ng-container>
+<arg-empty-state
+  [titleKey]="t.errors.notFound.title"
+  [bodyKey]="t.errors.notFound.body"
+  [actionKey]="t.errors.notFound.action"
+  [link]="language.homeUrl()"
+/>

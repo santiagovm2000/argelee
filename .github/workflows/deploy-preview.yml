@@ -25,7 +25,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PRIMENG_LICENSE_KEY: ${{ secrets.PRIMENG_LICENSE_KEY }}
       # Includes the /argelee subpath: canonical, hreflang and sitemap URLs derive from it.
       SITE_ORIGIN: https://santiagovm2000.github.io/argelee
       SITE_INDEXABLE: 'false'

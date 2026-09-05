@@ -1,0 +1,80 @@
+<ng-container *transloco="let translate">
+  <section
+    [id]="sections.catalog"
+    class="shelf-stage scroll-mt-anchor bg-surface-tint pt-8 pb-12 lg:pt-10 lg:pb-14"
+  >
+    <div class="mx-auto max-w-content px-6 text-center sm:px-10">
+      <p class="text-eyebrow font-medium text-accent-text uppercase">
+        {{ translate(t.catalog.section.eyebrow) }}
+      </p>
+      <h2 class="mt-2.5 font-display text-headline text-ink">
+        {{ translate(t.catalog.section.title) }}
+      </h2>
+      <div class="ornament mx-auto mt-4 w-fit" aria-hidden="true"><span></span></div>
+      <p class="mx-auto mt-3 max-w-[48ch] text-body-sm text-ink-muted">
+        {{ translate(t.catalog.section.subtitle) }}
+      </p>
+    </div>
+
+    <div
+      #shelf
+      class="shelf mt-6 flex gap-shelf overflow-x-auto pt-3 pb-4"
+      role="list"
+      [attr.aria-label]="translate(t.a11y.pieces)"
+    >
+      @for (card of cards(); track card.product.id) {
+        <arg-product-card
+          class="shelf__card"
+          role="listitem"
+          [product]="card.product"
+          [link]="card.link"
+          [price]="card.price"
+          [featured]="card.product.id === focus()"
+          (chosen)="focus.set($event)"
+        />
+      }
+    </div>
+
+    <div class="mx-auto mt-5 flex max-w-content items-center gap-6 px-6 sm:px-10">
+      <div class="shelf-rail relative h-0.5 flex-1 bg-line-tint/60" aria-hidden="true">
+        <span class="shelf-rail__thumb absolute inset-y-0 left-0 w-12 bg-ink"></span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button
+          type="button"
+          class="grid size-10 place-items-center rounded-full border border-line-tint text-ink transition-colors duration-settled hover:border-accent-text hover:bg-surface-hover"
+          [attr.aria-label]="translate(t.a11y.previousPiece)"
+          (click)="nudge(-1)"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="grid size-10 place-items-center rounded-full border border-line-tint text-ink transition-colors duration-settled hover:border-accent-text hover:bg-surface-hover"
+          [attr.aria-label]="translate(t.a11y.nextPiece)"
+          (click)="nudge(1)"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+</ng-container>

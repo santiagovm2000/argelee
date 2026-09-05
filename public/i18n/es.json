@@ -1,40 +1,151 @@
 {
   "meta": {
     "home": {
-      "title": "Argelee",
-      "description": "Descripción de la página para buscadores y redes sociales."
+      "title": "ArGelees — Gelatinas artesanales por encargo",
+      "description": "Gelatinas moldeadas a mano y decoradas con fruta natural, preparadas para la fecha de tu celebración. Elige la pieza, sus capas y su fruta, y encárgala por WhatsApp."
+    },
+    "product": {
+      "title": "{{name}} — ArGelees",
+      "description": "{{description}} Ajusta porciones, capas y fruta, y encárgala por WhatsApp."
     }
   },
   "a11y": {
     "skipToContent": "Saltar al contenido",
     "mainNavigation": "Navegación principal",
-    "openMenu": "Abrir menú",
-    "closeMenu": "Cerrar menú",
     "changeLanguage": "Cambiar idioma",
     "switchToDarkTheme": "Activar tema oscuro",
-    "switchToLightTheme": "Activar tema claro"
+    "switchToLightTheme": "Activar tema claro",
+    "openWhatsapp": "Escribir por WhatsApp",
+    "priceUpdated": "Precio actualizado: {{total}}",
+    "previousPiece": "Pieza anterior",
+    "nextPiece": "Pieza siguiente",
+    "pieces": "Piezas de la carta"
   },
   "common": {
-    "actions": {
-      "back": "Volver",
-      "retry": "Reintentar",
-      "close": "Cerrar"
-    },
     "language": {
       "es": "Español",
       "en": "English"
     }
   },
   "navigation": {
-    "home": "Inicio"
+    "catalog": "Catálogo",
+    "orders": "Encargos"
   },
   "landing": {
     "hero": {
-      "headline": "Argelee",
-      "subheadline": "Reemplaza este texto cuando definamos el mensaje de la landing.",
-      "primaryAction": "Empezar",
-      "secondaryAction": "Ver cómo funciona"
+      "eyebrow": "Gelatinas por encargo",
+      "headline": "Delicadeza en cada capa",
+      "body": "Moldeadas a mano y decoradas con fruta natural. Cada pieza se prepara para la fecha de tu celebración: bodas, bautizos, cumpleaños y mesas de postres.",
+      "primaryAction": "Ver catálogo",
+      "secondaryAction": "Cotizar"
+    },
+    "orders": {
+      "statement": "Los encargos se agendan con una semana de anticipación",
+      "action": "Escribir por WhatsApp"
     }
+  },
+  "catalog": {
+    "section": {
+      "eyebrow": "Catálogo",
+      "title": "La carta",
+      "subtitle": "Elige una pieza para ajustar porciones, sabores y fruta. El precio se actualiza al instante."
+    },
+    "card": {
+      "fromPrice": "Desde {{price}}",
+      "customize": "Personalizar"
+    },
+    "groups": {
+      "portions": "Porciones",
+      "layers": "Capas de sabor",
+      "fruit": "Fruta natural"
+    },
+    "hints": {
+      "layers": "Elige las capas — cada capa extra suma {{price}}",
+      "fruit": "Cada fruta adicional suma {{price}}"
+    },
+    "portions": {
+      "8": "8 porciones",
+      "12": "12 porciones",
+      "16": "16 porciones"
+    },
+    "layers": {
+      "fresa": "Fresa",
+      "crema": "Crema",
+      "durazno": "Durazno",
+      "maracuya": "Maracuyá",
+      "limon": "Limón",
+      "uva": "Uva",
+      "leche": "Leche",
+      "vainilla": "Vainilla",
+      "mora": "Mora",
+      "frutos-rojos": "Frutos rojos",
+      "cereza": "Cereza",
+      "granadilla": "Granadilla",
+      "coco": "Coco"
+    },
+    "fruits": {
+      "fresa": "Fresa",
+      "uva": "Uva",
+      "durazno": "Durazno",
+      "kiwi": "Kiwi",
+      "mango": "Mango",
+      "pina": "Piña"
+    },
+    "products": {
+      "jardin-de-frutas": {
+        "name": "Jardín de Frutas",
+        "note": "Uva, durazno, fresa y kiwi",
+        "description": "Gelatina transparente con fruta fresca en corte grueso, ordenada en radios. La fruta se define contigo antes del armado.",
+        "imageAlt": "Corona de gelatina transparente con fresas, uvas moradas, durazno y uva verde"
+      },
+      "mosaico-fresa-crema": {
+        "name": "Mosaico Fresa y Crema",
+        "note": "Fresa natural y crema",
+        "description": "Molde de flor en dos capas: gelatina de fresa natural sobre base de crema. Se desmolda entera y llega montada en su base dorada.",
+        "imageAlt": "Gelatina en molde de flor, roja arriba y crema abajo, sobre base dorada"
+      },
+      "uva-nocturna": {
+        "name": "Uva Nocturna",
+        "note": "Uva morada y leche",
+        "description": "Uva morada sobre capa de leche, con racimo fresco al centro. La pieza más sobria de la carta.",
+        "imageAlt": "Gelatina en molde acanalado, morada oscura sobre capa lila, con uvas en el centro"
+      },
+      "rubi-clasica": {
+        "name": "Rubí Clásica",
+        "note": "Frutos rojos, molde tradicional",
+        "description": "Molde tradicional de perlas en una sola capa de frutos rojos. Brillo alto y corte firme.",
+        "imageAlt": "Gelatina roja en molde redondo de perlas sobre un plato blanco"
+      },
+      "capas-de-fresa": {
+        "name": "Capas de Fresa",
+        "note": "Fresa, crema y limón en capas",
+        "description": "Bandeja rectangular en capas alternadas, con fresa laminada en la superficie. Rinde para mesas largas.",
+        "imageAlt": "Gelatina rectangular de capas rojas, blancas y verdes con láminas de fresa encima"
+      }
+    },
+    "customizer": {
+      "eyebrow": "Pieza por encargo",
+      "back": "Volver a la carta",
+      "order": "Encargar esta pieza",
+      "summaryPortions": "{{count}} porciones",
+      "summaryFruit": "con {{fruits}}"
+    },
+    "order": {
+      "greeting": "Hola, quiero encargar una pieza.",
+      "product": "Pieza: {{product}}",
+      "portions": "Porciones: {{portions}}",
+      "option": "{{group}}: {{choice}}",
+      "total": "Precio estimado: {{total}}",
+      "closing": "¿Me confirman disponibilidad y fecha de entrega?"
+    },
+    "missing": {
+      "title": "Esa pieza no está en la carta.",
+      "body": "Puede que el enlace esté incompleto. Estas son las piezas que sí preparamos.",
+      "action": "Ver la carta"
+    }
+  },
+  "footer": {
+    "tagline": "Hecho a mano, por encargo."
   },
   "errors": {
     "notFound": {

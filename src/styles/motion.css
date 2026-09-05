@@ -1,0 +1,184 @@
+/* Scroll-driven motion. Pure CSS: it runs on the compositor, needs no scroll
+   listener, and applies from the first paint of the prerendered HTML.
+
+   Restraint is the point. Nothing floats, breathes or cascades in on load; the
+   only motion is depth that answers the visitor's own scrolling. Every class
+   here is progressive enhancement: the un-animated state of each element is
+   its final, fully visible state, so a browser without animation-timeline
+   (Firefox, for now) and a visitor with reduced motion both get the same
+   static page. */
+
+@keyframes window-parallax {
+  from {
+    translate: 0 -4%;
+  }
+  to {
+    translate: 0 4%;
+  }
+}
+
+/* Cards fade, shrink and sink a little as they slide out of either end of the
+   shelf and recover as they come in; across the middle they stand at full
+   strength, like plates on a counter. */
+@keyframes shelf-enter {
+  from {
+    opacity: 0.35;
+    scale: 0.94;
+    translate: 0 0.75rem;
+  }
+}
+@keyframes shelf-exit {
+  to {
+    opacity: 0.35;
+    scale: 0.94;
+    translate: 0 0.75rem;
+  }
+}
+
+/* The rail's ink segment runs the full width of its track as the shelf scrolls. */
+@keyframes rail-run {
+  to {
+    translate: calc(100cqw - 100%) 0;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  /* A photo slides inside its frame as the card crosses the viewport. The
+     frame clips; the image is scaled up just enough to cover the travel. */
+  .parallax-window {
+    overflow: hidden;
+  }
+  .parallax-window__image {
+    scale: 1.1;
+    animation: window-parallax linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+
+  .shelf__card {
+    animation:
+      shelf-enter linear both,
+      shelf-exit linear both;
+    animation-timeline: view(inline);
+    animation-range: entry, exit;
+  }
+  .shelf-rail__thumb {
+    animation: rail-run linear both;
+    animation-timeline: --shelf;
+  }
+
+  /* Under the pointer the photo comes a touch closer; the parallax keeps its travel. */
+  .parallax-window__image {
+    transition: scale var(--duration-settled) var(--ease-out-quart);
+  }
+  .parallax-window:hover .parallax-window__image {
+    scale: 1.16;
+  }
+}
+
+/* Opening a piece: its photo morphs from the shelf card into the product page,
+   and back again, through the router's view transition. Both frames carry the
+   piece id in data-piece and attr() turns it into the shared transition name,
+   so the menu stays data — no per-product class anywhere. Around the photo the
+   old page fades out and the new one rises in. */
+[data-piece] {
+  view-transition-name: attr(data-piece type(<custom-ident>));
+}
+::view-transition-group(*) {
+  animation-duration: var(--duration-deliberate);
+  animation-timing-function: var(--ease-out-quart);
+}
+::view-transition-old(*),
+::view-transition-new(*) {
+  height: 100%;
+  object-fit: cover;
+}
+::view-transition-old(root) {
+  animation: page-leave var(--duration-settled) var(--ease-out-quart) both;
+}
+::view-transition-new(root) {
+  animation: page-arrive var(--duration-deliberate) var(--ease-out-quart) both;
+}
+@keyframes page-leave {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-arrive {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+/* Reduced motion: a scroll timeline ignores animation-duration, so the global
+   reset in base.css cannot stop these. Remove the animations outright, and
+   leave the hero on its poster instead of the looping video. */
+@media (prefers-reduced-motion: reduce) {
+  .parallax-window__image,
+  .shelf__card,
+  .shelf-rail__thumb,
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  .parallax-window__image {
+    scale: 1;
+  }
+  .hero-video {
+    display: none;
+  }
+}
+
+/* The top bar on the landing: transparent over the video at rest, the mark
+   large and rose; over the first stretch of scroll the band frosts in, the mark
+   rises and shrinks into it and turns wine, the navigation turns ink. One
+   element moves — there is no second wordmark to cross-fade. `from` only: the
+   `to` state is the bar's own settled style in patterns.css. Nothing here paints:
+   the band fades by opacity, the mark moves by translate/scale. */
+@keyframes topbar-settle {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes mark-rise {
+  from {
+    translate: 0 var(--mark-drop);
+    scale: var(--mark-scale);
+    color: var(--color-vino-soft);
+  }
+}
+@keyframes nav-light {
+  from {
+    color: var(--color-neutral-100);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  :root:has(.hero-stage) .topbar::before,
+  :root:has(.hero-stage) .topbar__mark,
+  :root:has(.hero-stage) .topbar__nav {
+    animation-timeline: scroll();
+    animation-range: 0 var(--mark-travel);
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+  }
+  :root:has(.hero-stage) .topbar::before {
+    animation-name: topbar-settle;
+  }
+  :root:has(.hero-stage) .topbar__mark {
+    animation-name: mark-rise;
+  }
+  :root:has(.hero-stage) .topbar__nav {
+    animation-name: nav-light;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar::before,
+  .topbar__mark,
+  .topbar__nav {
+    animation: none !important;
+  }
+}

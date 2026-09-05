@@ -12,6 +12,11 @@ export const BREAKPOINTS = {
 } as const;
 
 export const SITE = {
-  name: 'Argelee',
-  twitterHandle: '@argelee',
+  name: 'ArGelees',
+  wordmark: 'ArGelees',
+  twitterHandle: '@argelees',
+  // International format, digits only. Replace with the real business line before launch.
+  whatsappNumber: '573000000000',
 } as const;
+
+export const WHATSAPP_BASE_URL = 'https://wa.me/';

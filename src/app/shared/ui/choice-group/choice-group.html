@@ -1,0 +1,28 @@
+<fieldset class="min-w-0">
+  <legend class="flex w-full flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+    <span class="text-eyebrow font-medium text-accent-text uppercase">{{ legend() }}</span>
+    @if (hint()) {
+      <span class="text-caption text-ink-muted">{{ hint() }}</span>
+    }
+  </legend>
+
+  <div class="mt-4 flex flex-wrap gap-2.5">
+    @for (option of options(); track option.id) {
+      <label
+        class="relative inline-flex min-h-11 cursor-pointer items-center rounded-control border px-5 py-2.5 text-body-sm transition-colors duration-settled select-none not-has-checked:hover:border-accent-text not-has-checked:hover:bg-surface-hover not-has-checked:hover:text-ink has-checked:border-accent-text has-checked:bg-surface-selected has-checked:text-ink has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-surface-raised"
+        [class.border-line-tint]="!isSelected(option.id)"
+        [class.text-ink-muted]="!isSelected(option.id)"
+      >
+        <input
+          class="sr-only"
+          [type]="single() ? 'radio' : 'checkbox'"
+          [name]="name()"
+          [value]="option.id"
+          [checked]="isSelected(option.id)"
+          (click)="onClick($event, option.id)"
+        />
+        {{ option.label }}
+      </label>
+    }
+  </div>
+</fieldset>

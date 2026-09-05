@@ -1,0 +1,132 @@
+/* Tailwind has no `--duration-*` theme namespace, so the duration tokens become
+   utilities here; `--ease-*` tokens already do on their own. */
+@utility duration-instant {
+  transition-duration: var(--duration-instant);
+}
+@utility duration-quick {
+  transition-duration: var(--duration-quick);
+}
+@utility duration-settled {
+  transition-duration: var(--duration-settled);
+}
+@utility duration-deliberate {
+  transition-duration: var(--duration-deliberate);
+}
+
+/* Structural classes a Tailwind utility cannot express in one token. */
+
+/* The shelf: the menu's pieces on one horizontal, snapping scroller. Native
+   scroll does the moving; the arrows only nudge it. The row starts where the
+   content column (and the rail under it) starts, so the first piece reads as
+   the beginning of the menu rather than the middle of it. */
+.shelf-stage {
+  timeline-scope: --shelf;
+}
+.shelf {
+  --shelf-inset: calc(max(0px, (100% - var(--container-content)) / 2) + --spacing(6));
+  scroll-timeline: --shelf inline;
+  scroll-snap-type: x mandatory;
+  padding-inline: var(--shelf-inset);
+  scroll-padding-inline: var(--shelf-inset);
+  @variant sm {
+    --shelf-inset: calc(max(0px, (100% - var(--container-content)) / 2) + --spacing(10));
+  }
+  scrollbar-width: none;
+}
+.shelf::-webkit-scrollbar {
+  display: none;
+}
+.shelf__card {
+  scroll-snap-align: start;
+}
+/* The rail under the shelf: a hairline with a short ink segment that travels
+   along it as the shelf scrolls (motion.css). Container units size the travel. */
+.shelf-rail {
+  container-type: inline-size;
+}
+
+/* The hero ornament from the draft: a rule, a dot, a shorter rule. */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+.ornament::before,
+.ornament::after {
+  content: '';
+  height: 1px;
+  background: var(--color-line-tint);
+}
+.ornament::before {
+  width: 4rem;
+}
+.ornament::after {
+  width: 1.625rem;
+}
+.ornament > span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--color-line-tint);
+}
+
+/* The two button shapes of the draft: ink for the one action that matters, a
+   hairline for the rest. Straight corners, small tracked capitals. */
+.button {
+  @apply inline-flex min-h-12 items-center justify-center rounded-control px-8 text-label font-medium uppercase transition-[background-color,color,border-color,translate] duration-settled;
+}
+.button--primary {
+  @apply bg-accent text-accent-ink hover:-translate-y-0.5 hover:bg-accent-hover;
+}
+/* The quiet button borrows its border from its own text colour, so it sits on
+   the video as well as on the page; on hover it fills and inverts. */
+.button--secondary {
+  @apply border border-current/45 text-ink hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-ink;
+}
+
+/* The top bar. Its resting style is the settled one — a frosted band, the mark
+   small, ink navigation — so a browser without scroll timelines and a visitor
+   with reduced motion get a readable header. On the landing, motion.css lets it
+   start transparent over the video with the mark large, and rise into place. */
+.topbar {
+  --mark-drop: clamp(3rem, 9vh, 5.5rem);
+  --mark-scale: 1.45;
+  --mark-travel: 40vh;
+  isolation: isolate;
+}
+/* The band is a layer behind the bar's content. Only its opacity ever animates,
+   which stays on the compositor; painting a blur or a colour on every scroll
+   frame is what makes an anchor scroll stutter. */
+.topbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-line);
+}
+@media (min-width: 40rem) {
+  .topbar {
+    --mark-scale: 2.1;
+  }
+}
+.topbar__mark {
+  display: inline-block;
+  transform-origin: 0 50%;
+  color: var(--color-wordmark);
+}
+.topbar__nav {
+  color: var(--color-ink-muted);
+}
+
+/* Theme change: the new theme spreads from the toggle as a circle. ThemeService
+   drives the clip-path with the Web Animations API; this only stops the default
+   cross-fade for that one transition, so route changes keep theirs. */
+:root.arg-theme-reveal::view-transition-old(root),
+:root.arg-theme-reveal::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+:root.arg-theme-reveal::view-transition-new(root) {
+  z-index: 1;
+}

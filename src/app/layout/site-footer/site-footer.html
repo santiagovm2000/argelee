@@ -1,5 +1,13 @@
-<footer class="border-t border-line">
-  <div class="mx-auto flex max-w-content items-center justify-between px-6 py-8">
-    <p class="text-body-sm text-ink-muted">© {{ year }} {{ site.name }}</p>
-  </div>
-</footer>
+<ng-container *transloco="let translate">
+  <footer class="border-t border-line">
+    <div
+      class="mx-auto flex max-w-wide flex-col gap-4 px-6 py-10 sm:flex-row sm:items-end sm:justify-between sm:px-10 lg:px-14"
+    >
+      <div class="flex flex-col gap-1">
+        <arg-wordmark class="text-wordmark" />
+        <p class="text-caption text-ink-muted">{{ translate(t.footer.tagline) }}</p>
+      </div>
+      <p class="text-caption text-ink-muted">© {{ year }} {{ site.name }}</p>
+    </div>
+  </footer>
+</ng-container>

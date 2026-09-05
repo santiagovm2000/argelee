@@ -5,9 +5,20 @@ import {
   COLOR_SCHEME_MEDIA_QUERY,
   DEFAULT_THEME_PREFERENCE,
   isThemePreference,
+  REDUCED_MOTION_MEDIA_QUERY,
+  THEME_REVEAL_CLASS,
+  THEME_REVEAL_DURATION_TOKEN,
+  THEME_REVEAL_EASING_TOKEN,
+  THEME_REVEAL_FALLBACK_MS,
+  MS_PER_SECOND,
   type ColorScheme,
   type ThemePreference,
 } from './theme.constants';
+
+export interface ViewportPoint {
+  readonly x: number;
+  readonly y: number;
+}
 
 @Service()
 export class ThemeService {
@@ -56,6 +67,61 @@ export class ThemeService {
     this.set(this.isDark() ? 'light' : 'dark');
   }
 
+  /**
+   * Flips the theme and, where the browser can, lets the new colours spread from
+   * a point as a growing circle. Falls back to a plain flip without view
+   * transitions or when the visitor prefers reduced motion.
+   */
+  toggleFrom(origin: ViewportPoint): void {
+    const next: ThemePreference = this.isDark() ? 'light' : 'dark';
+    const view = this.document.defaultView;
+    const canReveal =
+      this.isBrowser &&
+      view !== null &&
+      view !== undefined &&
+      !view.matchMedia(REDUCED_MOTION_MEDIA_QUERY).matches &&
+      typeof this.document.startViewTransition === 'function';
+    if (!canReveal) {
+      this.set(next);
+      return;
+    }
+
+    const root = this.document.documentElement;
+    root.classList.add(THEME_REVEAL_CLASS);
+    const transition = this.document.startViewTransition(() => {
+      // Apply the class now: the snapshot of the new state is taken when this
+      // callback returns, before the effect above gets a chance to run.
+      root.classList.toggle(DARK_THEME_CLASS, next === 'dark');
+      this.set(next);
+    });
+
+    const radius = Math.hypot(
+      Math.max(origin.x, view.innerWidth - origin.x),
+      Math.max(origin.y, view.innerHeight - origin.y),
+    );
+    void transition.ready
+      .then(() => {
+        const style = view.getComputedStyle(root);
+        root.animate(
+          {
+            clipPath: [
+              `circle(0px at ${origin.x}px ${origin.y}px)`,
+              `circle(${radius}px at ${origin.x}px ${origin.y}px)`,
+            ],
+          },
+          {
+            duration: parseDuration(style.getPropertyValue(THEME_REVEAL_DURATION_TOKEN)),
+            easing: style.getPropertyValue(THEME_REVEAL_EASING_TOKEN).trim() || 'ease',
+            pseudoElement: '::view-transition-new(root)',
+          },
+        );
+      })
+      .catch(() => undefined);
+    void transition.finished.finally(() => {
+      root.classList.remove(THEME_REVEAL_CLASS);
+    });
+  }
+
   /** Tracks prefers-color-scheme so 'system' keeps following the OS. */
   private watchSystemPreference(): void {
     const query = this.document.defaultView?.matchMedia(COLOR_SCHEME_MEDIA_QUERY);
@@ -75,4 +141,12 @@ export class ThemeService {
       return null;
     }
   }
+}
+
+/** Turns a CSS time such as "720ms" or "0.7s" into milliseconds. */
+function parseDuration(value: string): number {
+  const trimmed = value.trim();
+  const amount = Number.parseFloat(trimmed);
+  if (Number.isNaN(amount)) return THEME_REVEAL_FALLBACK_MS;
+  return trimmed.endsWith('ms') ? amount : amount * MS_PER_SECOND;
 }

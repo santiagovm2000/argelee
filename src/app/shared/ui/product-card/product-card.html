@@ -1,0 +1,36 @@
+<ng-container *transloco="let translate">
+  <a
+    [routerLink]="link()"
+    (click)="chosen.emit(product().id)"
+    class="group block text-center outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-4 focus-visible:ring-offset-surface-tint"
+  >
+    <div
+      [attr.data-piece]="piece()"
+      class="parallax-window relative aspect-[4/5] overflow-hidden rounded-card border border-line-tint bg-surface-raised shadow-raised transition-[box-shadow,border-color] duration-settled group-hover:border-accent-text group-hover:shadow-overlay"
+    >
+      <img
+        [ngSrc]="image().path"
+        fill
+        [ngSrcset]="srcset()"
+        [placeholder]="image().placeholder"
+        [sizes]="sizes"
+        class="parallax-window__image object-cover"
+        [alt]="translate(t.catalog.products[product().id].imageAlt)"
+      />
+    </div>
+
+    <div class="px-2 pt-4">
+      <h3 class="font-display text-title text-ink">
+        {{ translate(t.catalog.products[product().id].name) }}
+      </h3>
+      <p class="mt-2 text-caption text-ink-muted">
+        {{ translate(t.catalog.products[product().id].note) }}
+      </p>
+      <p class="mt-3 text-eyebrow font-medium text-accent-text uppercase">
+        {{ translate(t.catalog.card.fromPrice, { price: price() }) }}
+        ·
+        {{ translate(t.catalog.card.customize) }}
+      </p>
+    </div>
+  </a>
+</ng-container>

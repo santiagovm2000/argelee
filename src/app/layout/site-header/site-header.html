@@ -1,14 +1,30 @@
 <ng-container *transloco="let translate">
-  <header class="sticky top-0 z-40 border-b border-line bg-surface/85 backdrop-blur-md">
-    <div class="mx-auto flex h-16 max-w-content items-center justify-between gap-6 px-6">
-      <a
-        [routerLink]="language.homeUrl()"
-        class="font-display text-title font-semibold tracking-tight text-ink"
-      >
-        {{ site.name }}
+  <header class="topbar fixed inset-x-0 top-0 z-40">
+    <div
+      class="mx-auto flex h-header max-w-wide items-center justify-between gap-6 px-6 sm:px-10 lg:px-14"
+    >
+      <a [routerLink]="language.homeUrl()" class="topbar__mark rounded-control">
+        <arg-wordmark size="display" />
       </a>
 
-      <nav class="flex items-center gap-3" [attr.aria-label]="translate(t.a11y.mainNavigation)">
+      <nav
+        class="topbar__nav flex items-center gap-5 sm:gap-8"
+        [attr.aria-label]="translate(t.a11y.mainNavigation)"
+      >
+        <a
+          [routerLink]="language.homeUrl()"
+          [fragment]="sections.catalog"
+          class="hidden min-h-11 items-center text-label font-medium text-current uppercase opacity-80 transition-opacity duration-quick hover:opacity-100 sm:inline-flex"
+        >
+          {{ translate(t.navigation.catalog) }}
+        </a>
+        <a
+          [routerLink]="language.homeUrl()"
+          [fragment]="sections.orders"
+          class="hidden min-h-11 items-center text-label font-medium text-current uppercase opacity-80 transition-opacity duration-quick hover:opacity-100 sm:inline-flex"
+        >
+          {{ translate(t.navigation.orders) }}
+        </a>
         <arg-language-switcher />
         <arg-theme-toggle />
       </nav>

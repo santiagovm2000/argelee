@@ -43,7 +43,7 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 
-# Local environment (holds PRIMENG_LICENSE_KEY)
+# Local environment (SITE_ORIGIN, SITE_INDEXABLE)
 .env
 .env.*
 !.env.example

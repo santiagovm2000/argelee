@@ -6,9 +6,9 @@
  * brand colour lives in exactly ONE place: change it here, regenerate, paste.
  *
  * Scales are built in OKLCH so every step is perceptually even — the reason
- * `brand-400` on dark and `brand-600` on light read as the same "weight".
+ * `brand-200` on dark and `brand-600` on light read as the same "weight".
  */
-const BRAND_HEX = '#3AC5F7';
+const BRAND_HEX = '#4E6E90';
 
 interface Oklch {
   l: number;
@@ -44,19 +44,19 @@ function hexToOklch(hex: string): Oklch {
 
 const round = (value: number, places: number): number => Number(value.toFixed(places));
 
-/** Step 500 is anchored to BRAND_HEX itself; the rest ramp around it. */
+/** Step 600 is anchored to BRAND_HEX itself (a mid-tone brand); the rest ramp around it. */
 const STEPS: readonly (readonly [name: number, lightness: number | null, chromaRatio: number])[] = [
-  [50, 0.98, 0.12],
-  [100, 0.955, 0.24],
-  [200, 0.918, 0.45],
-  [300, 0.872, 0.68],
-  [400, 0.825, 0.88],
-  [500, null, 1.0],
-  [600, 0.7, 0.99],
-  [700, 0.6, 0.92],
-  [800, 0.49, 0.8],
-  [900, 0.38, 0.64],
-  [950, 0.26, 0.46],
+  [50, 0.978, 0.08],
+  [100, 0.955, 0.18],
+  [200, 0.847, 0.62],
+  [300, 0.78, 0.8],
+  [400, 0.702, 1.0],
+  [500, 0.61, 1.08],
+  [600, null, 1.0],
+  [700, 0.45, 0.92],
+  [800, 0.37, 0.77],
+  [900, 0.29, 0.6],
+  [950, 0.248, 0.38],
 ];
 
 const base = hexToOklch(BRAND_HEX);
@@ -73,22 +73,22 @@ for (const [name, lightness, chromaRatio] of STEPS) {
   );
 }
 
-/* A neutral carrying a trace of the brand hue reads as intentional rather than
-   as the framework's default grey. Chroma stays under 0.012 so it never tints. */
-console.log(`\n/* Neutrals, hue-matched to the brand at very low chroma */`);
+/* The neutrals carry a visible trace of the brand hue: a cool, inky grey rather
+   than a framework default. Chroma peaks in the mid-tones and fades to white. */
+console.log(`\n/* Neutrals, hue-matched to the brand */`);
 const NEUTRALS: readonly (readonly [name: number, lightness: number, chroma: number])[] = [
   [0, 1, 0],
-  [50, 0.985, 0.003],
-  [100, 0.962, 0.005],
-  [200, 0.922, 0.007],
-  [300, 0.868, 0.009],
-  [400, 0.715, 0.011],
-  [500, 0.575, 0.012],
-  [600, 0.46, 0.012],
-  [700, 0.37, 0.011],
-  [800, 0.272, 0.01],
-  [900, 0.19, 0.008],
-  [950, 0.128, 0.006],
+  [50, 0.985, 0.004],
+  [100, 0.958, 0.01],
+  [200, 0.932, 0.013],
+  [300, 0.868, 0.016],
+  [400, 0.728, 0.028],
+  [500, 0.524, 0.033],
+  [600, 0.45, 0.03],
+  [700, 0.37, 0.028],
+  [800, 0.296, 0.025],
+  [900, 0.227, 0.021],
+  [950, 0.188, 0.015],
 ];
 for (const [name, lightness, chroma] of NEUTRALS) {
   console.log(`  --color-neutral-${name}: oklch(${lightness} ${chroma} ${hue});`);

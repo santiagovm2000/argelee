@@ -1,46 +1,157 @@
 {
   "meta": {
     "home": {
-      "title": "Argelee",
-      "description": "Page description for search engines and social cards."
+      "title": "ArGelees — Artisan jellies, made to order",
+      "description": "Hand-moulded jellies finished with fresh fruit, made for the date of your celebration. Pick a piece, its layers and its fruit, and order on WhatsApp."
+    },
+    "product": {
+      "title": "{{name}} — ArGelees",
+      "description": "{{description}} Adjust servings, layers and fruit, then order on WhatsApp."
     }
   },
   "a11y": {
     "skipToContent": "Skip to content",
     "mainNavigation": "Main navigation",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
     "changeLanguage": "Change language",
     "switchToDarkTheme": "Switch to dark theme",
-    "switchToLightTheme": "Switch to light theme"
+    "switchToLightTheme": "Switch to light theme",
+    "openWhatsapp": "Message on WhatsApp",
+    "priceUpdated": "Price updated: {{total}}",
+    "previousPiece": "Previous piece",
+    "nextPiece": "Next piece",
+    "pieces": "Pieces on the menu"
   },
   "common": {
-    "actions": {
-      "back": "Back",
-      "retry": "Try again",
-      "close": "Close"
-    },
     "language": {
       "es": "Español",
       "en": "English"
     }
   },
   "navigation": {
-    "home": "Home"
+    "catalog": "Menu",
+    "orders": "Orders"
   },
   "landing": {
     "hero": {
-      "headline": "Argelee",
-      "subheadline": "Replace this copy once the landing message is defined.",
-      "primaryAction": "Get started",
-      "secondaryAction": "See how it works"
+      "eyebrow": "Jellies to order",
+      "headline": "Delicacy in every layer",
+      "body": "Hand-moulded and finished with fresh fruit. Each piece is made for the date of your celebration: weddings, christenings, birthdays and dessert tables.",
+      "primaryAction": "See the menu",
+      "secondaryAction": "Get a quote"
+    },
+    "orders": {
+      "statement": "Orders are scheduled one week in advance",
+      "action": "Message on WhatsApp"
     }
+  },
+  "catalog": {
+    "section": {
+      "eyebrow": "Menu",
+      "title": "The menu",
+      "subtitle": "Pick a piece to adjust servings, layers and fruit. The price updates instantly."
+    },
+    "card": {
+      "fromPrice": "From {{price}}",
+      "customize": "Customise"
+    },
+    "groups": {
+      "portions": "Servings",
+      "layers": "Flavor layers",
+      "fruit": "Fresh fruit"
+    },
+    "hints": {
+      "layers": "Pick the layers — each extra layer adds {{price}}",
+      "fruit": "Each extra fruit adds {{price}}"
+    },
+    "portions": {
+      "8": "8 servings",
+      "12": "12 servings",
+      "16": "16 servings"
+    },
+    "layers": {
+      "fresa": "Strawberry",
+      "crema": "Cream",
+      "durazno": "Peach",
+      "maracuya": "Passion fruit",
+      "limon": "Lime",
+      "uva": "Grape",
+      "leche": "Milk",
+      "vainilla": "Vanilla",
+      "mora": "Blackberry",
+      "frutos-rojos": "Red berries",
+      "cereza": "Cherry",
+      "granadilla": "Granadilla",
+      "coco": "Coconut"
+    },
+    "fruits": {
+      "fresa": "Strawberry",
+      "uva": "Grape",
+      "durazno": "Peach",
+      "kiwi": "Kiwi",
+      "mango": "Mango",
+      "pina": "Pineapple"
+    },
+    "products": {
+      "jardin-de-frutas": {
+        "name": "Fruit Garden",
+        "note": "Grape, peach, strawberry and kiwi",
+        "description": "Clear jelly with thick-cut fresh fruit set in spokes. The fruit is decided with you before it is built.",
+        "imageAlt": "Clear jelly crown with strawberries, purple grapes, peach and green grapes"
+      },
+      "mosaico-fresa-crema": {
+        "name": "Strawberry and Cream Mosaic",
+        "note": "Fresh strawberry and cream",
+        "description": "A flower mould in two layers: fresh strawberry jelly over a cream base. Unmoulded whole and delivered on its gold board.",
+        "imageAlt": "Flower-mould jelly, red on top and cream below, on a gold board"
+      },
+      "uva-nocturna": {
+        "name": "Midnight Grape",
+        "note": "Black grape and milk",
+        "description": "Black grape over a milk layer, with a fresh cluster at the centre. The most understated piece on the menu.",
+        "imageAlt": "Fluted jelly mould, dark purple over a lilac layer, with grapes at the centre"
+      },
+      "rubi-clasica": {
+        "name": "Classic Ruby",
+        "note": "Red berries, traditional mould",
+        "description": "The traditional pearl mould in a single layer of red berries. High gloss and a firm cut.",
+        "imageAlt": "Red jelly in a round pearl mould on a white plate"
+      },
+      "capas-de-fresa": {
+        "name": "Strawberry Layers",
+        "note": "Strawberry, cream and lime in layers",
+        "description": "A rectangular tray of alternating layers, with sliced strawberry across the top. Made for long tables.",
+        "imageAlt": "Rectangular jelly with red, white and green layers, sliced strawberries on top"
+      }
+    },
+    "customizer": {
+      "eyebrow": "Made to order",
+      "back": "Back to the menu",
+      "order": "Order this piece",
+      "summaryPortions": "{{count}} servings",
+      "summaryFruit": "with {{fruits}}"
+    },
+    "order": {
+      "greeting": "Hi, I'd like to order a piece.",
+      "product": "Piece: {{product}}",
+      "portions": "Servings: {{portions}}",
+      "option": "{{group}}: {{choice}}",
+      "total": "Estimated price: {{total}}",
+      "closing": "Could you confirm availability and a delivery date?"
+    },
+    "missing": {
+      "title": "That piece isn't on the menu.",
+      "body": "The link may be incomplete. These are the pieces we do make.",
+      "action": "See the menu"
+    }
+  },
+  "footer": {
+    "tagline": "Handmade, to order."
   },
   "errors": {
     "notFound": {
       "title": "This page doesn't exist",
       "body": "The link you followed is broken, or the page moved.",
-      "action": "Go to home"
+      "action": "Go to the homepage"
     }
   }
 }

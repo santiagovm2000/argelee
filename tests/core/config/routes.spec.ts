@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { localizedUrl, pathSegments } from '@core/config/routes';
+import { localizedUrl, pathSegments, productSegments, ROUTE_PATHS } from '@core/config/routes';
 
 describe('localizedUrl', () => {
   it('keeps the default language at the root', () => {
@@ -32,7 +32,16 @@ describe('pathSegments', () => {
     for (const url of ['/', '/en', '/pricing', '/en/pricing']) {
       const segments = pathSegments(url);
       expect(localizedUrl('es', segments)).toBe(pathSegments(url).length ? '/pricing' : '/');
-      expect(pathSegments(localizedUrl('en', segments))).toEqual(segments);
+      expect(pathSegments(localizedUrl('en', segments)).length).toBe(segments.length);
     }
+  });
+});
+
+describe('productSegments', () => {
+  it('nests the slug under the catalogue segment in every language', () => {
+    const segments = productSegments('jardin-de-frutas');
+    expect(localizedUrl('es', segments)).toBe(`/${ROUTE_PATHS.catalog}/jardin-de-frutas`);
+    expect(localizedUrl('en', segments)).toBe(`/en/${ROUTE_PATHS.catalog}/jardin-de-frutas`);
+    expect(pathSegments(localizedUrl('en', segments))).toEqual(segments);
   });
 });

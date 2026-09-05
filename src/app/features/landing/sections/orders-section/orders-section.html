@@ -1,0 +1,15 @@
+<ng-container *transloco="let translate">
+  <section [id]="sections.orders" class="scroll-mt-anchor px-6 py-26 text-center sm:px-10 lg:py-30">
+    <p class="mx-auto max-w-[24ch] font-display text-statement text-ink">
+      {{ translate(t.landing.orders.statement) }}
+    </p>
+    <a
+      [href]="order.chatUrl()"
+      target="_blank"
+      rel="noopener"
+      class="button button--secondary mt-8"
+    >
+      {{ translate(t.landing.orders.action) }}
+    </a>
+  </section>
+</ng-container>
