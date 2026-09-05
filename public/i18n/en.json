@@ -5,7 +5,7 @@
       "description": "Hand-moulded jellies finished with fresh fruit, made for the date of your celebration. Pick a piece, its layers and its fruit, and order on WhatsApp."
     },
     "product": {
-      "title": "{{name}} — ArGelees",
+      "title": "ArGelees — {{name}}",
       "description": "{{description}} Adjust servings, layers and fruit, then order on WhatsApp."
     }
   },

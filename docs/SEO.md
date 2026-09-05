@@ -71,7 +71,7 @@ export class PricingPage implements OnInit {
 `segments` is the path **without** the language prefix — the service derives the canonical and all
 alternates from it. Get this wrong and the canonical points at the wrong page. Titles can take
 `paramKeys` (interpolation values that are themselves translation keys); the piece page uses that
-to build "`<name>` — ArGelees" from the piece's own name key.
+to build "ArGelees — `<name>`" from the piece's own name key. The brand always comes first in a title.
 
 ## Prerendering data-driven pages
 

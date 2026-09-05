@@ -5,7 +5,7 @@
       "description": "Gelatinas moldeadas a mano y decoradas con fruta natural, preparadas para la fecha de tu celebración. Elige la pieza, sus capas y su fruta, y encárgala por WhatsApp."
     },
     "product": {
-      "title": "{{name}} — ArGelees",
+      "title": "ArGelees — {{name}}",
       "description": "{{description}} Ajusta porciones, capas y fruta, y encárgala por WhatsApp."
     }
   },
