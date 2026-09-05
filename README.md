@@ -1,6 +1,6 @@
 # Argelee
 
-Landing page and made-to-order menu for **ArGelees**, artisan jellies. Visitors pick a piece, its
+Landing page and made-to-order menu for **ArGeles**, artisan jellies. Visitors pick a piece, its
 layers, its fruit and its size, and the order opens in WhatsApp already written out. Static,
 multilingual, no backend, no component library.
 

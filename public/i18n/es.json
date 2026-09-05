@@ -1,11 +1,11 @@
 {
   "meta": {
     "home": {
-      "title": "ArGelees — Gelatinas artesanales por encargo",
+      "title": "ArGeles — Gelatinas artesanales por encargo",
       "description": "Gelatinas moldeadas a mano y decoradas con fruta natural, preparadas para la fecha de tu celebración. Elige la pieza, sus capas y su fruta, y encárgala por WhatsApp."
     },
     "product": {
-      "title": "ArGelees — {{name}}",
+      "title": "ArGeles — {{name}}",
       "description": "{{description}} Ajusta porciones, capas y fruta, y encárgala por WhatsApp."
     }
   },

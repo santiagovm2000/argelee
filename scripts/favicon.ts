@@ -2,7 +2,7 @@
  * Favicon from the wordmark. Run with `bun run favicon` after changing the
  * wordmark font or the brand colours.
  *
- * Outlines the "A" of ArGelees straight from the bundled Parisienne file, so
+ * Outlines the "A" of ArGeles straight from the bundled Parisienne file, so
  * the icon never depends on a font loading, and paints it in the wordmark's
  * wine with no background: on the tab it reads like the logo itself. The SVG
  * follows the browser's colour scheme the way the wordmark follows the

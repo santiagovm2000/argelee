@@ -1,11 +1,11 @@
 {
   "meta": {
     "home": {
-      "title": "ArGelees — Artisan jellies, made to order",
+      "title": "ArGeles — Artisan jellies, made to order",
       "description": "Hand-moulded jellies finished with fresh fruit, made for the date of your celebration. Pick a piece, its layers and its fruit, and order on WhatsApp."
     },
     "product": {
-      "title": "ArGelees — {{name}}",
+      "title": "ArGeles — {{name}}",
       "description": "{{description}} Adjust servings, layers and fruit, then order on WhatsApp."
     }
   },

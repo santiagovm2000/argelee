@@ -20,7 +20,7 @@ export const IMAGES = {
     width: 1200,
     height: 630,
     widths: [420, 640, 960],
-    placeholder: 'data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAABQAwCdASoUAAsAPu1kqU2ppaOiMAgBMB2JZwDImCHfuB5gAAD+8cTYyUXwDULHotBXAAAA',
+    placeholder: 'data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAABQAwCdASoUAAsAPu1iqU2ppaQiMAgBMB2JZwDKACHft1A6AAD+8cTYyUXzLeDNS5ohoAAA',
   },
   catalogGrapeBundt: {
     path: 'images/catalog/grape-bundt',

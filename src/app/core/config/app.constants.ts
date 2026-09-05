@@ -12,9 +12,9 @@ export const BREAKPOINTS = {
 } as const;
 
 export const SITE = {
-  name: 'ArGelees',
-  wordmark: 'ArGelees',
-  twitterHandle: '@argelees',
+  name: 'ArGeles',
+  wordmark: 'ArGeles',
+  twitterHandle: '@argeles',
   whatsappNumber: '584241860627',
 } as const;
 

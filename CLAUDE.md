@@ -1,6 +1,6 @@
 # Argelee
 
-Landing page and made-to-order menu for **ArGelees**, artisan jellies; orders convert through
+Landing page and made-to-order menu for **ArGeles**, artisan jellies; orders convert through
 WhatsApp. Angular 22 + Tailwind CSS 4, built and run with **Bun**. No component library: every
 component is ours. No backend: the site prerenders to static HTML (`outputMode: "static"`) and
 deploys to any static host.
