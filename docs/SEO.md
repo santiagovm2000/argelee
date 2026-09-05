@@ -97,8 +97,9 @@ actually prerendered, not from a hand-kept list, so a new page cannot go missing
 - **Set `SITE_ORIGIN` for production.** Every canonical, hreflang, `og:image` and sitemap URL
   derives from it, including any subpath. It defaults to `http://localhost:4200`, so a build without
   it is not publishable.
-- **The WhatsApp number** in `SITE.whatsappNumber` is a placeholder, and the **prices and
-  currency** in `catalog.data.ts` / `catalog.constants.ts` are the draft's provisional figures.
+- **The prices and currency** in `catalog.data.ts` / `catalog.constants.ts` are the draft's
+  provisional figures. `SITE.whatsappNumber` is the real business line, in the digits-only form
+  wa.me links take.
 - **Host-level settings Lighthouse cannot see locally:** enable Brotli/gzip and long `Cache-Control`
   on hashed assets. Both are one setting on Vercel, Netlify or Cloudflare.
 - **Search Console** verification tag, once the domain is live.

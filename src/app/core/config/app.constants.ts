@@ -15,8 +15,7 @@ export const SITE = {
   name: 'ArGelees',
   wordmark: 'ArGelees',
   twitterHandle: '@argelees',
-  // International format, digits only. Replace with the real business line before launch.
-  whatsappNumber: '573000000000',
+  whatsappNumber: '584241860627',
 } as const;
 
 export const WHATSAPP_BASE_URL = 'https://wa.me/';

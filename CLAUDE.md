@@ -111,4 +111,5 @@ bun run test           # vitest, reads only from tests/
 - Never edit a `*.generated.ts` file. Change its source and re-run the generator.
 - `.env` holds `SITE_ORIGIN` and `SITE_INDEXABLE`, and is git-ignored. Never treat a value in the
   bundle as secret: minification is not encryption, so anything the browser needs is public.
-- `SITE.whatsappNumber` and every price are placeholders until the owner supplies the real ones.
+- Every price is a placeholder until the owner supplies the real list. `SITE.whatsappNumber` is
+  the real business line, in the digits-only form wa.me links take.
