@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { CatalogService } from '../../../../core/catalog/catalog.service';
-import { formatPrice, startingPrice } from '../../../../core/catalog/pricing';
+import { formatPrice, listedPrice } from '../../../../core/catalog/pricing';
 import { localizedUrl, productSegments, SECTION_IDS } from '../../../../core/config/routes';
 import { LanguageService } from '../../../../core/i18n/language.service';
 import { T } from '../../../../core/i18n/translation-keys.generated';
@@ -38,7 +38,7 @@ export class CatalogSection {
     return this.catalog.products.map((product) => ({
       product,
       link: localizedUrl(language, productSegments(product.id)),
-      price: formatPrice(startingPrice(product), language),
+      price: formatPrice(listedPrice(product), language),
     }));
   });
 

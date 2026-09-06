@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PORTION_SIZES } from '@core/catalog/catalog.constants';
+import { PRICE_STEP } from '@core/catalog/catalog.constants';
 import { PRODUCTS } from '@core/catalog/catalog.data';
 import { IMAGES } from '@core/images/image-manifest.generated';
 
@@ -10,18 +10,30 @@ describe('menu data', () => {
     for (const id of ids) expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
   });
 
-  it('offers at least one mould size per piece, ascending, from the known sizes', () => {
+  it('lists every price on the price step', () => {
     for (const product of PRODUCTS) {
-      expect(product.portions.length).toBeGreaterThan(0);
-      expect([...product.portions].sort((a, b) => a - b)).toEqual([...product.portions]);
-      for (const size of product.portions) expect(PORTION_SIZES).toContain(size);
+      expect(product.price).toBeGreaterThan(0);
+      expect((product.price / PRICE_STEP) % 1).toBe(0);
     }
   });
 
-  it('gives every piece something to configure, with defaults drawn from its own options', () => {
+  it('gives every mould a volume and an ascending range of people it serves', () => {
+    for (const product of PRODUCTS) {
+      if (product.size === null) continue;
+      expect(product.size.litres).toBeGreaterThan(0);
+      const [from, to] = product.size.serves;
+      expect(from).toBeGreaterThan(0);
+      expect(to).toBeGreaterThanOrEqual(from);
+    }
+  });
+
+  it('sells at least one piece by the unit', () => {
+    expect(PRODUCTS.some((product) => product.size === null)).toBe(true);
+  });
+
+  it('draws the defaults of every option group from its own options', () => {
     for (const product of PRODUCTS) {
       const groups = [product.layers, product.fruits].filter((group) => group !== null);
-      expect(groups.length).toBeGreaterThan(0);
       for (const group of groups) {
         expect(group.defaults.length).toBeGreaterThan(0);
         expect(new Set(group.options).size).toBe(group.options.length);

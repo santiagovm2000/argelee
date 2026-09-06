@@ -1,0 +1,61 @@
+<ng-container *transloco="let translate">
+  <fieldset class="min-w-0">
+    <legend class="flex w-full flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      <span class="text-eyebrow font-medium text-accent-text uppercase">{{ legend() }}</span>
+      @if (hint()) {
+        <span class="text-caption text-ink-muted">{{ hint() }}</span>
+      }
+    </legend>
+
+    <div
+      class="mt-4 inline-flex min-h-11 items-stretch rounded-control border border-line-tint bg-surface-raised text-ink"
+    >
+      <button
+        type="button"
+        class="grid w-11 place-items-center rounded-l-control border-r border-line-tint text-ink-muted transition-colors duration-settled hover:bg-surface-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+        [disabled]="value() <= min"
+        [attr.aria-label]="translate(t.a11y.fewerUnits)"
+        (click)="step(-1)"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" d="M5 12h14" />
+        </svg>
+      </button>
+      <input
+        type="number"
+        inputmode="numeric"
+        class="quantity-field w-20 bg-transparent text-center text-body text-ink outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-inset"
+        [name]="name()"
+        [min]="min"
+        [value]="value()"
+        [attr.aria-label]="legend()"
+        (input)="onInput($event)"
+        (blur)="onBlur($event)"
+      />
+      <button
+        type="button"
+        class="grid w-11 place-items-center rounded-r-control border-l border-line-tint text-ink-muted transition-colors duration-settled hover:bg-surface-hover hover:text-ink"
+        [attr.aria-label]="translate(t.a11y.moreUnits)"
+        (click)="step(1)"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" d="M12 5v14M5 12h14" />
+        </svg>
+      </button>
+    </div>
+  </fieldset>
+</ng-container>

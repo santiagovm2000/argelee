@@ -43,13 +43,13 @@
 }
 
 @supports (animation-timeline: scroll()) {
-  /* A photo slides inside its frame as the card crosses the viewport. The
-     frame clips; the image is scaled up just enough to cover the travel. */
+  /* The photo shows whole on a blurred wash of its own placeholder. The wash
+     slides behind it as the card crosses the viewport (it is scaled up enough
+     to cover the travel); the photo itself never moves, so no piece is cropped. */
   .parallax-window {
     overflow: hidden;
   }
-  .parallax-window__image {
-    scale: 1.1;
+  .parallax-window__backdrop {
     animation: window-parallax linear both;
     animation-timeline: view();
     animation-range: cover 0% cover 100%;
@@ -67,12 +67,12 @@
     animation-timeline: --shelf;
   }
 
-  /* Under the pointer the photo comes a touch closer; the parallax keeps its travel. */
+  /* Under the pointer the photo leans in a touch, well within its wash. */
   .parallax-window__image {
     transition: scale var(--duration-settled) var(--ease-out-quart);
   }
   .parallax-window:hover .parallax-window__image {
-    scale: 1.16;
+    scale: 1.03;
   }
 }
 
@@ -115,6 +115,7 @@
    reset in base.css cannot stop these. Remove the animations outright, and
    leave the hero on its poster instead of the looping video. */
 @media (prefers-reduced-motion: reduce) {
+  .parallax-window__backdrop,
   .parallax-window__image,
   .shelf__card,
   .shelf-rail__thumb,

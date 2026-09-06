@@ -6,15 +6,26 @@
   >
     <div
       [attr.data-piece]="piece()"
-      class="parallax-window relative aspect-[4/5] overflow-hidden rounded-card border border-line-tint bg-surface-raised shadow-raised transition-[box-shadow,border-color] duration-settled group-hover:border-accent-text group-hover:shadow-overlay"
+      class="parallax-window relative aspect-square overflow-hidden rounded-card border border-line-tint bg-surface-raised shadow-raised transition-[box-shadow,border-color] duration-settled group-hover:border-accent-text group-hover:shadow-overlay"
     >
+      <svg
+        class="parallax-window__backdrop absolute inset-0 size-full scale-125 blur-2xl"
+        aria-hidden="true"
+      >
+        <image
+          [attr.href]="image().placeholder"
+          width="100%"
+          height="100%"
+          preserveAspectRatio="xMidYMid slice"
+        />
+      </svg>
       <img
         [ngSrc]="image().path"
         fill
         [ngSrcset]="srcset()"
         [placeholder]="image().placeholder"
         [sizes]="sizes"
-        class="parallax-window__image object-cover"
+        class="parallax-window__image object-contain"
         [alt]="translate(t.catalog.products[product().id].imageAlt)"
       />
     </div>
@@ -27,7 +38,11 @@
         {{ translate(t.catalog.products[product().id].note) }}
       </p>
       <p class="mt-3 text-eyebrow font-medium text-accent-text uppercase">
-        {{ translate(t.catalog.card.fromPrice, { price: price() }) }}
+        @if (byUnit()) {
+          {{ translate(t.catalog.card.unitPrice, { price: price() }) }}
+        } @else {
+          {{ price() }}
+        }
         ·
         {{ translate(t.catalog.card.customize) }}
       </p>

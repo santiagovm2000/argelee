@@ -1,60 +1,66 @@
 import type { Product } from './catalog.model';
 
-// The whole menu, in shelf order. Add a piece here and its names in
-// public/i18n/<lang>.json, run `bun run i18n`, and the shelf, the product page
-// and the sitemap pick it up. A group listed as `null` is simply absent from the
-// configurator; the layers or fruit in `defaults` are included in the base price.
+// The whole menu, in the order of the owner's price list. Add a piece here and
+// its names in public/i18n/<lang>.json, run `bun run i18n`, and the shelf, the
+// product page and the sitemap pick it up. `size: null` sells the piece by the
+// unit: the configurator asks how many, and `price` is the price of one. A
+// group listed as `null` is simply absent from the configurator; the layers or
+// fruit in `defaults` are included in the price.
 export const PRODUCTS: readonly Product[] = [
   {
-    id: 'jardin-de-frutas',
-    image: 'catalogTropicalFruitRing',
-    basePrice: 18,
-    portions: [8, 12, 16],
+    id: 'frutas-en-capa-cristalina',
+    image: 'catalogFruitCrystalLayer',
+    price: 60,
+    size: { litres: 2, serves: [16, 20] },
     layers: null,
-    fruits: {
-      options: ['fresa', 'uva', 'durazno', 'kiwi', 'mango', 'pina'],
-      defaults: ['fresa', 'uva'],
-    },
-  },
-  {
-    id: 'mosaico-fresa-crema',
-    image: 'catalogStrawberryMilkFlower',
-    basePrice: 15,
-    portions: [8, 12, 16],
-    layers: {
-      options: ['fresa', 'crema', 'durazno', 'maracuya', 'limon'],
-      defaults: ['fresa', 'crema'],
-    },
     fruits: null,
   },
   {
-    id: 'uva-nocturna',
-    image: 'catalogGrapeBundt',
-    basePrice: 16,
-    portions: [8, 12, 16],
-    layers: { options: ['uva', 'leche', 'vainilla', 'mora'], defaults: ['uva', 'leche'] },
+    id: 'fresa-a-franjas',
+    image: 'catalogStrawberryStripes',
+    price: 45,
+    size: { litres: 2, serves: [16, 20] },
+    layers: null,
     fruits: null,
   },
   {
-    id: 'rubi-clasica',
-    image: 'catalogStrawberryScalloped',
-    basePrice: 12,
-    portions: [8, 12, 16],
-    layers: {
-      options: ['frutos-rojos', 'fresa', 'cereza', 'granadilla'],
-      defaults: ['frutos-rojos'],
-    },
+    id: 'anillo-de-cereza-y-tres-leches',
+    image: 'catalogCherryTresLechesRing',
+    price: 35,
+    size: { litres: 2, serves: [16, 20] },
+    layers: null,
     fruits: null,
   },
   {
-    id: 'capas-de-fresa',
-    image: 'catalogStrawberrySheet',
-    basePrice: 17,
-    portions: [8, 12, 16],
-    layers: {
-      options: ['fresa', 'crema', 'limon', 'durazno', 'coco'],
-      defaults: ['fresa', 'crema'],
-    },
-    fruits: { options: ['fresa', 'kiwi', 'uva', 'durazno'], defaults: ['fresa'] },
+    id: 'uva-a-dos-tonos',
+    image: 'catalogTwoToneGrape',
+    price: 30,
+    size: { litres: 2, serves: [16, 20] },
+    layers: null,
+    fruits: null,
+  },
+  {
+    id: 'fresa-con-cubitos',
+    image: 'catalogStrawberryCubes',
+    price: 30,
+    size: { litres: 1.6, serves: [13, 16] },
+    layers: null,
+    fruits: null,
+  },
+  {
+    id: 'cereza-y-leche-condensada',
+    image: 'catalogCherryCondensedMilk',
+    price: 20,
+    size: { litres: 1, serves: [8, 10] },
+    layers: null,
+    fruits: null,
+  },
+  {
+    id: 'fresa-en-envase-individual',
+    image: 'catalogStrawberryCup',
+    price: 3.5,
+    size: null,
+    layers: null,
+    fruits: null,
   },
 ];

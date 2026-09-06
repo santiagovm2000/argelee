@@ -2,11 +2,11 @@
   "meta": {
     "home": {
       "title": "ArGeles — Artisan jellies, made to order",
-      "description": "Hand-moulded jellies finished with fresh fruit, made for the date of your celebration. Pick a piece, its layers and its fruit, and order on WhatsApp."
+      "description": "Hand-moulded jellies decorated with fresh fruit, made for the date of your celebration. Choose your piece and order it on WhatsApp."
     },
     "product": {
       "title": "ArGeles — {{name}}",
-      "description": "{{description}} Adjust servings, layers and fruit, then order on WhatsApp."
+      "description": "{{description}} Order it on WhatsApp."
     }
   },
   "a11y": {
@@ -19,7 +19,9 @@
     "priceUpdated": "Price updated: {{total}}",
     "previousPiece": "Previous piece",
     "nextPiece": "Next piece",
-    "pieces": "Pieces on the menu"
+    "pieces": "Pieces on the menu",
+    "fewerUnits": "One cup fewer",
+    "moreUnits": "One cup more"
   },
   "common": {
     "language": {
@@ -48,25 +50,22 @@
     "section": {
       "eyebrow": "Menu",
       "title": "The menu",
-      "subtitle": "Pick a piece to adjust servings, layers and fruit. The price updates instantly."
+      "subtitle": "Every piece is made to order with selected fresh fruit. Choose yours and order it on WhatsApp."
     },
     "card": {
-      "fromPrice": "From {{price}}",
-      "customize": "Customise"
+      "unitPrice": "{{price}} per cup",
+      "customize": "View and order"
     },
     "groups": {
-      "portions": "Servings",
+      "size": "Size",
+      "quantity": "Quantity",
       "layers": "Flavor layers",
       "fruit": "Fresh fruit"
     },
     "hints": {
       "layers": "Pick the layers — each extra layer adds {{price}}",
-      "fruit": "Each extra fruit adds {{price}}"
-    },
-    "portions": {
-      "8": "8 servings",
-      "12": "12 servings",
-      "16": "16 servings"
+      "fruit": "Each extra fruit adds {{price}}",
+      "quantity": "Price per 200 ml cup: {{price}}"
     },
     "layers": {
       "fresa": "Strawberry",
@@ -92,51 +91,67 @@
       "pina": "Pineapple"
     },
     "products": {
-      "jardin-de-frutas": {
-        "name": "Fruit Garden",
-        "note": "Grape, peach, strawberry and kiwi",
-        "description": "Clear jelly with thick-cut fresh fruit set in spokes. The fruit is decided with you before it is built.",
+      "frutas-en-capa-cristalina": {
+        "name": "Fruit in a Crystal Layer",
+        "note": "Strawberries, peach and grapes in clear jelly",
+        "description": "Strawberries, peach and grapes suspended in clear jelly, over a base of tres leches jelly.",
         "imageAlt": "Clear jelly crown with strawberries, purple grapes, peach and green grapes"
       },
-      "mosaico-fresa-crema": {
-        "name": "Strawberry and Cream Mosaic",
-        "note": "Fresh strawberry and cream",
-        "description": "A flower mould in two layers: fresh strawberry jelly over a cream base. Unmoulded whole and delivered on its gold board.",
+      "fresa-a-franjas": {
+        "name": "Strawberry Stripes",
+        "note": "Sliced strawberry over strawberry, lime and tres leches stripes",
+        "description": "Sliced strawberry over fine stripes of strawberry jelly, lime jelly and tres leches jelly.",
+        "imageAlt": "Rectangular jelly with red, white and green layers, sliced strawberries on top"
+      },
+      "anillo-de-cereza-y-tres-leches": {
+        "name": "Cherry and Tres Leches Ring",
+        "note": "Cherry and tres leches, alternating, in a ring mould",
+        "description": "Cherry jelly and tres leches jelly alternating in a ring mould.",
         "imageAlt": "Flower-mould jelly, red on top and cream below, on a gold board"
       },
-      "uva-nocturna": {
-        "name": "Midnight Grape",
-        "note": "Black grape and milk",
-        "description": "Black grape over a milk layer, with a fresh cluster at the centre. The most understated piece on the menu.",
+      "uva-a-dos-tonos": {
+        "name": "Two-Tone Grape",
+        "note": "Grape jelly in two tones, crowned with fresh grapes",
+        "description": "Grape jelly in two tones, one dark layer and one with condensed milk, crowned with fresh grapes.",
         "imageAlt": "Fluted jelly mould, dark purple over a lilac layer, with grapes at the centre"
       },
-      "rubi-clasica": {
-        "name": "Classic Ruby",
-        "note": "Red berries, traditional mould",
-        "description": "The traditional pearl mould in a single layer of red berries. High gloss and a firm cut.",
+      "fresa-con-cubitos": {
+        "name": "Strawberry with Cubes",
+        "note": "Fresh strawberry cubes over strawberry and condensed-milk stripes",
+        "description": "Fresh strawberry cubes in the top layer over stripes of strawberry jelly with condensed milk.",
+        "imageAlt": "Round scalloped pink jelly with strawberry cubes in its clear top layer"
+      },
+      "cereza-y-leche-condensada": {
+        "name": "Cherry and Condensed Milk",
+        "note": "Cherry in two layers, one clear and one creamy",
+        "description": "Cherry jelly in two layers: one clear, and a creamy base with condensed milk.",
         "imageAlt": "Red jelly in a round pearl mould on a white plate"
       },
-      "capas-de-fresa": {
-        "name": "Strawberry Layers",
-        "note": "Strawberry, cream and lime in layers",
-        "description": "A rectangular tray of alternating layers, with sliced strawberry across the top. Made for long tables.",
-        "imageAlt": "Rectangular jelly with red, white and green layers, sliced strawberries on top"
+      "fresa-en-envase-individual": {
+        "name": "Strawberry in an Individual Cup",
+        "note": "Creamy strawberry base, strawberry cubes and a jelly flower",
+        "description": "A creamy strawberry jelly base, fresh strawberry cubes and a jelly flower. Ready to serve: each 200 ml cup comes with its lid and spoon.",
+        "imageAlt": "Lidded individual cups of strawberry jelly with fruit cubes and a pink flower on top"
       }
     },
     "customizer": {
       "eyebrow": "Made to order",
       "back": "Back to the menu",
       "order": "Order this piece",
-      "summaryPortions": "{{count}} servings",
-      "summaryFruit": "with {{fruits}}"
+      "summaryFruit": "with {{fruits}}",
+      "size": "{{litres}} litres, serves {{from}} to {{to}}",
+      "units": "{{count}} cups",
+      "unit": "{{count}} cup"
     },
     "order": {
       "greeting": "Hi, I'd like to order a piece.",
       "product": "Piece: {{product}}",
-      "portions": "Servings: {{portions}}",
       "option": "{{group}}: {{choice}}",
-      "total": "Estimated price: {{total}}",
-      "closing": "Could you confirm availability and a delivery date?"
+      "total": "Price: {{total}}",
+      "closing": "Could you confirm availability and a delivery date?",
+      "size": "Size: {{litres}} litres, serves {{from}} to {{to}}",
+      "quantity": "Quantity: {{count}} cups",
+      "quantityOne": "Quantity: {{count}} cup"
     },
     "missing": {
       "title": "That piece isn't on the menu.",

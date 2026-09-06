@@ -6,12 +6,12 @@ import {
   CURRENCY_CODE,
   EXTRA_FRUIT_PRICE,
   EXTRA_LAYER_PRICE,
-  PORTION_SIZES,
+  SINGLE_UNIT,
 } from '../../../../core/catalog/catalog.constants';
 import type { FruitId, LayerId, Product, Selection } from '../../../../core/catalog/catalog.model';
 import { CatalogService } from '../../../../core/catalog/catalog.service';
 import { OrderService } from '../../../../core/catalog/order.service';
-import { formatPrice, quote, startingPrice } from '../../../../core/catalog/pricing';
+import { formatNumber, formatPrice, listedPrice, quote } from '../../../../core/catalog/pricing';
 import { defaultSelection } from '../../../../core/catalog/selection';
 import { productSegments, SECTION_IDS } from '../../../../core/config/routes';
 import { IMAGES } from '../../../../core/images/image-manifest.generated';
@@ -22,10 +22,11 @@ import { T } from '../../../../core/i18n/translation-keys.generated';
 import { SeoService } from '../../../../core/seo/seo.service';
 import { ChoiceGroup, type ChoiceOption } from '../../../../shared/ui/choice-group/choice-group';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
+import { QuantityInput } from '../../../../shared/ui/quantity-input/quantity-input';
 
-// Native radio/checkbox groups need a shared name per group.
+// Native controls need a shared name per group.
 const GROUP_NAMES = {
-  portions: 'portions',
+  quantity: 'quantity',
   layers: 'layers',
   fruits: 'fruits',
 } as const;
@@ -35,7 +36,14 @@ const LIST_SEPARATOR = ', ';
 
 @Component({
   selector: 'arg-product-page',
-  imports: [NgOptimizedImage, RouterLink, TranslocoDirective, ChoiceGroup, EmptyState],
+  imports: [
+    NgOptimizedImage,
+    RouterLink,
+    TranslocoDirective,
+    ChoiceGroup,
+    EmptyState,
+    QuantityInput,
+  ],
   templateUrl: './product-page.html',
 })
 export class ProductPage {
@@ -81,15 +89,23 @@ export class ProductPage {
     return product === null || selection === null ? '' : this.order.orderUrl(product, selection);
   });
 
-  protected readonly portionOptions = computed<readonly ChoiceOption<string>[]>(() =>
-    (this.product()?.portions ?? []).map((size) => ({
-      id: String(size),
-      label: this.translate(T.catalog.portions[size]),
-    })),
-  );
-  protected readonly portionSelected = computed<readonly string[]>(() => {
-    const selection = this.selection();
-    return selection === null ? [] : [String(selection.portions)];
+  /** "2 litros, para 16 a 20 personas" for a mould; empty for a piece sold by the unit. */
+  protected readonly sizeText = computed(() => {
+    const size = this.product()?.size ?? null;
+    if (size === null) return '';
+    return this.translate(T.catalog.customizer.size, {
+      litres: formatNumber(size.litres, this.language.current()),
+      from: size.serves[0],
+      to: size.serves[1],
+    });
+  });
+
+  /** "Precio por envase de 200 ml: $3,50", beside the quantity field. */
+  protected readonly unitHint = computed(() => {
+    const product = this.product();
+    return product === null
+      ? ''
+      : this.translate(T.catalog.hints.quantity, { price: this.money(product.price) });
   });
 
   protected readonly layerOptions = computed<readonly ChoiceOption<LayerId>[]>(() =>
@@ -112,12 +128,20 @@ export class ProductPage {
     this.translate(T.catalog.hints.fruit, { price: this.money(EXTRA_FRUIT_PRICE) }),
   );
 
-  /** "12 porciones · Fresa · Crema · con fresa, uva", the line under the price. */
+  /** "2 litros, para 16 a 20 personas · Fresa · con fresa, uva", the line under the price. */
   protected readonly summary = computed(() => {
+    const product = this.product();
     const selection = this.selection();
-    if (selection === null) return '';
+    if (product === null || selection === null) return '';
     const parts = [
-      this.translate(T.catalog.customizer.summaryPortions, { count: selection.portions }),
+      product.size === null
+        ? this.translate(
+            selection.quantity === SINGLE_UNIT
+              ? T.catalog.customizer.unit
+              : T.catalog.customizer.units,
+            { count: selection.quantity },
+          )
+        : this.sizeText(),
       ...selection.layers.map((id) => this.translate(T.catalog.layers[id])),
     ];
     if (selection.fruits.length > 0) {
@@ -140,10 +164,8 @@ export class ProductPage {
     });
   }
 
-  protected setPortions(ids: readonly string[]): void {
-    const portions = PORTION_SIZES.find((size) => String(size) === ids[0]);
-    if (portions === undefined) return;
-    this.selection.update((current) => (current === null ? current : { ...current, portions }));
+  protected setQuantity(quantity: number): void {
+    this.selection.update((current) => (current === null ? current : { ...current, quantity }));
   }
 
   protected setLayers(layers: readonly LayerId[]): void {
@@ -165,7 +187,7 @@ export class ProductPage {
       product: {
         nameKey: keys.name,
         descriptionKey: keys.description,
-        lowPrice: startingPrice(product),
+        lowPrice: listedPrice(product),
         currency: CURRENCY_CODE,
       },
     });

@@ -2,11 +2,11 @@
   "meta": {
     "home": {
       "title": "ArGeles — Gelatinas artesanales por encargo",
-      "description": "Gelatinas moldeadas a mano y decoradas con fruta natural, preparadas para la fecha de tu celebración. Elige la pieza, sus capas y su fruta, y encárgala por WhatsApp."
+      "description": "Gelatinas moldeadas a mano y decoradas con fruta fresca, preparadas para la fecha de tu celebración. Elige tu pieza y encárgala por WhatsApp."
     },
     "product": {
       "title": "ArGeles — {{name}}",
-      "description": "{{description}} Ajusta porciones, capas y fruta, y encárgala por WhatsApp."
+      "description": "{{description}} Encárgala por WhatsApp."
     }
   },
   "a11y": {
@@ -19,7 +19,9 @@
     "priceUpdated": "Precio actualizado: {{total}}",
     "previousPiece": "Pieza anterior",
     "nextPiece": "Pieza siguiente",
-    "pieces": "Piezas de la carta"
+    "pieces": "Piezas de la carta",
+    "fewerUnits": "Un envase menos",
+    "moreUnits": "Un envase más"
   },
   "common": {
     "language": {
@@ -48,25 +50,22 @@
     "section": {
       "eyebrow": "Catálogo",
       "title": "La carta",
-      "subtitle": "Elige una pieza para ajustar porciones, sabores y fruta. El precio se actualiza al instante."
+      "subtitle": "Cada pieza se elabora por encargo, con fruta fresca seleccionada. Elige la tuya y encárgala por WhatsApp."
     },
     "card": {
-      "fromPrice": "Desde {{price}}",
-      "customize": "Personalizar"
+      "unitPrice": "{{price}} por envase",
+      "customize": "Ver y encargar"
     },
     "groups": {
-      "portions": "Porciones",
+      "size": "Tamaño",
+      "quantity": "Cantidad",
       "layers": "Capas de sabor",
       "fruit": "Fruta natural"
     },
     "hints": {
       "layers": "Elige las capas — cada capa extra suma {{price}}",
-      "fruit": "Cada fruta adicional suma {{price}}"
-    },
-    "portions": {
-      "8": "8 porciones",
-      "12": "12 porciones",
-      "16": "16 porciones"
+      "fruit": "Cada fruta adicional suma {{price}}",
+      "quantity": "Precio por envase de 200 ml: {{price}}"
     },
     "layers": {
       "fresa": "Fresa",
@@ -92,51 +91,67 @@
       "pina": "Piña"
     },
     "products": {
-      "jardin-de-frutas": {
-        "name": "Jardín de Frutas",
-        "note": "Uva, durazno, fresa y kiwi",
-        "description": "Gelatina transparente con fruta fresca en corte grueso, ordenada en radios. La fruta se define contigo antes del armado.",
+      "frutas-en-capa-cristalina": {
+        "name": "Frutas en capa cristalina",
+        "note": "Fresas, melocotón y uvas en gelatina transparente",
+        "description": "Fresas, melocotón y uvas suspendidas en gelatina transparente, sobre una base de gelatina tres leches.",
         "imageAlt": "Corona de gelatina transparente con fresas, uvas moradas, durazno y uva verde"
       },
-      "mosaico-fresa-crema": {
-        "name": "Mosaico Fresa y Crema",
-        "note": "Fresa natural y crema",
-        "description": "Molde de flor en dos capas: gelatina de fresa natural sobre base de crema. Se desmolda entera y llega montada en su base dorada.",
+      "fresa-a-franjas": {
+        "name": "Fresa a franjas",
+        "note": "Fresa laminada sobre franjas de fresa, limón y tres leches",
+        "description": "Fresa laminada sobre franjas finas de gelatina de fresa, gelatina de limón y gelatina tres leches.",
+        "imageAlt": "Gelatina rectangular de capas rojas, blancas y verdes con láminas de fresa encima"
+      },
+      "anillo-de-cereza-y-tres-leches": {
+        "name": "Anillo de cereza y tres leches",
+        "note": "Cereza y tres leches alternadas en molde de anillo",
+        "description": "Gelatina de cereza y gelatina tres leches alternadas en molde de anillo.",
         "imageAlt": "Gelatina en molde de flor, roja arriba y crema abajo, sobre base dorada"
       },
-      "uva-nocturna": {
-        "name": "Uva Nocturna",
-        "note": "Uva morada y leche",
-        "description": "Uva morada sobre capa de leche, con racimo fresco al centro. La pieza más sobria de la carta.",
+      "uva-a-dos-tonos": {
+        "name": "Uva a dos tonos",
+        "note": "Uva en dos tonos, coronada con uvas frescas",
+        "description": "Gelatina de uva en dos tonos, una capa oscura y otra con leche condensada, coronada con uvas frescas.",
         "imageAlt": "Gelatina en molde acanalado, morada oscura sobre capa lila, con uvas en el centro"
       },
-      "rubi-clasica": {
-        "name": "Rubí Clásica",
-        "note": "Frutos rojos, molde tradicional",
-        "description": "Molde tradicional de perlas en una sola capa de frutos rojos. Brillo alto y corte firme.",
+      "fresa-con-cubitos": {
+        "name": "Fresa con cubitos",
+        "note": "Cubitos de fresa fresca sobre franjas de fresa con leche condensada",
+        "description": "Cubitos de fresa fresca en la capa superior y franjas de gelatina de fresa con leche condensada.",
+        "imageAlt": "Gelatina redonda festoneada, rosada, con cubitos de fresa en su capa superior transparente"
+      },
+      "cereza-y-leche-condensada": {
+        "name": "Cereza y leche condensada",
+        "note": "Cereza en dos capas, una transparente y una cremosa",
+        "description": "Gelatina de cereza en dos capas, una transparente y una base cremosa con leche condensada.",
         "imageAlt": "Gelatina roja en molde redondo de perlas sobre un plato blanco"
       },
-      "capas-de-fresa": {
-        "name": "Capas de Fresa",
-        "note": "Fresa, crema y limón en capas",
-        "description": "Bandeja rectangular en capas alternadas, con fresa laminada en la superficie. Rinde para mesas largas.",
-        "imageAlt": "Gelatina rectangular de capas rojas, blancas y verdes con láminas de fresa encima"
+      "fresa-en-envase-individual": {
+        "name": "Fresa en envase individual",
+        "note": "Base cremosa de fresa, cubitos de fresa y flor de gelatina",
+        "description": "Base cremosa de gelatina de fresa, cubitos de fresa fresca y una flor de gelatina. Listos para servir, cada envase de 200 ml con su tapa y su cucharilla.",
+        "imageAlt": "Envases individuales con tapa de gelatina de fresa, con cubitos de fruta y una flor rosada encima"
       }
     },
     "customizer": {
       "eyebrow": "Pieza por encargo",
       "back": "Volver a la carta",
       "order": "Encargar esta pieza",
-      "summaryPortions": "{{count}} porciones",
-      "summaryFruit": "con {{fruits}}"
+      "summaryFruit": "con {{fruits}}",
+      "size": "{{litres}} litros, para {{from}} a {{to}} personas",
+      "units": "{{count}} envases",
+      "unit": "{{count}} envase"
     },
     "order": {
       "greeting": "Hola, quiero encargar una pieza.",
       "product": "Pieza: {{product}}",
-      "portions": "Porciones: {{portions}}",
       "option": "{{group}}: {{choice}}",
-      "total": "Precio estimado: {{total}}",
-      "closing": "¿Me confirman disponibilidad y fecha de entrega?"
+      "total": "Precio: {{total}}",
+      "closing": "¿Me confirman disponibilidad y fecha de entrega?",
+      "size": "Tamaño: {{litres}} litros, para {{from}} a {{to}} personas",
+      "quantity": "Cantidad: {{count}} envases",
+      "quantityOne": "Cantidad: {{count}} envase"
     },
     "missing": {
       "title": "Esa pieza no está en la carta.",

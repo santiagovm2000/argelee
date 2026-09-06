@@ -87,7 +87,7 @@ Everything a visitor can buy is data, never markup.
 
 ```
 core/catalog/
-  catalog.constants.ts   mould sizes, the default size, currency, price factors, extras
+  catalog.constants.ts   currency, the price step, extras, unit quantities
   catalog.model.ts       Product, OptionGroup, Selection — ids are the i18n keys
   catalog.data.ts        PRODUCTS: the whole menu, one object per piece, in shelf order
   selection.ts           defaultSelection(), toggleChoice(): pure, unit-tested
@@ -107,7 +107,10 @@ absent from the configurator. A group never goes empty.
 The shelf and the product page both read `PRODUCTS`; the prerenderer reads it too, to know which
 `/catalogo/<slug>` pages to emit; the sitemap is built from what was emitted. **Adding a piece** is
 therefore: one entry in `catalog.data.ts`, its names in both locale files, the photo in
-`assets-src/images/catalog/`, then `bun run images` and `bun run i18n`. Nothing else changes.
+`assets-src/images/catalog/`, then `bun run images` and `bun run i18n`. Nothing else changes. A
+piece sold by the unit (an individual cup) sets `size: null`: the configurator then asks how many,
+and its `price` is the price of one. Prices, sizes and descriptions follow the owner's price list,
+published as `public/ArGeles-catalogo.pdf`; change the list and the data together.
 
 ## Rendering
 

@@ -1,10 +1,11 @@
 import { inject, Service } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { SITE, WHATSAPP_BASE_URL } from '../config/app.constants';
+import { SINGLE_UNIT } from './catalog.constants';
 import { LanguageService } from '../i18n/language.service';
 import { T } from '../i18n/translation-keys.generated';
 import type { Product, Selection } from './catalog.model';
-import { formatPrice, quote } from './pricing';
+import { formatNumber, formatPrice, quote } from './pricing';
 
 @Service()
 export class OrderService {
@@ -19,6 +20,7 @@ export class OrderService {
   /** The conversation link with the configured piece already written out as the first message. */
   orderUrl(product: Product, selection: Selection): string {
     const t = T.catalog;
+    const language = this.language.current();
     const translate = (key: string, params?: Record<string, string | number>): string =>
       this.transloco.translate(key, params);
     const joined = (keys: readonly string[]): string =>
@@ -27,7 +29,15 @@ export class OrderService {
     const lines = [
       translate(t.order.greeting),
       translate(t.order.product, { product: translate(t.products[product.id].name) }),
-      translate(t.order.portions, { portions: selection.portions }),
+      product.size === null
+        ? translate(selection.quantity === SINGLE_UNIT ? t.order.quantityOne : t.order.quantity, {
+            count: selection.quantity,
+          })
+        : translate(t.order.size, {
+            litres: formatNumber(product.size.litres, language),
+            from: product.size.serves[0],
+            to: product.size.serves[1],
+          }),
     ];
     if (selection.layers.length > 0) {
       lines.push(
@@ -46,9 +56,7 @@ export class OrderService {
       );
     }
     lines.push(
-      translate(t.order.total, {
-        total: formatPrice(quote(product, selection), this.language.current()),
-      }),
+      translate(t.order.total, { total: formatPrice(quote(product, selection), language) }),
       translate(t.order.closing),
     );
 

@@ -130,3 +130,14 @@
 :root.arg-theme-reveal::view-transition-new(root) {
   z-index: 1;
 }
+
+/* The quantity field: a plain number box whose stepping lives in our own
+   minus and plus buttons, so the browser's spinner is hidden. */
+.quantity-field {
+  appearance: textfield;
+}
+.quantity-field::-webkit-inner-spin-button,
+.quantity-field::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}

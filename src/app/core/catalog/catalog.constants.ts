@@ -1,14 +1,6 @@
 import type { SupportedLanguage } from '../i18n/i18n.constants';
 
-// The mould sizes the kitchen actually makes, in servings.
-export const PORTION_SIZES = [8, 12, 16] as const;
-export type PortionSize = (typeof PORTION_SIZES)[number];
-
-// The size a piece opens at; prices are quoted for it and scaled for the others.
-export const DEFAULT_PORTIONS: PortionSize = 12;
-
-// Prices are provisional, in US dollars at Venezuelan artisan-market levels,
-// until the owner's real list arrives.
+// Prices are the owner's price list (public/ArGeles-catalogo.pdf), in US dollars.
 export const CURRENCY_CODE = 'USD';
 
 export const PRICE_LOCALES: Readonly<Record<SupportedLanguage, string>> = {
@@ -22,14 +14,18 @@ export const PRICE_DISPLAY: Readonly<Record<SupportedLanguage, 'narrowSymbol' | 
   en: 'narrowSymbol',
 };
 
-export const PORTION_PRICE_FACTOR: Readonly<Record<PortionSize, number>> = {
-  8: 0.78,
-  12: 1,
-  16: 1.28,
-};
+// The list goes to the half dollar (the individual cup is $3.50), so quotes
+// are rounded to that and shown with cents only when they have them.
+export const PRICE_STEP = 0.5;
+export const PRICE_FRACTION_DIGITS = 2;
 
+// What a choice beyond the included ones adds, for any piece that offers extras.
 export const EXTRA_LAYER_PRICE = 2;
 export const EXTRA_FRUIT_PRICE = 3;
 
-// Quotes are rounded to whole dollars.
-export const PRICE_STEP = 1;
+// A piece sold by the unit (an individual cup) is ordered by quantity, typed
+// into the configurator; a mould always counts as a single unit.
+export const DEFAULT_UNIT_QUANTITY = 12;
+export const MIN_UNIT_QUANTITY = 1;
+export const QUANTITY_STEP = 1;
+export const SINGLE_UNIT = 1;

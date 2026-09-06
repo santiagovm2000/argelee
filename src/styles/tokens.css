@@ -96,7 +96,7 @@
   --container-content: 73.75rem;
   --container-wide: 82.5rem;
   --container-prose: 40rem;
-  --spacing-card: clamp(13.75rem, 30vh, 17.5rem);
+  --spacing-card: 17.5rem;
   --spacing-shelf: 1.75rem;
   --spacing-hero: 100svh;
   --spacing-header: 4.5rem;

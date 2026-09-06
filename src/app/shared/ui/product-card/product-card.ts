@@ -8,7 +8,7 @@ import { IMAGE_SIZES } from '../../../core/images/image.constants';
 import { srcsetFor } from '../../../core/images/image.loader';
 import { T } from '../../../core/i18n/translation-keys.generated';
 
-/** One piece on the shelf: the photo, its name, a note and the starting price. */
+/** One piece on the shelf: the photo, its name, a note and the listed price. */
 @Component({
   selector: 'arg-product-card',
   imports: [NgOptimizedImage, RouterLink, TranslocoDirective],
@@ -28,4 +28,5 @@ export class ProductCard {
   protected readonly image = computed(() => IMAGES[this.product().image]);
   protected readonly srcset = computed(() => srcsetFor(this.image()));
   protected readonly piece = computed(() => (this.featured() ? this.product().id : null));
+  protected readonly byUnit = computed(() => this.product().size === null);
 }

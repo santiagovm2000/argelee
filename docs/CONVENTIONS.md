@@ -8,7 +8,7 @@ Files and folders are `kebab-case`. Classes are `PascalCase`. Constants are `SCR
 | --------- | --------------------------------------- | ----------------- |
 | Component | `hero-section.ts` + `hero-section.html` | `HeroSection`     |
 | Service   | `language.service.ts`                   | `LanguageService` |
-| Constants | `catalog.constants.ts`                  | `PORTION_SIZES`   |
+| Constants | `catalog.constants.ts`                  | `PRICE_STEP`      |
 | Data      | `catalog.data.ts`                       | `PRODUCTS`        |
 | Routes    | `landing.routes.ts`                     | `landingRoutes`   |
 | Generated | `translation-keys.generated.ts`         | —                 |
@@ -99,7 +99,9 @@ Never format a price in a template.
 
 ## Images
 
-Originals go in `assets-src/images/<category>/<name>.<ext>` and are never served.
+Originals go in `assets-src/images/<category>/<name>.<ext>` and are never served. A photo needs
+no particular shape: the frames are square and show the photo whole over a blurred wash of its own
+placeholder, so frame the piece generously and let the site do the rest.
 `bun run images` emits responsive AVIF plus one JPEG social card into `public/images/<category>/`
 and writes a typed manifest to `core/images/image-manifest.generated.ts`.
 
