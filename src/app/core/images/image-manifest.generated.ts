@@ -33,10 +33,10 @@ export const IMAGES = {
   catalogStrawberryMilkFlower: {
     path: 'images/catalog/strawberry-milk-flower',
     social: 'images/catalog/strawberry-milk-flower-social.jpg',
-    width: 1130,
-    height: 1100,
+    width: 992,
+    height: 1074,
     widths: [420, 640, 960],
-    placeholder: 'data:image/webp;base64,UklGRvwAAABXRUJQVlA4IPAAAACQBQCdASoUABMAPu1ur1IppiQiqAgBMB2JbACdMxx5adFgjaoLUXc8vVtceR2y7t1/CnxVGAD+YUt/pdQz9y32+w5u4H6hsJDyNYiyrR02UpceSg1oEIguApV5zwTrNRYGxcEc1zdTHc2wBF67pEtLeRt61278jaIY2z0ZvR1d47AEU8B0k4zcLgTOb5hnfRP4tR+q3r8CI7po8WDiIHLJFB6RZEKA3r5d0m3V+gBaednRXSKfe8hoDdDi+8cJGZiaHWcI34SXFh3CRBzfiK47gBtop5xS3hAsUqVZMwS1TXGZbuO6lcyO5ffioyWQKAA=',
+    placeholder: 'data:image/webp;base64,UklGRgYBAABXRUJQVlA4IPoAAABQBgCdASoUABYAPu1qqFAppiOiqA1RMB2JbACdMoPEBz5WjGZll1QLeVwsgdoTbLBMoZMvU96hXxTbiAD+xLJHzXUQULT5fZIrgESyD2fuitHzE2VyGcV58lxb+/KLvcslAqCNxCYoffY7YMQyNzzDHd3fAiyxymdo83ERrkSZgNh5XDcXkaTxef9VHyWYrkY3z8mb6bCG1fzyHICkamBa3KC13a3BgF1P2PYVOonrBspAniNVAI6k7mMiyvAMdQzMlmU0pioKseVb24jt92a9yUrNxBQHA/7RaTSiC0auGuUFwRYH9Otz/cv1gN3NErtiW2nflMjF7AAA',
   },
   catalogStrawberryScalloped: {
     path: 'images/catalog/strawberry-scalloped',
