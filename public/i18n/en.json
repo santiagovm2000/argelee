@@ -178,7 +178,6 @@
     "tagline": "Artisan jellies, made to order.",
     "whatsapp": "Chat on WhatsApp",
     "website": "Visit the website",
-    "catalog": "Price list (PDF)",
-    "phone": "Orders on WhatsApp · {{phone}}"
+    "catalog": "View catalogue"
   }
 }

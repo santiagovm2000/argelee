@@ -45,7 +45,9 @@
   container-type: inline-size;
 }
 
-/* The hero ornament from the draft: a rule, a dot, a shorter rule. */
+/* The ornament: a rule, a dot, a rule. Centred under a title it is symmetric;
+   leading a left-aligned block (the hero, as in the draft) the first rule is
+   long and the second short, so the eye lands on the text. */
 .ornament {
   display: flex;
   align-items: center;
@@ -54,13 +56,14 @@
 .ornament::before,
 .ornament::after {
   content: '';
+  width: 2.5rem;
   height: 1px;
   background: var(--color-line-tint);
 }
-.ornament::before {
+.ornament--lead::before {
   width: 4rem;
 }
-.ornament::after {
+.ornament--lead::after {
   width: 1.625rem;
 }
 .ornament > span {

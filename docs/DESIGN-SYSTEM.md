@@ -122,6 +122,9 @@ There is no component library. The few shapes the site needs are ours:
 - **Buttons**: `.button .button--primary` (ink), `.button .button--secondary` (azul hairline) and
   `.button .button--whatsapp` (WhatsApp green, only ever for WhatsApp), composed in `patterns.css`.
   Same padding, same small capitals, same 4px corners everywhere.
+- **The ornament** (`.ornament`): a rule, a dot, a rule, symmetric under a centred title; with
+  `.ornament--lead` under the left-aligned hero the first rule is long and the second short, as in
+  the draft.
 - **The link hub** (`features/links`, at `/enlaces`): the page behind the QR code and the social
   bios. One phone screen: the wordmark, the tagline and three full-width buttons, WhatsApp, the
   site and the PDF price list. Its route trims the footer and the floating button through
