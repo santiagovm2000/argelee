@@ -16,6 +16,10 @@ export const SITE = {
   wordmark: 'ArGeles',
   twitterHandle: '@argeles',
   whatsappNumber: '584241860627',
+  // The same line as people read it on the price list.
+  whatsappDisplay: '0424 186 0627',
+  // The published price list, relative so it follows the base href.
+  catalogPdf: 'ArGeles-catalogo.pdf',
 } as const;
 
 export const WHATSAPP_BASE_URL = 'https://wa.me/';

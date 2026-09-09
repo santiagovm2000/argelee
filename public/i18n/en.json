@@ -7,6 +7,10 @@
     "product": {
       "title": "ArGeles — {{name}}",
       "description": "{{description}} Order it on WhatsApp."
+    },
+    "links": {
+      "title": "ArGeles — Links",
+      "description": "Message us on WhatsApp, visit the website or download the PDF price list."
     }
   },
   "a11y": {
@@ -168,5 +172,13 @@
       "body": "The link you followed is broken, or the page moved.",
       "action": "Go to the homepage"
     }
+  },
+  "links": {
+    "title": "Links",
+    "tagline": "Artisan jellies, made to order.",
+    "whatsapp": "Chat on WhatsApp",
+    "website": "Visit the website",
+    "catalog": "Price list (PDF)",
+    "phone": "Orders on WhatsApp · {{phone}}"
   }
 }

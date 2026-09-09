@@ -14,6 +14,10 @@
     <router-outlet />
   </main>
 
-  <arg-site-footer />
-  <arg-whatsapp-button />
+  @if (chrome().footer) {
+    <arg-site-footer />
+  }
+  @if (chrome().whatsappWidget) {
+    <arg-whatsapp-button />
+  }
 </ng-container>

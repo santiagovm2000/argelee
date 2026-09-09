@@ -5,7 +5,7 @@
 Four layers. Dependencies point **down only** — ESLint enforces this, so a wrong import fails `bun run lint`.
 
 ```
-features/   landing, catalog, not-found   one folder per business capability, lazy-loaded, preloaded after first render
+features/   landing, catalog, links, not-found   one folder per business capability, lazy-loaded, preloaded after first render
    |
 layout/     header, footer, switchers, WhatsApp button   the persistent site chrome
    |

@@ -14,6 +14,10 @@ const languageChildren: Routes = [
     path: ROUTE_PATHS.catalog,
     loadChildren: () => import('./features/catalog/catalog.routes').then((m) => m.catalogRoutes),
   },
+  {
+    path: ROUTE_PATHS.links,
+    loadChildren: () => import('./features/links/links.routes').then((m) => m.linksRoutes),
+  },
 ];
 
 const prefixedLanguages = SUPPORTED_LANGUAGES.filter((language) => language !== DEFAULT_LANGUAGE);

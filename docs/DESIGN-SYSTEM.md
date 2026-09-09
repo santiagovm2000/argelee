@@ -119,8 +119,13 @@ that only changes the fragment skips the transition altogether: that is a scroll
 
 There is no component library. The few shapes the site needs are ours:
 
-- **Buttons**: `.button .button--primary` (ink) and `.button .button--secondary` (azul hairline),
-  composed in `patterns.css`. Same padding, same small capitals, same 4px corners everywhere.
+- **Buttons**: `.button .button--primary` (ink), `.button .button--secondary` (azul hairline) and
+  `.button .button--whatsapp` (WhatsApp green, only ever for WhatsApp), composed in `patterns.css`.
+  Same padding, same small capitals, same 4px corners everywhere.
+- **The link hub** (`features/links`, at `/enlaces`): the page behind the QR code and the social
+  bios. One phone screen: the wordmark, the tagline and three full-width buttons, WhatsApp, the
+  site and the PDF price list. Its route trims the footer and the floating button through
+  `data.chrome` (see `core/config/page-chrome.ts`), so the shell shows only the top bar.
 - **Quantity**: `shared/ui/quantity-input`, a native number field between our own minus and plus
   buttons, for pieces sold by the unit. Same legend and hint as a chip group.
 - **Chips**: `shared/ui/choice-group` — native radios and checkboxes inside a `fieldset`, styled

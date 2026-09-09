@@ -10,6 +10,7 @@ import {
 export const ROUTE_PATHS = {
   home: '',
   catalog: 'catalogo',
+  links: 'enlaces',
   notFound: '**',
 } as const;
 

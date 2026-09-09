@@ -7,6 +7,10 @@
     "product": {
       "title": "ArGeles — {{name}}",
       "description": "{{description}} Encárgala por WhatsApp."
+    },
+    "links": {
+      "title": "ArGeles — Enlaces",
+      "description": "Escríbenos por WhatsApp, visita la página web o descarga el catálogo en PDF."
     }
   },
   "a11y": {
@@ -168,5 +172,13 @@
       "body": "El enlace que seguiste está roto o la página se movió.",
       "action": "Ir al inicio"
     }
+  },
+  "links": {
+    "title": "Enlaces",
+    "tagline": "Gelatinas artesanales, hechas por encargo.",
+    "whatsapp": "Escribir por WhatsApp",
+    "website": "Ver la página web",
+    "catalog": "Catálogo en PDF",
+    "phone": "Pedidos por WhatsApp · {{phone}}"
   }
 }

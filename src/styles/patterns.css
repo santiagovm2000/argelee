@@ -83,6 +83,19 @@
 .button--secondary {
   @apply border border-current/45 text-ink hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-ink;
 }
+/* WhatsApp keeps its own green wherever it appears, so the entry point is recognised at a glance. */
+.button--whatsapp {
+  @apply bg-whatsapp text-neutral-0 hover:-translate-y-0.5 hover:bg-whatsapp-hover;
+}
+/* A thumb-sized button for a screen that is nothing but buttons. */
+.button--tall {
+  @apply min-h-14;
+}
+
+/* The link hub fills the first screen under the top bar, whatever the phone's toolbars do. */
+.link-stage {
+  min-height: calc(100svh - var(--spacing-header));
+}
 
 /* The top bar. Its resting style is the settled one — a frosted band, the mark
    small, ink navigation — so a browser without scroll timelines and a visitor
