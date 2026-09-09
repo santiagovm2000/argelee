@@ -14,4 +14,12 @@ export class OrdersSection {
   protected readonly t = T;
   protected readonly sections = SECTION_IDS;
   protected readonly order = inject(OrderService);
+  // The conditions from the price list, in its order.
+  protected readonly notes = [
+    T.landing.orders.notes.fruit,
+    T.landing.orders.notes.flavours,
+    T.landing.orders.notes.deposit,
+    T.landing.orders.notes.delivery,
+    T.landing.orders.notes.currency,
+  ] as const;
 }

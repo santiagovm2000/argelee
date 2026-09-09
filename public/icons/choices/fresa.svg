@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="glyph" viewBox="0 0 24 24">
+  <path d="M12 21.5c-4.6 0-7.8-3.6-7.8-8 0-3.4 3-5.7 7.8-5.7s7.8 2.3 7.8 5.7c0 4.4-3.2 8-7.8 8Z" fill="#E24B4B" />
+  <ellipse cx="9.4" cy="11.4" rx="1.1" ry="1.7" transform="rotate(-25 9.4 11.4)" fill="#fff" fill-opacity=".35" />
+  <g fill="#FFE6C7">
+    <circle cx="10.2" cy="14.2" r=".75" />
+    <circle cx="13.6" cy="12.9" r=".75" />
+    <circle cx="15.2" cy="15.6" r=".75" />
+    <circle cx="10.8" cy="17.4" r=".75" />
+    <circle cx="13.4" cy="18.3" r=".75" />
+    <circle cx="12.4" cy="15.5" r=".75" />
+  </g>
+  <path d="M12 8.3c-1.4-1.8-3.4-2.4-5.6-1.6 1 1.6 2.9 2.2 5.6 1.6 2.7.6 4.6 0 5.6-1.6-2.2-.8-4.2-.2-5.6 1.6Z" fill="#5FB37A" />
+  <path d="M12 7.8V5" stroke="#5FB37A" stroke-width="1.6" stroke-linecap="round" />
+</svg>

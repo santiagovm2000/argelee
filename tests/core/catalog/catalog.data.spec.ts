@@ -17,27 +17,31 @@ describe('menu data', () => {
     }
   });
 
-  it('gives every mould a volume and an ascending range of people it serves', () => {
+  it('gives every whole piece an ascending range of people it serves', () => {
     for (const product of PRODUCTS) {
-      if (product.size === null) continue;
-      expect(product.size.litres).toBeGreaterThan(0);
-      const [from, to] = product.size.serves;
+      if (product.serves === null) continue;
+      const [from, to] = product.serves;
       expect(from).toBeGreaterThan(0);
       expect(to).toBeGreaterThanOrEqual(from);
     }
   });
 
   it('sells at least one piece by the unit', () => {
-    expect(PRODUCTS.some((product) => product.size === null)).toBe(true);
+    expect(PRODUCTS.some((product) => product.serves === null)).toBe(true);
   });
 
-  it('draws the defaults of every option group from its own options', () => {
+  it('keeps every option group consistent: unique options, defaults within them and within the limits', () => {
     for (const product of PRODUCTS) {
-      const groups = [product.layers, product.fruits].filter((group) => group !== null);
+      const groups = [product.flavours, product.fruits].filter((group) => group !== null);
       for (const group of groups) {
-        expect(group.defaults.length).toBeGreaterThan(0);
         expect(new Set(group.options).size).toBe(group.options.length);
         for (const choice of group.defaults) expect(group.options).toContain(choice);
+        expect(group.min).toBeGreaterThanOrEqual(0);
+        expect(group.defaults.length).toBeGreaterThanOrEqual(group.min);
+        if (group.max !== null) {
+          expect(group.max).toBeGreaterThanOrEqual(Math.max(group.min, 1));
+          expect(group.defaults.length).toBeLessThanOrEqual(group.max);
+        }
       }
     }
   });

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { OrderService } from '../../core/catalog/order.service';
 import { T } from '../../core/i18n/translation-keys.generated';
-import { ICON_PATHS } from '../../shared/ui/icons/icon-paths.constants';
+import { ICON_URLS } from '../../shared/ui/icons/icons';
 
 @Component({
   selector: 'arg-whatsapp-button',
@@ -11,6 +11,6 @@ import { ICON_PATHS } from '../../shared/ui/icons/icon-paths.constants';
 })
 export class WhatsappButton {
   protected readonly t = T;
-  protected readonly icons = ICON_PATHS;
+  protected readonly icons = ICON_URLS;
   protected readonly order = inject(OrderService);
 }

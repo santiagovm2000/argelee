@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="glyph" viewBox="0 0 24 24">
+  <g fill="#5FB37A">
+    <path d="M12 8.8 10 3l2 2.4L14 3l-2 5.8Z" />
+    <path d="M12 8.8 7.4 5.4l3.4 3.8L12 8.8Z" />
+    <path d="M12 8.8l4.6-3.4-3.4 3.8L12 8.8Z" />
+  </g>
+  <ellipse cx="12" cy="15.2" rx="5.4" ry="6.6" fill="#F3B94C" />
+  <path d="M8.2 12.4l6.4 6.2M15.8 12.4l-6.4 6.2M9.8 9.9l5.8 5.6M14.2 9.9l-5.8 5.6M10.4 20.2l5-4.8M13.6 20.2l-5-4.8" stroke="#D89A2B" stroke-width=".9" stroke-linecap="round" fill="none" />
+  <ellipse cx="9.6" cy="11.6" rx="1" ry="1.5" transform="rotate(-20 9.6 11.6)" fill="#fff" fill-opacity=".35" />
+</svg>

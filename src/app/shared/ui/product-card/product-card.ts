@@ -28,5 +28,5 @@ export class ProductCard {
   protected readonly image = computed(() => IMAGES[this.product().image]);
   protected readonly srcset = computed(() => srcsetFor(this.image()));
   protected readonly piece = computed(() => (this.featured() ? this.product().id : null));
-  protected readonly byUnit = computed(() => this.product().size === null);
+  protected readonly byUnit = computed(() => this.product().serves === null);
 }

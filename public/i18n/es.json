@@ -24,8 +24,8 @@
     "previousPiece": "Pieza anterior",
     "nextPiece": "Pieza siguiente",
     "pieces": "Piezas de la carta",
-    "fewerUnits": "Un envase menos",
-    "moreUnits": "Un envase más"
+    "fewerUnits": "Una unidad menos",
+    "moreUnits": "Una unidad más"
   },
   "common": {
     "language": {
@@ -46,95 +46,100 @@
       "secondaryAction": "Cotizar"
     },
     "orders": {
-      "statement": "Los encargos se agendan con una semana de anticipación",
-      "action": "Escribir por WhatsApp"
+      "statement": "Los pedidos se reciben con un mínimo de tres días de anticipación.",
+      "action": "Escribir por WhatsApp",
+      "notes": {
+        "fruit": "Cada gelatina se elabora por encargo, con fruta fresca seleccionada.",
+        "flavours": "Los sabores y las frutas de todas las piezas se adaptan a tu preferencia.",
+        "deposit": "Para reservar se solicita un adelanto: en las piezas grandes, el 50 %, y el resto se cancela el día de la entrega.",
+        "delivery": "Las gelatinas grandes se entregan en su caja; las porciones individuales, con tapa y cucharilla.",
+        "currency": "Precios en dólares. Los pagos en bolívares se calculan a la tasa BCV del día."
+      }
     }
   },
   "catalog": {
     "section": {
-      "eyebrow": "Catálogo",
-      "title": "La carta",
+      "title": "Catálogo",
       "subtitle": "Cada pieza se elabora por encargo, con fruta fresca seleccionada. Elige la tuya y encárgala por WhatsApp."
     },
     "card": {
-      "unitPrice": "{{price}} por envase",
+      "unitPrice": "{{price}} por unidad",
       "customize": "Ver y encargar"
     },
     "groups": {
       "size": "Tamaño",
       "quantity": "Cantidad",
-      "layers": "Capas de sabor",
-      "fruit": "Fruta natural"
+      "fruit": "Fruta fresca",
+      "flavour": "Sabor de gelatina",
+      "flavours": "Sabores de gelatina"
     },
     "hints": {
-      "layers": "Elige las capas — cada capa extra suma {{price}}",
-      "fruit": "Cada fruta adicional suma {{price}}",
-      "quantity": "Precio por envase de 200 ml: {{price}}"
+      "quantity": "Precio por unidad: {{price}} · mínimo {{min}}",
+      "pickOne": "Elige uno",
+      "pickAny": "Elige las que quieras",
+      "tally": "{{count}}/{{max}}"
     },
-    "layers": {
+    "flavours": {
       "fresa": "Fresa",
-      "crema": "Crema",
-      "durazno": "Durazno",
-      "maracuya": "Maracuyá",
-      "limon": "Limón",
-      "uva": "Uva",
-      "leche": "Leche",
-      "vainilla": "Vainilla",
-      "mora": "Mora",
-      "frutos-rojos": "Frutos rojos",
       "cereza": "Cereza",
-      "granadilla": "Granadilla",
-      "coco": "Coco"
+      "frambuesa": "Frambuesa",
+      "uva": "Uva",
+      "limon": "Limón",
+      "pina": "Piña",
+      "tutti-frutti": "Tutti frutti"
     },
     "fruits": {
       "fresa": "Fresa",
       "uva": "Uva",
-      "durazno": "Durazno",
-      "kiwi": "Kiwi",
+      "melocoton": "Melocotón",
       "mango": "Mango",
+      "mora": "Mora",
+      "arandano": "Arándano",
+      "cereza": "Cereza",
+      "mandarina": "Mandarina",
       "pina": "Piña"
     },
     "products": {
-      "frutas-en-capa-cristalina": {
-        "name": "Frutas en capa cristalina",
-        "note": "Fresas, melocotón y uvas en gelatina transparente",
-        "description": "Fresas, melocotón y uvas suspendidas en gelatina transparente, sobre una base de gelatina tres leches.",
+      "encapsulada-de-frutas": {
+        "name": "Encapsulada de frutas",
+        "note": "Fruta fresca en gelatina transparente sobre tres leches",
+        "description": "Fruta fresca a elección suspendida en una capa de gelatina transparente, sobre una base de gelatina tres leches.",
         "imageAlt": "Corona de gelatina transparente con fresas, uvas moradas, durazno y uva verde"
       },
-      "fresa-a-franjas": {
-        "name": "Fresa a franjas",
-        "note": "Fresa laminada sobre franjas de fresa, limón y tres leches",
-        "description": "Fresa laminada sobre franjas finas de gelatina de fresa, gelatina de limón y gelatina tres leches.",
+      "napolitana-de-frutas": {
+        "name": "Napolitana de frutas",
+        "note": "Fruta laminada sobre franjas frutales y tres leches",
+        "description": "Fruta fresca laminada sobre franjas finas de gelatina de sabores frutales a elección y gelatina tres leches.",
         "imageAlt": "Gelatina rectangular de capas rojas, blancas y verdes con láminas de fresa encima"
       },
-      "anillo-de-cereza-y-tres-leches": {
-        "name": "Anillo de cereza y tres leches",
-        "note": "Cereza y tres leches alternadas en molde de anillo",
-        "description": "Gelatina de cereza y gelatina tres leches alternadas en molde de anillo.",
+      "corona-tres-leches": {
+        "name": "Corona tres leches",
+        "note": "Sabor frutal y tres leches en molde de anillo",
+        "description": "Gelatina de sabor frutal a elección y gelatina tres leches alternadas en molde de anillo.",
         "imageAlt": "Gelatina en molde de flor, roja arriba y crema abajo, sobre base dorada"
       },
-      "uva-a-dos-tonos": {
-        "name": "Uva a dos tonos",
-        "note": "Uva en dos tonos, coronada con uvas frescas",
-        "description": "Gelatina de uva en dos tonos, una capa oscura y otra con leche condensada, coronada con uvas frescas.",
+      "bicolor-coronada": {
+        "name": "Bicolor coronada",
+        "note": "Dos tonos de fruta, coronada con fruta fresca",
+        "description": "Gelatina de sabor frutal a elección en dos tonos, una capa intensa y otra con leche condensada, coronada con fruta fresca.",
         "imageAlt": "Gelatina en molde acanalado, morada oscura sobre capa lila, con uvas en el centro"
       },
-      "fresa-con-cubitos": {
-        "name": "Fresa con cubitos",
-        "note": "Cubitos de fresa fresca sobre franjas de fresa con leche condensada",
-        "description": "Cubitos de fresa fresca en la capa superior y franjas de gelatina de fresa con leche condensada.",
+      "mosaico-de-fruta-fresca": {
+        "name": "Mosaico de fruta fresca",
+        "note": "Cubitos de fruta sobre franjas con leche condensada",
+        "description": "Cubitos de fruta fresca en la capa superior y franjas de gelatina de sabor frutal con leche condensada.",
         "imageAlt": "Gelatina redonda festoneada, rosada, con cubitos de fresa en su capa superior transparente"
       },
-      "cereza-y-leche-condensada": {
-        "name": "Cereza y leche condensada",
-        "note": "Cereza en dos capas, una transparente y una cremosa",
-        "description": "Gelatina de cereza en dos capas, una transparente y una base cremosa con leche condensada.",
+      "cristal-y-crema": {
+        "name": "Cristal y crema",
+        "note": "Una capa transparente y una base cremosa",
+        "description": "Gelatina de sabor frutal a elección en dos capas, una transparente y una base cremosa con leche condensada.",
         "imageAlt": "Gelatina roja en molde redondo de perlas sobre un plato blanco"
       },
-      "fresa-en-envase-individual": {
-        "name": "Fresa en envase individual",
-        "note": "Base cremosa de fresa, cubitos de fresa y flor de gelatina",
-        "description": "Base cremosa de gelatina de fresa, cubitos de fresa fresca y una flor de gelatina. Listos para servir, cada envase de 200 ml con su tapa y su cucharilla.",
+      "porcion-individual": {
+        "name": "Porción individual",
+        "note": "Con tapa y cucharilla, lista para servir",
+        "description": "Base cremosa de gelatina de sabor frutal, cubitos de fruta fresca y una flor de gelatina. Lista para servir, con su tapa y su cucharilla.",
         "imageAlt": "Envases individuales con tapa de gelatina de fresa, con cubitos de fruta y una flor rosada encima"
       }
     },
@@ -142,20 +147,14 @@
       "eyebrow": "Pieza por encargo",
       "back": "Volver a la carta",
       "order": "Encargar esta pieza",
-      "summaryFruit": "con {{fruits}}",
-      "size": "{{litres}} litros, para {{from}} a {{to}} personas",
-      "units": "{{count}} envases",
-      "unit": "{{count}} envase"
+      "serves": "Para {{from}} a {{to}} personas"
     },
     "order": {
       "greeting": "Hola, quiero encargar una pieza.",
       "product": "Pieza: {{product}}",
       "option": "{{group}}: {{choice}}",
-      "total": "Precio: {{total}}",
       "closing": "¿Me confirman disponibilidad y fecha de entrega?",
-      "size": "Tamaño: {{litres}} litros, para {{from}} a {{to}} personas",
-      "quantity": "Cantidad: {{count}} envases",
-      "quantityOne": "Cantidad: {{count}} envase"
+      "quantity": "Cantidad: {{count}}"
     },
     "missing": {
       "title": "Esa pieza no está en la carta.",
@@ -175,7 +174,7 @@
   },
   "links": {
     "title": "Enlaces",
-    "tagline": "Gelatinas artesanales, hechas por encargo.",
+    "tagline": "Gelatinas artesanales con fruta fresca para tus eventos más especiales.",
     "whatsapp": "Escribir por WhatsApp",
     "website": "Página web",
     "catalog": "Catálogo"

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { EXTRA_FRUIT_PRICE, EXTRA_LAYER_PRICE, PRICE_STEP } from '@core/catalog/catalog.constants';
+import { PRICE_STEP } from '@core/catalog/catalog.constants';
 import { PRODUCTS } from '@core/catalog/catalog.data';
 import type { Product } from '@core/catalog/catalog.model';
-import { formatNumber, formatPrice, listedPrice, quote } from '@core/catalog/pricing';
+import { formatPrice, listedPrice, quote } from '@core/catalog/pricing';
 import { defaultSelection } from '@core/catalog/selection';
 
 const byId = (id: Product['id']): Product => {
@@ -13,45 +13,29 @@ const byId = (id: Product['id']): Product => {
 
 const rounded = (value: number): number => Math.round(value / PRICE_STEP) * PRICE_STEP;
 
-// A mould with extras on offer, to exercise the mechanism whatever the menu lists today.
-const withExtras = (product: Product): Product => ({
-  ...product,
-  layers: { options: ['fresa', 'crema', 'limon'], defaults: ['fresa', 'crema'] },
-  fruits: { options: ['fresa', 'uva', 'kiwi'], defaults: ['fresa', 'uva'] },
-});
-
 describe('quote', () => {
-  const crystal = byId('frutas-en-capa-cristalina');
-  const cup = byId('fresa-en-envase-individual');
+  const crystal = byId('encapsulada-de-frutas');
+  const portion = byId('porcion-individual');
 
-  it('opens a mould at its listed price with what the piece comes with', () => {
+  it('prices a whole piece at its listed price, whatever the choices', () => {
     expect(quote(crystal, defaultSelection(crystal))).toBe(crystal.price);
-  });
-
-  it('charges only the layers beyond the included ones', () => {
-    const piece = withExtras(crystal);
-    const threeLayers = {
-      ...defaultSelection(piece),
-      layers: ['fresa', 'crema', 'limon'] as const,
+    const everything = {
+      ...defaultSelection(crystal),
+      flavours: crystal.flavours?.options ?? [],
+      fruits: crystal.fruits?.options ?? [],
     };
-    expect(quote(piece, threeLayers)).toBe(rounded(piece.price + EXTRA_LAYER_PRICE));
-  });
-
-  it('charges only the fruit beyond the included ones', () => {
-    const piece = withExtras(crystal);
-    const threeFruits = { ...defaultSelection(piece), fruits: ['fresa', 'uva', 'kiwi'] as const };
-    expect(quote(piece, threeFruits)).toBe(rounded(piece.price + EXTRA_FRUIT_PRICE));
+    expect(quote(crystal, everything)).toBe(crystal.price);
   });
 
   it('prices a piece sold by the unit per unit, times the quantity', () => {
     const dozen = 12;
-    expect(listedPrice(cup)).toBe(cup.price);
-    expect(quote(cup, { ...defaultSelection(cup), quantity: dozen })).toBe(
-      rounded(cup.price * dozen),
+    expect(listedPrice(portion)).toBe(portion.price);
+    expect(quote(portion, { ...defaultSelection(portion), quantity: dozen })).toBe(
+      rounded(portion.price * dozen),
     );
   });
 
-  it('lists a mould on its card at the listed price', () => {
+  it('lists a whole piece on its card at the listed price', () => {
     expect(listedPrice(crystal)).toBe(crystal.price);
   });
 
@@ -78,13 +62,5 @@ describe('formatPrice', () => {
   it('keeps the cents of a half-dollar price', () => {
     expect(formatPrice(3.5, 'en')).toBe('$3.50');
     expect(formatPrice(3.5, 'es')).toContain('3,50');
-  });
-});
-
-describe('formatNumber', () => {
-  it('writes litres with the decimal mark of the language', () => {
-    expect(formatNumber(1.6, 'en')).toBe('1.6');
-    expect(formatNumber(1.6, 'es')).toBe('1,6');
-    expect(formatNumber(2, 'es')).toBe('2');
   });
 });

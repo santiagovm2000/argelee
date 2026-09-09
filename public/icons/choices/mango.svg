@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="glyph" viewBox="0 0 24 24">
+  <path d="M6.6 8.4c3.3-3.3 8.8-3.3 11.5 0 2.2 2.8 1.1 7.2-1.6 10.5-2.7 3.3-7.3 3.3-9.9.4-2.7-2.8-2.2-7.7 0-10.9Z" fill="#F5B53B" />
+  <path d="M13 6.2c3 .2 5.6 2.5 5.3 6-.3 3.6-2.6 6.4-4.6 7.6 1.8-3.3 2.3-9.3-.7-13.6Z" fill="#EF8A2E" />
+  <ellipse cx="9.2" cy="10.6" rx="1.1" ry="1.7" transform="rotate(-30 9.2 10.6)" fill="#fff" fill-opacity=".35" />
+  <path d="M10.6 6.8 8.8 4" stroke="#8C6A4A" stroke-width="1.5" stroke-linecap="round" />
+  <path d="M10.6 6.8C9.2 4.9 7.2 4.2 5 4.6c1 1.8 2.9 2.6 5.6 2.2Z" fill="#5FB37A" />
+</svg>

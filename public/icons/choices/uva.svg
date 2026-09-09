@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="glyph" viewBox="0 0 24 24">
+  <path d="M12 7.6V4.6" stroke="#8C6A4A" stroke-width="1.5" stroke-linecap="round" />
+  <path d="M12 5.4c1.8-1.6 3.9-1.9 5.8-.8-1.5 1.5-3.4 1.8-5.8.8Z" fill="#5FB37A" />
+  <g fill="#8464C8">
+    <circle cx="8.2" cy="11" r="2.3" />
+    <circle cx="12" cy="10" r="2.3" />
+    <circle cx="15.8" cy="11" r="2.3" />
+    <circle cx="10" cy="14.6" r="2.3" />
+    <circle cx="14" cy="14.6" r="2.3" />
+    <circle cx="12" cy="18.2" r="2.3" />
+  </g>
+  <g fill="#fff" fill-opacity=".35">
+    <circle cx="7.4" cy="10.2" r=".7" />
+    <circle cx="11.2" cy="9.2" r=".7" />
+    <circle cx="15" cy="10.2" r=".7" />
+    <circle cx="9.2" cy="13.8" r=".7" />
+    <circle cx="13.2" cy="13.8" r=".7" />
+    <circle cx="11.2" cy="17.4" r=".7" />
+  </g>
+</svg>

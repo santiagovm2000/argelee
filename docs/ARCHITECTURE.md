@@ -108,8 +108,14 @@ The shelf and the product page both read `PRODUCTS`; the prerenderer reads it to
 `/catalogo/<slug>` pages to emit; the sitemap is built from what was emitted. **Adding a piece** is
 therefore: one entry in `catalog.data.ts`, its names in both locale files, the photo in
 `assets-src/images/catalog/`, then `bun run images` and `bun run i18n`. Nothing else changes. A
-piece sold by the unit (an individual cup) sets `size: null`: the configurator then asks how many,
-and its `price` is the price of one. Prices, sizes and descriptions follow the owner's price list,
+piece sold by the unit (an individual portion) sets `serves: null`: the configurator then asks how
+many, never fewer than `MIN_UNIT_QUANTITY`, and its `price` is the price of one. Sizes are stated
+only as the people a piece serves. Flavours and fruit are option groups per piece, from the
+owner's "frutas y sabores por pieza" sheet: the options, the defaults (what the photo shows) and
+the limits, `min` (0 lets the group be emptied, which every multi-choice group allows) and `max` (1 turns the chips into radios; null
+means any number). Every choice is included in the price. Each option id needs a name in both
+locales and a glyph file at `public/icons/choices/<id>.svg`; the compiler and `check:structure`
+enforce both. Prices, sizes and descriptions follow the owner's price list,
 published as `public/ArGeles-catalogo.pdf`; change the list and the data together.
 
 ## Rendering

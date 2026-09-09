@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="glyph" viewBox="0 0 24 24">
+  <circle cx="12" cy="9.2" r="3.2" fill="#F3B94C" />
+  <circle cx="8.3" cy="15.4" r="3.2" fill="#E24B4B" />
+  <circle cx="15.7" cy="15.4" r="3.2" fill="#9BCB5A" />
+  <g fill="#fff" fill-opacity=".35">
+    <circle cx="11" cy="8.2" r=".8" />
+    <circle cx="7.3" cy="14.4" r=".8" />
+    <circle cx="14.7" cy="14.4" r=".8" />
+  </g>
+  <circle cx="19.4" cy="7.2" r="1.1" fill="#D94A78" />
+  <circle cx="4.6" cy="7.2" r="1.1" fill="#8464C8" />
+  <circle cx="12" cy="20.4" r="1.1" fill="#5B79D6" />
+</svg>

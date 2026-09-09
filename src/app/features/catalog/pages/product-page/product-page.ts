@@ -2,16 +2,17 @@ import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, effect, inject, input, linkedSignal, untracked } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import {
-  CURRENCY_CODE,
-  EXTRA_FRUIT_PRICE,
-  EXTRA_LAYER_PRICE,
-  SINGLE_UNIT,
-} from '../../../../core/catalog/catalog.constants';
-import type { FruitId, LayerId, Product, Selection } from '../../../../core/catalog/catalog.model';
+import { CURRENCY_CODE, MIN_UNIT_QUANTITY } from '../../../../core/catalog/catalog.constants';
+import type {
+  ChoiceLimits,
+  FlavourId,
+  FruitId,
+  Product,
+  Selection,
+} from '../../../../core/catalog/catalog.model';
 import { CatalogService } from '../../../../core/catalog/catalog.service';
 import { OrderService } from '../../../../core/catalog/order.service';
-import { formatNumber, formatPrice, listedPrice, quote } from '../../../../core/catalog/pricing';
+import { formatPrice, listedPrice, quote } from '../../../../core/catalog/pricing';
 import { defaultSelection } from '../../../../core/catalog/selection';
 import { productSegments, SECTION_IDS } from '../../../../core/config/routes';
 import { IMAGES } from '../../../../core/images/image-manifest.generated';
@@ -22,17 +23,18 @@ import { T } from '../../../../core/i18n/translation-keys.generated';
 import { SeoService } from '../../../../core/seo/seo.service';
 import { ChoiceGroup, type ChoiceOption } from '../../../../shared/ui/choice-group/choice-group';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
+import { choiceIconUrl } from '../../../../shared/ui/icons/icons';
 import { QuantityInput } from '../../../../shared/ui/quantity-input/quantity-input';
 
 // Native controls need a shared name per group.
 const GROUP_NAMES = {
   quantity: 'quantity',
-  layers: 'layers',
+  flavours: 'flavours',
   fruits: 'fruits',
 } as const;
 
-const SUMMARY_SEPARATOR = '  ·  ';
-const LIST_SEPARATOR = ', ';
+// A group with no options to pick from, so the template can bind before a piece resolves.
+const NO_LIMITS: ChoiceLimits = { min: 0, max: null };
 
 @Component({
   selector: 'arg-product-page',
@@ -89,69 +91,56 @@ export class ProductPage {
     return product === null || selection === null ? '' : this.order.orderUrl(product, selection);
   });
 
-  /** "2 litros, para 16 a 20 personas" for a mould; empty for a piece sold by the unit. */
-  protected readonly sizeText = computed(() => {
-    const size = this.product()?.size ?? null;
-    if (size === null) return '';
-    return this.translate(T.catalog.customizer.size, {
-      litres: formatNumber(size.litres, this.language.current()),
-      from: size.serves[0],
-      to: size.serves[1],
-    });
+  /** "Para 16 a 20 personas" for a whole piece; empty for a piece sold by the unit. */
+  protected readonly servesText = computed(() => {
+    const serves = this.product()?.serves ?? null;
+    if (serves === null) return '';
+    return this.translate(T.catalog.customizer.serves, { from: serves[0], to: serves[1] });
   });
 
-  /** "Precio por envase de 200 ml: $3,50", beside the quantity field. */
+  /** "Precio por unidad: $3,50 · mínimo 5", beside the quantity field. */
   protected readonly unitHint = computed(() => {
     const product = this.product();
     return product === null
       ? ''
-      : this.translate(T.catalog.hints.quantity, { price: this.money(product.price) });
+      : this.translate(T.catalog.hints.quantity, {
+          price: this.money(product.price),
+          min: MIN_UNIT_QUANTITY,
+        });
   });
 
-  protected readonly layerOptions = computed<readonly ChoiceOption<LayerId>[]>(() =>
-    (this.product()?.layers?.options ?? []).map((id) => ({
+  protected readonly flavourLimits = computed<ChoiceLimits>(
+    () => this.product()?.flavours ?? NO_LIMITS,
+  );
+  protected readonly flavourLegend = computed(() =>
+    this.translate(
+      this.flavourLimits().max === 1 ? T.catalog.groups.flavour : T.catalog.groups.flavours,
+    ),
+  );
+  protected readonly flavourHint = computed(() =>
+    this.limitsHint(this.flavourLimits(), this.selection()?.flavours.length ?? 0),
+  );
+  protected readonly flavourOptions = computed<readonly ChoiceOption<FlavourId>[]>(() =>
+    (this.product()?.flavours?.options ?? []).map((id) => ({
       id,
-      label: this.translate(T.catalog.layers[id]),
+      label: this.translate(T.catalog.flavours[id]),
+      icon: choiceIconUrl(id),
     })),
   );
-  protected readonly layerHint = computed(() =>
-    this.translate(T.catalog.hints.layers, { price: this.money(EXTRA_LAYER_PRICE) }),
-  );
 
+  protected readonly fruitLimits = computed<ChoiceLimits>(
+    () => this.product()?.fruits ?? NO_LIMITS,
+  );
+  protected readonly fruitHint = computed(() =>
+    this.limitsHint(this.fruitLimits(), this.selection()?.fruits.length ?? 0),
+  );
   protected readonly fruitOptions = computed<readonly ChoiceOption<FruitId>[]>(() =>
     (this.product()?.fruits?.options ?? []).map((id) => ({
       id,
       label: this.translate(T.catalog.fruits[id]),
+      icon: choiceIconUrl(id),
     })),
   );
-  protected readonly fruitHint = computed(() =>
-    this.translate(T.catalog.hints.fruit, { price: this.money(EXTRA_FRUIT_PRICE) }),
-  );
-
-  /** "2 litros, para 16 a 20 personas · Fresa · con fresa, uva", the line under the price. */
-  protected readonly summary = computed(() => {
-    const product = this.product();
-    const selection = this.selection();
-    if (product === null || selection === null) return '';
-    const parts = [
-      product.size === null
-        ? this.translate(
-            selection.quantity === SINGLE_UNIT
-              ? T.catalog.customizer.unit
-              : T.catalog.customizer.units,
-            { count: selection.quantity },
-          )
-        : this.sizeText(),
-      ...selection.layers.map((id) => this.translate(T.catalog.layers[id])),
-    ];
-    if (selection.fruits.length > 0) {
-      const fruits = selection.fruits
-        .map((id) => this.translate(T.catalog.fruits[id]).toLocaleLowerCase())
-        .join(LIST_SEPARATOR);
-      parts.push(this.translate(T.catalog.customizer.summaryFruit, { fruits }));
-    }
-    return parts.join(SUMMARY_SEPARATOR);
-  });
 
   constructor() {
     effect(() => {
@@ -168,12 +157,19 @@ export class ProductPage {
     this.selection.update((current) => (current === null ? current : { ...current, quantity }));
   }
 
-  protected setLayers(layers: readonly LayerId[]): void {
-    this.selection.update((current) => (current === null ? current : { ...current, layers }));
+  protected setFlavours(flavours: readonly FlavourId[]): void {
+    this.selection.update((current) => (current === null ? current : { ...current, flavours }));
   }
 
   protected setFruits(fruits: readonly FruitId[]): void {
     this.selection.update((current) => (current === null ? current : { ...current, fruits }));
+  }
+
+  /** What a group asks for: one, a running tally against its maximum, or any number. */
+  private limitsHint(limits: ChoiceLimits, count: number): string {
+    if (limits.max === 1) return this.translate(T.catalog.hints.pickOne);
+    if (limits.max === null) return this.translate(T.catalog.hints.pickAny);
+    return this.translate(T.catalog.hints.tally, { count, max: limits.max });
   }
 
   private applySeo(product: Product): void {

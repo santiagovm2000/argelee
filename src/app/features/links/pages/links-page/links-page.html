@@ -13,8 +13,8 @@
         rel="noopener"
         class="button button--whatsapp button--tall w-full gap-3"
       >
-        <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path [attr.d]="icons.whatsapp" />
+        <svg class="size-5 shrink-0" aria-hidden="true">
+          <use [attr.href]="icons.whatsapp" />
         </svg>
         {{ translate(t.links.whatsapp) }}
       </a>

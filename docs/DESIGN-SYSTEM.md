@@ -132,7 +132,18 @@ There is no component library. The few shapes the site needs are ours:
 - **Quantity**: `shared/ui/quantity-input`, a native number field between our own minus and plus
   buttons, for pieces sold by the unit. Same legend and hint as a chip group.
 - **Chips**: `shared/ui/choice-group` — native radios and checkboxes inside a `fieldset`, styled
-  through the label with `has-checked:`. Keyboard and screen readers work for free.
+  through the label with `has-checked:`; each chip carries the line glyph of its flavour or fruit,
+  drawn in the current colour so it follows the chip's state. A full group greys out what is
+  left (`has-disabled:`), and the legend's hint says what the group takes: "Elige uno", a running
+  tally such as "2/3" against the maximum, or any number. A group with a tally may be emptied. Keyboard and screen readers work for free.
+- **Fruit stickers**: plain SVG files in `public/icons/choices/<id>.svg`, one per flavour and
+  fruit, hand-drawn on a 24×24 grid and read at 24px on both surfaces. Flat and rounded, no
+  outlines: one body colour true to the fruit, one darker accent, a soft white gloss top-left
+  (the jelly sheen), and the same leaf green `#5FB37A` and stem brown `#8C6A4A` on every one, so
+  twelve different fruits read as one family. The WhatsApp glyph (`icons/whatsapp.svg`) keeps
+  `currentColor`. Each file's root is id'd `glyph`; templates draw one with `<use href>` through
+  `shared/ui/icons/icons.ts`, so a file is fetched once and never inlined. Draw new ones in the
+  same language; never pull in an icon set.
 - **The shelf**: `features/landing/sections/catalog-section` — a native horizontal scroller with
   snap points (`.shelf` in `patterns.css`); the arrows only nudge it. The row starts on the
   content column's left edge, level with the rail. Cards dim, shrink and settle a little lower as

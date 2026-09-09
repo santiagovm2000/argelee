@@ -1,16 +1,12 @@
 import { inject, Service } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { SITE, WHATSAPP_BASE_URL } from '../config/app.constants';
-import { SINGLE_UNIT } from './catalog.constants';
-import { LanguageService } from '../i18n/language.service';
 import { T } from '../i18n/translation-keys.generated';
 import type { Product, Selection } from './catalog.model';
-import { formatNumber, formatPrice, quote } from './pricing';
 
 @Service()
 export class OrderService {
   private readonly transloco = inject(TranslocoService);
-  private readonly language = inject(LanguageService);
 
   /** A bare conversation link, for the floating button, the hero and the footer. */
   chatUrl(): string {
@@ -20,7 +16,6 @@ export class OrderService {
   /** The conversation link with the configured piece already written out as the first message. */
   orderUrl(product: Product, selection: Selection): string {
     const t = T.catalog;
-    const language = this.language.current();
     const translate = (key: string, params?: Record<string, string | number>): string =>
       this.transloco.translate(key, params);
     const joined = (keys: readonly string[]): string =>
@@ -29,21 +24,15 @@ export class OrderService {
     const lines = [
       translate(t.order.greeting),
       translate(t.order.product, { product: translate(t.products[product.id].name) }),
-      product.size === null
-        ? translate(selection.quantity === SINGLE_UNIT ? t.order.quantityOne : t.order.quantity, {
-            count: selection.quantity,
-          })
-        : translate(t.order.size, {
-            litres: formatNumber(product.size.litres, language),
-            from: product.size.serves[0],
-            to: product.size.serves[1],
-          }),
     ];
-    if (selection.layers.length > 0) {
+    if (product.serves === null) {
+      lines.push(translate(t.order.quantity, { count: selection.quantity }));
+    }
+    if (selection.flavours.length > 0) {
       lines.push(
         translate(t.order.option, {
-          group: translate(t.groups.layers),
-          choice: joined(selection.layers.map((id) => t.layers[id])),
+          group: translate(product.flavours?.max === 1 ? t.groups.flavour : t.groups.flavours),
+          choice: joined(selection.flavours.map((id) => t.flavours[id])),
         }),
       );
     }
@@ -55,10 +44,7 @@ export class OrderService {
         }),
       );
     }
-    lines.push(
-      translate(t.order.total, { total: formatPrice(quote(product, selection), language) }),
-      translate(t.order.closing),
-    );
+    lines.push(translate(t.order.closing));
 
     return this.whatsappUrl(lines.join('\n'));
   }

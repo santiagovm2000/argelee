@@ -8,7 +8,7 @@ import { IMAGES } from '../../../../core/images/image-manifest.generated';
 import { LanguageService } from '../../../../core/i18n/language.service';
 import { T } from '../../../../core/i18n/translation-keys.generated';
 import { SeoService } from '../../../../core/seo/seo.service';
-import { ICON_PATHS } from '../../../../shared/ui/icons/icon-paths.constants';
+import { ICON_URLS } from '../../../../shared/ui/icons/icons';
 import { Wordmark } from '../../../../shared/ui/wordmark/wordmark';
 
 /**
@@ -27,7 +27,7 @@ export class LinksPage implements OnInit {
 
   protected readonly t = T;
   protected readonly site = SITE;
-  protected readonly icons = ICON_PATHS;
+  protected readonly icons = ICON_URLS;
 
   ngOnInit(): void {
     this.seo.apply({

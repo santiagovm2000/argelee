@@ -1,17 +1,20 @@
 /**
  * File-placement guard. Run with `bun run check:structure`.
  *
- * Enforces two rules a compiler cannot see:
+ * Enforces three rules a compiler cannot see:
  *  1. Every test lives under tests/. No spec files scattered next to source.
  *  2. No filename carries the project name.
+ *  3. Every flavour and fruit the menu offers has its glyph file in public/icons/choices.
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join, relative, resolve, sep } from 'node:path';
+import { PRODUCTS } from '../src/app/core/catalog/catalog.data';
 
 const ROOT = resolve(import.meta.dir, '..');
 const TESTS_DIR = 'tests';
 const SCANNED_DIRS = ['src', 'tests', 'scripts', 'public', 'assets-src', 'docs'];
 const TEST_SUFFIXES = ['.spec.ts', '.test.ts'];
+const CHOICE_GLYPHS_DIR = join('public', 'icons', 'choices');
 
 const projectName = (
   JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as { name: string }
@@ -61,6 +64,23 @@ for (const dir of SCANNED_DIRS) {
   }
 }
 
+const offered = new Set(
+  PRODUCTS.flatMap((product) => [
+    ...(product.flavours?.options ?? []),
+    ...(product.fruits?.options ?? []),
+  ]),
+);
+for (const option of offered) {
+  const glyph = join(CHOICE_GLYPHS_DIR, `${option}.svg`);
+  if (!existsSync(join(ROOT, glyph))) {
+    findings.push({
+      file: glyph.split(sep).join('/'),
+      rule: 'every-choice-has-a-glyph',
+      detail: `draw "${option}" as a 24x24 line glyph there, root id "glyph", stroke currentColor.`,
+    });
+  }
+}
+
 if (findings.length > 0) {
   console.error(`check:structure — ${findings.length} violation(s):\n`);
   for (const finding of findings) {
@@ -68,4 +88,6 @@ if (findings.length > 0) {
   }
   process.exit(1);
 }
-console.log('check:structure — tests are all in tests/, no project name in a filename.');
+console.log(
+  'check:structure — tests are all in tests/, no project name in a filename, every choice has a glyph.',
+);

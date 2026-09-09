@@ -58,11 +58,17 @@ export const T = {
     orders: {
       statement: 'landing.orders.statement',
       action: 'landing.orders.action',
+      notes: {
+        fruit: 'landing.orders.notes.fruit',
+        flavours: 'landing.orders.notes.flavours',
+        deposit: 'landing.orders.notes.deposit',
+        delivery: 'landing.orders.notes.delivery',
+        currency: 'landing.orders.notes.currency',
+      },
     },
   },
   catalog: {
     section: {
-      eyebrow: 'catalog.section.eyebrow',
       title: 'catalog.section.title',
       subtitle: 'catalog.section.subtitle',
     },
@@ -73,99 +79,92 @@ export const T = {
     groups: {
       size: 'catalog.groups.size',
       quantity: 'catalog.groups.quantity',
-      layers: 'catalog.groups.layers',
       fruit: 'catalog.groups.fruit',
+      flavour: 'catalog.groups.flavour',
+      flavours: 'catalog.groups.flavours',
     },
     hints: {
-      layers: 'catalog.hints.layers',
-      fruit: 'catalog.hints.fruit',
       quantity: 'catalog.hints.quantity',
+      pickOne: 'catalog.hints.pickOne',
+      pickAny: 'catalog.hints.pickAny',
+      tally: 'catalog.hints.tally',
     },
-    layers: {
-      fresa: 'catalog.layers.fresa',
-      crema: 'catalog.layers.crema',
-      durazno: 'catalog.layers.durazno',
-      maracuya: 'catalog.layers.maracuya',
-      limon: 'catalog.layers.limon',
-      uva: 'catalog.layers.uva',
-      leche: 'catalog.layers.leche',
-      vainilla: 'catalog.layers.vainilla',
-      mora: 'catalog.layers.mora',
-      "frutos-rojos": 'catalog.layers.frutos-rojos',
-      cereza: 'catalog.layers.cereza',
-      granadilla: 'catalog.layers.granadilla',
-      coco: 'catalog.layers.coco',
+    flavours: {
+      fresa: 'catalog.flavours.fresa',
+      cereza: 'catalog.flavours.cereza',
+      frambuesa: 'catalog.flavours.frambuesa',
+      uva: 'catalog.flavours.uva',
+      limon: 'catalog.flavours.limon',
+      pina: 'catalog.flavours.pina',
+      "tutti-frutti": 'catalog.flavours.tutti-frutti',
     },
     fruits: {
       fresa: 'catalog.fruits.fresa',
       uva: 'catalog.fruits.uva',
-      durazno: 'catalog.fruits.durazno',
-      kiwi: 'catalog.fruits.kiwi',
+      melocoton: 'catalog.fruits.melocoton',
       mango: 'catalog.fruits.mango',
+      mora: 'catalog.fruits.mora',
+      arandano: 'catalog.fruits.arandano',
+      cereza: 'catalog.fruits.cereza',
+      mandarina: 'catalog.fruits.mandarina',
       pina: 'catalog.fruits.pina',
     },
     products: {
-      "frutas-en-capa-cristalina": {
-        name: 'catalog.products.frutas-en-capa-cristalina.name',
-        note: 'catalog.products.frutas-en-capa-cristalina.note',
-        description: 'catalog.products.frutas-en-capa-cristalina.description',
-        imageAlt: 'catalog.products.frutas-en-capa-cristalina.imageAlt',
+      "encapsulada-de-frutas": {
+        name: 'catalog.products.encapsulada-de-frutas.name',
+        note: 'catalog.products.encapsulada-de-frutas.note',
+        description: 'catalog.products.encapsulada-de-frutas.description',
+        imageAlt: 'catalog.products.encapsulada-de-frutas.imageAlt',
       },
-      "fresa-a-franjas": {
-        name: 'catalog.products.fresa-a-franjas.name',
-        note: 'catalog.products.fresa-a-franjas.note',
-        description: 'catalog.products.fresa-a-franjas.description',
-        imageAlt: 'catalog.products.fresa-a-franjas.imageAlt',
+      "napolitana-de-frutas": {
+        name: 'catalog.products.napolitana-de-frutas.name',
+        note: 'catalog.products.napolitana-de-frutas.note',
+        description: 'catalog.products.napolitana-de-frutas.description',
+        imageAlt: 'catalog.products.napolitana-de-frutas.imageAlt',
       },
-      "anillo-de-cereza-y-tres-leches": {
-        name: 'catalog.products.anillo-de-cereza-y-tres-leches.name',
-        note: 'catalog.products.anillo-de-cereza-y-tres-leches.note',
-        description: 'catalog.products.anillo-de-cereza-y-tres-leches.description',
-        imageAlt: 'catalog.products.anillo-de-cereza-y-tres-leches.imageAlt',
+      "corona-tres-leches": {
+        name: 'catalog.products.corona-tres-leches.name',
+        note: 'catalog.products.corona-tres-leches.note',
+        description: 'catalog.products.corona-tres-leches.description',
+        imageAlt: 'catalog.products.corona-tres-leches.imageAlt',
       },
-      "uva-a-dos-tonos": {
-        name: 'catalog.products.uva-a-dos-tonos.name',
-        note: 'catalog.products.uva-a-dos-tonos.note',
-        description: 'catalog.products.uva-a-dos-tonos.description',
-        imageAlt: 'catalog.products.uva-a-dos-tonos.imageAlt',
+      "bicolor-coronada": {
+        name: 'catalog.products.bicolor-coronada.name',
+        note: 'catalog.products.bicolor-coronada.note',
+        description: 'catalog.products.bicolor-coronada.description',
+        imageAlt: 'catalog.products.bicolor-coronada.imageAlt',
       },
-      "fresa-con-cubitos": {
-        name: 'catalog.products.fresa-con-cubitos.name',
-        note: 'catalog.products.fresa-con-cubitos.note',
-        description: 'catalog.products.fresa-con-cubitos.description',
-        imageAlt: 'catalog.products.fresa-con-cubitos.imageAlt',
+      "mosaico-de-fruta-fresca": {
+        name: 'catalog.products.mosaico-de-fruta-fresca.name',
+        note: 'catalog.products.mosaico-de-fruta-fresca.note',
+        description: 'catalog.products.mosaico-de-fruta-fresca.description',
+        imageAlt: 'catalog.products.mosaico-de-fruta-fresca.imageAlt',
       },
-      "cereza-y-leche-condensada": {
-        name: 'catalog.products.cereza-y-leche-condensada.name',
-        note: 'catalog.products.cereza-y-leche-condensada.note',
-        description: 'catalog.products.cereza-y-leche-condensada.description',
-        imageAlt: 'catalog.products.cereza-y-leche-condensada.imageAlt',
+      "cristal-y-crema": {
+        name: 'catalog.products.cristal-y-crema.name',
+        note: 'catalog.products.cristal-y-crema.note',
+        description: 'catalog.products.cristal-y-crema.description',
+        imageAlt: 'catalog.products.cristal-y-crema.imageAlt',
       },
-      "fresa-en-envase-individual": {
-        name: 'catalog.products.fresa-en-envase-individual.name',
-        note: 'catalog.products.fresa-en-envase-individual.note',
-        description: 'catalog.products.fresa-en-envase-individual.description',
-        imageAlt: 'catalog.products.fresa-en-envase-individual.imageAlt',
+      "porcion-individual": {
+        name: 'catalog.products.porcion-individual.name',
+        note: 'catalog.products.porcion-individual.note',
+        description: 'catalog.products.porcion-individual.description',
+        imageAlt: 'catalog.products.porcion-individual.imageAlt',
       },
     },
     customizer: {
       eyebrow: 'catalog.customizer.eyebrow',
       back: 'catalog.customizer.back',
       order: 'catalog.customizer.order',
-      summaryFruit: 'catalog.customizer.summaryFruit',
-      size: 'catalog.customizer.size',
-      units: 'catalog.customizer.units',
-      unit: 'catalog.customizer.unit',
+      serves: 'catalog.customizer.serves',
     },
     order: {
       greeting: 'catalog.order.greeting',
       product: 'catalog.order.product',
       option: 'catalog.order.option',
-      total: 'catalog.order.total',
       closing: 'catalog.order.closing',
-      size: 'catalog.order.size',
       quantity: 'catalog.order.quantity',
-      quantityOne: 'catalog.order.quantityOne',
     },
     missing: {
       title: 'catalog.missing.title',
@@ -193,4 +192,4 @@ export const T = {
 } as const;
 
 /** Every valid translation key, as a union of literal strings. */
-export type TranslationKey = 'meta.home.title' | 'meta.home.description' | 'meta.product.title' | 'meta.product.description' | 'meta.links.title' | 'meta.links.description' | 'a11y.skipToContent' | 'a11y.mainNavigation' | 'a11y.changeLanguage' | 'a11y.switchToDarkTheme' | 'a11y.switchToLightTheme' | 'a11y.openWhatsapp' | 'a11y.priceUpdated' | 'a11y.previousPiece' | 'a11y.nextPiece' | 'a11y.pieces' | 'a11y.fewerUnits' | 'a11y.moreUnits' | 'common.language.es' | 'common.language.en' | 'navigation.catalog' | 'navigation.orders' | 'landing.hero.eyebrow' | 'landing.hero.headline' | 'landing.hero.body' | 'landing.hero.primaryAction' | 'landing.hero.secondaryAction' | 'landing.orders.statement' | 'landing.orders.action' | 'catalog.section.eyebrow' | 'catalog.section.title' | 'catalog.section.subtitle' | 'catalog.card.unitPrice' | 'catalog.card.customize' | 'catalog.groups.size' | 'catalog.groups.quantity' | 'catalog.groups.layers' | 'catalog.groups.fruit' | 'catalog.hints.layers' | 'catalog.hints.fruit' | 'catalog.hints.quantity' | 'catalog.layers.fresa' | 'catalog.layers.crema' | 'catalog.layers.durazno' | 'catalog.layers.maracuya' | 'catalog.layers.limon' | 'catalog.layers.uva' | 'catalog.layers.leche' | 'catalog.layers.vainilla' | 'catalog.layers.mora' | 'catalog.layers.frutos-rojos' | 'catalog.layers.cereza' | 'catalog.layers.granadilla' | 'catalog.layers.coco' | 'catalog.fruits.fresa' | 'catalog.fruits.uva' | 'catalog.fruits.durazno' | 'catalog.fruits.kiwi' | 'catalog.fruits.mango' | 'catalog.fruits.pina' | 'catalog.products.frutas-en-capa-cristalina.name' | 'catalog.products.frutas-en-capa-cristalina.note' | 'catalog.products.frutas-en-capa-cristalina.description' | 'catalog.products.frutas-en-capa-cristalina.imageAlt' | 'catalog.products.fresa-a-franjas.name' | 'catalog.products.fresa-a-franjas.note' | 'catalog.products.fresa-a-franjas.description' | 'catalog.products.fresa-a-franjas.imageAlt' | 'catalog.products.anillo-de-cereza-y-tres-leches.name' | 'catalog.products.anillo-de-cereza-y-tres-leches.note' | 'catalog.products.anillo-de-cereza-y-tres-leches.description' | 'catalog.products.anillo-de-cereza-y-tres-leches.imageAlt' | 'catalog.products.uva-a-dos-tonos.name' | 'catalog.products.uva-a-dos-tonos.note' | 'catalog.products.uva-a-dos-tonos.description' | 'catalog.products.uva-a-dos-tonos.imageAlt' | 'catalog.products.fresa-con-cubitos.name' | 'catalog.products.fresa-con-cubitos.note' | 'catalog.products.fresa-con-cubitos.description' | 'catalog.products.fresa-con-cubitos.imageAlt' | 'catalog.products.cereza-y-leche-condensada.name' | 'catalog.products.cereza-y-leche-condensada.note' | 'catalog.products.cereza-y-leche-condensada.description' | 'catalog.products.cereza-y-leche-condensada.imageAlt' | 'catalog.products.fresa-en-envase-individual.name' | 'catalog.products.fresa-en-envase-individual.note' | 'catalog.products.fresa-en-envase-individual.description' | 'catalog.products.fresa-en-envase-individual.imageAlt' | 'catalog.customizer.eyebrow' | 'catalog.customizer.back' | 'catalog.customizer.order' | 'catalog.customizer.summaryFruit' | 'catalog.customizer.size' | 'catalog.customizer.units' | 'catalog.customizer.unit' | 'catalog.order.greeting' | 'catalog.order.product' | 'catalog.order.option' | 'catalog.order.total' | 'catalog.order.closing' | 'catalog.order.size' | 'catalog.order.quantity' | 'catalog.order.quantityOne' | 'catalog.missing.title' | 'catalog.missing.body' | 'catalog.missing.action' | 'footer.tagline' | 'errors.notFound.title' | 'errors.notFound.body' | 'errors.notFound.action' | 'links.title' | 'links.tagline' | 'links.whatsapp' | 'links.website' | 'links.catalog';
+export type TranslationKey = 'meta.home.title' | 'meta.home.description' | 'meta.product.title' | 'meta.product.description' | 'meta.links.title' | 'meta.links.description' | 'a11y.skipToContent' | 'a11y.mainNavigation' | 'a11y.changeLanguage' | 'a11y.switchToDarkTheme' | 'a11y.switchToLightTheme' | 'a11y.openWhatsapp' | 'a11y.priceUpdated' | 'a11y.previousPiece' | 'a11y.nextPiece' | 'a11y.pieces' | 'a11y.fewerUnits' | 'a11y.moreUnits' | 'common.language.es' | 'common.language.en' | 'navigation.catalog' | 'navigation.orders' | 'landing.hero.eyebrow' | 'landing.hero.headline' | 'landing.hero.body' | 'landing.hero.primaryAction' | 'landing.hero.secondaryAction' | 'landing.orders.statement' | 'landing.orders.action' | 'landing.orders.notes.fruit' | 'landing.orders.notes.flavours' | 'landing.orders.notes.deposit' | 'landing.orders.notes.delivery' | 'landing.orders.notes.currency' | 'catalog.section.title' | 'catalog.section.subtitle' | 'catalog.card.unitPrice' | 'catalog.card.customize' | 'catalog.groups.size' | 'catalog.groups.quantity' | 'catalog.groups.fruit' | 'catalog.groups.flavour' | 'catalog.groups.flavours' | 'catalog.hints.quantity' | 'catalog.hints.pickOne' | 'catalog.hints.pickAny' | 'catalog.hints.tally' | 'catalog.flavours.fresa' | 'catalog.flavours.cereza' | 'catalog.flavours.frambuesa' | 'catalog.flavours.uva' | 'catalog.flavours.limon' | 'catalog.flavours.pina' | 'catalog.flavours.tutti-frutti' | 'catalog.fruits.fresa' | 'catalog.fruits.uva' | 'catalog.fruits.melocoton' | 'catalog.fruits.mango' | 'catalog.fruits.mora' | 'catalog.fruits.arandano' | 'catalog.fruits.cereza' | 'catalog.fruits.mandarina' | 'catalog.fruits.pina' | 'catalog.products.encapsulada-de-frutas.name' | 'catalog.products.encapsulada-de-frutas.note' | 'catalog.products.encapsulada-de-frutas.description' | 'catalog.products.encapsulada-de-frutas.imageAlt' | 'catalog.products.napolitana-de-frutas.name' | 'catalog.products.napolitana-de-frutas.note' | 'catalog.products.napolitana-de-frutas.description' | 'catalog.products.napolitana-de-frutas.imageAlt' | 'catalog.products.corona-tres-leches.name' | 'catalog.products.corona-tres-leches.note' | 'catalog.products.corona-tres-leches.description' | 'catalog.products.corona-tres-leches.imageAlt' | 'catalog.products.bicolor-coronada.name' | 'catalog.products.bicolor-coronada.note' | 'catalog.products.bicolor-coronada.description' | 'catalog.products.bicolor-coronada.imageAlt' | 'catalog.products.mosaico-de-fruta-fresca.name' | 'catalog.products.mosaico-de-fruta-fresca.note' | 'catalog.products.mosaico-de-fruta-fresca.description' | 'catalog.products.mosaico-de-fruta-fresca.imageAlt' | 'catalog.products.cristal-y-crema.name' | 'catalog.products.cristal-y-crema.note' | 'catalog.products.cristal-y-crema.description' | 'catalog.products.cristal-y-crema.imageAlt' | 'catalog.products.porcion-individual.name' | 'catalog.products.porcion-individual.note' | 'catalog.products.porcion-individual.description' | 'catalog.products.porcion-individual.imageAlt' | 'catalog.customizer.eyebrow' | 'catalog.customizer.back' | 'catalog.customizer.order' | 'catalog.customizer.serves' | 'catalog.order.greeting' | 'catalog.order.product' | 'catalog.order.option' | 'catalog.order.closing' | 'catalog.order.quantity' | 'catalog.missing.title' | 'catalog.missing.body' | 'catalog.missing.action' | 'footer.tagline' | 'errors.notFound.title' | 'errors.notFound.body' | 'errors.notFound.action' | 'links.title' | 'links.tagline' | 'links.whatsapp' | 'links.website' | 'links.catalog';

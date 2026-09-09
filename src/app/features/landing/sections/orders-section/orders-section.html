@@ -3,11 +3,24 @@
     <p class="mx-auto max-w-[24ch] font-display text-statement text-ink">
       {{ translate(t.landing.orders.statement) }}
     </p>
+    <ul
+      class="mx-auto mt-10 grid max-w-3xl gap-x-10 gap-y-3 text-left text-body-sm text-ink-muted sm:grid-cols-2"
+    >
+      @for (note of notes; track note) {
+        <li class="flex gap-3">
+          <span
+            class="mt-2.5 size-1.5 shrink-0 rounded-full bg-line-tint"
+            aria-hidden="true"
+          ></span>
+          {{ translate(note) }}
+        </li>
+      }
+    </ul>
     <a
       [href]="order.chatUrl()"
       target="_blank"
       rel="noopener"
-      class="button button--secondary mt-8"
+      class="button button--secondary mt-10"
     >
       {{ translate(t.landing.orders.action) }}
     </a>

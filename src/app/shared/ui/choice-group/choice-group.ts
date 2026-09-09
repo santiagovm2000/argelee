@@ -1,15 +1,20 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
+import type { ChoiceLimits } from '../../../core/catalog/catalog.model';
 import { toggleChoice } from '../../../core/catalog/selection';
 
 export interface ChoiceOption<Id extends string> {
   readonly id: Id;
   readonly label: string;
+  /** The URL of the option's glyph file, drawn beside the label. */
+  readonly icon: string;
 }
 
 /**
  * A group of chips backed by native radios or checkboxes, so keyboard and screen
- * reader behaviour come for free. A group never goes empty: a click that would
- * uncheck the last choice is cancelled before the browser toggles the control.
+ * reader behaviour come for free. The group keeps within its limits: a click
+ * that would empty it below its minimum is cancelled before the browser
+ * toggles the control, a full group greys out what is left, and a group that
+ * takes a single choice swaps it.
  */
 @Component({
   selector: 'arg-choice-group',
@@ -21,19 +26,25 @@ export class ChoiceGroup<Id extends string> {
   readonly name = input.required<string>();
   readonly options = input.required<readonly ChoiceOption<Id>[]>();
   readonly selected = input.required<readonly Id[]>();
-  readonly single = input<boolean>(false);
+  readonly limits = input.required<ChoiceLimits>();
   readonly selectedChange = output<readonly Id[]>();
+
+  protected readonly single = computed(() => this.limits().max === 1);
+  protected readonly full = computed(() => {
+    const max = this.limits().max;
+    return max !== null && !this.single() && this.selected().length >= max;
+  });
 
   protected isSelected(id: Id): boolean {
     return this.selected().includes(id);
   }
 
+  protected isDisabled(id: Id): boolean {
+    return this.full() && !this.isSelected(id);
+  }
+
   protected onClick(event: Event, id: Id): void {
-    const next = this.single()
-      ? this.isSelected(id)
-        ? this.selected()
-        : [id]
-      : toggleChoice(this.selected(), id);
+    const next = toggleChoice(this.selected(), id, this.limits());
     if (next === this.selected()) {
       event.preventDefault();
       return;
