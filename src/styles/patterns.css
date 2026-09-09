@@ -86,9 +86,11 @@
 .button--secondary {
   @apply border border-current/45 text-ink hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-ink;
 }
-/* WhatsApp keeps its own green wherever it appears, so the entry point is recognised at a glance. */
+/* WhatsApp keeps its own green wherever it appears, so the entry point is recognised
+   at a glance; the button with a label sits on the deeper shade that carries white
+   text at AA, the icon-only widget on the bright one. */
 .button--whatsapp {
-  @apply bg-whatsapp text-neutral-0 hover:-translate-y-0.5 hover:bg-whatsapp-hover;
+  @apply bg-whatsapp-deep text-neutral-0 hover:-translate-y-0.5 hover:bg-whatsapp-deep-hover;
 }
 /* A thumb-sized button for a screen that is nothing but buttons. */
 .button--tall {

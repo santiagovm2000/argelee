@@ -91,6 +91,7 @@ const CHECKS: readonly Check[] = [
   ['--ink', '--surface-selected', 4.5, 'label on a selected chip'],
   ['--ink', '--surface-hover', 4.5, 'label on a hovered control'],
   ['--accent-text', '--surface-raised', 3.0, 'selected chip border on a panel'],
+  ['--color-neutral-0', '--color-whatsapp-deep', 4.5, 'label on the WhatsApp button'],
 ];
 
 let failures = 0;

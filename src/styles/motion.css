@@ -17,21 +17,29 @@
   }
 }
 
-/* Cards fade, shrink and sink a little as they slide out of either end of the
-   shelf and recover as they come in; across the middle they stand at full
-   strength, like plates on a counter. */
+/* Cards shrink and sink a little as they slide out of either end of the shelf
+   and recover as they come in, like plates on a counter; their photos fade with
+   them while the captions stay fully legible. */
 @keyframes shelf-enter {
   from {
-    opacity: 0.35;
     scale: 0.94;
     translate: 0 0.75rem;
   }
 }
 @keyframes shelf-exit {
   to {
-    opacity: 0.35;
     scale: 0.94;
     translate: 0 0.75rem;
+  }
+}
+@keyframes photo-enter {
+  from {
+    opacity: 0.35;
+  }
+}
+@keyframes photo-exit {
+  to {
+    opacity: 0.35;
   }
 }
 
@@ -59,6 +67,13 @@
     animation:
       shelf-enter linear both,
       shelf-exit linear both;
+    animation-timeline: view(inline);
+    animation-range: entry, exit;
+  }
+  .shelf__card .parallax-window {
+    animation:
+      photo-enter linear both,
+      photo-exit linear both;
     animation-timeline: view(inline);
     animation-range: entry, exit;
   }
@@ -118,6 +133,7 @@
   .parallax-window__backdrop,
   .parallax-window__image,
   .shelf__card,
+  .shelf__card .parallax-window,
   .shelf-rail__thumb,
   ::view-transition-group(*),
   ::view-transition-old(*),

@@ -149,6 +149,11 @@ SVGs (icons) are inlined; they do not go through the pipeline and do not use `Ng
 
 ## Video
 
+The hero video carries no `autoplay` and `preload="none"`: `HeroSection` starts it from
+`afterNextRender` once the browser is idle (or after `HERO_VIDEO_START_TIMEOUT_MS`), and not at all
+under reduced motion or when the visitor saves data. The poster is the LCP image and gets the
+first bytes on a slow line; the video joins a moment later from the same frame.
+
 The hero loop lives in `public/video/` as `hero.mp4` (H.264, yuv420p, faststart) and `hero.webm`
 (VP9), both without audio, encoded once from the original with ffmpeg. Its poster frame goes
 through the image pipeline like any photo (`assets-src/images/hero/poster.jpg`), is the page's

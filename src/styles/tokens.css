@@ -78,6 +78,8 @@
   /* WhatsApp's own green, for its floating button only. */
   --color-whatsapp: oklch(0.77 0.187 151.5);
   --color-whatsapp-hover: oklch(0.72 0.19 151.5);
+  --color-whatsapp-deep: oklch(0.52 0.14 152);
+  --color-whatsapp-deep-hover: oklch(0.47 0.14 152);
 
   /* Status colours, hue-separated from the brand. */
   --color-positive: oklch(0.62 0.15 155);

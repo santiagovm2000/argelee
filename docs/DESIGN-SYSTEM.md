@@ -146,8 +146,9 @@ There is no component library. The few shapes the site needs are ours:
   same language; never pull in an icon set.
 - **The shelf**: `features/landing/sections/catalog-section` — a native horizontal scroller with
   snap points (`.shelf` in `patterns.css`); the arrows only nudge it. The row starts on the
-  content column's left edge, level with the rail. Cards dim, shrink and settle a little lower as
-  they slide out of either end through a CSS `view(inline)` timeline, like plates on a counter.
+  content column's left edge, level with the rail. Cards shrink and settle a little lower as they
+  slide out of either end through a CSS `view(inline)` timeline, like plates on a counter, and
+  their photos dim with them; the captions never fade, so they stay at AA.
   Frames are square and never crop: each photo is contained over a blurred wash of its own
   placeholder, so every piece shows whole whatever the photo's shape. Under the shelf a hairline rail carries an ink segment that travels with the shelf's
   own scroll (`scroll-timeline` on the shelf, `timeline-scope` on the section), so position is
@@ -222,7 +223,7 @@ first paint of the prerendered HTML, so nothing jumps on hydration.
 | Class                                             | What it does                                                                                                                                                       |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `.parallax-window` / `.parallax-window__backdrop` | the blurred wash behind a photo slides as the card crosses the viewport; the photo shows whole and only leans in on hover                                          |
-| `.shelf__card`                                    | cards fade and sink as they slide out of either end of the shelf                                                                                                   |
+| `.shelf__card`                                    | cards sink and their photos fade as they slide out of either end                                                                                                   |
 | `[data-piece]`                                    | the piece's photo morphs between its shelf card and the product page through the router's view transition; the rest of the page fades out and the new one rises in |
 
 Every class's un-animated state is its final, visible state, so a browser without
