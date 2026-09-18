@@ -46,13 +46,23 @@
       "secondaryAction": "Get a quote"
     },
     "orders": {
-      "statement": "Orders are taken at least three days ahead.",
+      "title": "Before you order",
       "action": "Message on WhatsApp",
+      "groups": {
+        "piece": "Your piece",
+        "payment": "Booking and payment",
+        "delivery": "Delivery"
+      },
       "notes": {
+        "notice": "Orders are taken at least three days ahead.",
         "fruit": "Every jelly is made to order, with selected fresh fruit.",
         "flavours": "The flavours and the fruit of every piece can be adapted to your taste.",
-        "deposit": "A deposit reserves your order: 50% on large pieces, with the rest paid on the day of delivery.",
+        "availability": "Orders are subject to availability.",
+        "deposit": "A 50% deposit reserves your order and is not refundable if the order is cancelled; the rest is paid on the day of delivery.",
+        "receipt": "Once the deposit is paid, send us the payment receipt.",
         "delivery": "Large jellies are delivered in their box; individual portions with a lid and a spoon.",
+        "deliveryFee": "Delivery at an additional cost.",
+        "deliveryArea": "Deliveries in La California.",
         "currency": "Prices in US dollars. Payments in bolívares follow the day's BCV rate."
       }
     }

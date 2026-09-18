@@ -46,13 +46,23 @@
       "secondaryAction": "Cotizar"
     },
     "orders": {
-      "statement": "Los pedidos se reciben con un mínimo de tres días de anticipación.",
+      "title": "Antes de encargar",
       "action": "Escribir por WhatsApp",
+      "groups": {
+        "piece": "Tu pieza",
+        "payment": "Reserva y pago",
+        "delivery": "Entrega"
+      },
       "notes": {
+        "notice": "Los pedidos se reciben con un mínimo de tres días de anticipación.",
         "fruit": "Cada gelatina se elabora por encargo, con fruta fresca seleccionada.",
         "flavours": "Los sabores y las frutas de todas las piezas se adaptan a tu preferencia.",
-        "deposit": "Para reservar se solicita un adelanto: en las piezas grandes, el 50 %, y el resto se cancela el día de la entrega.",
+        "availability": "Los pedidos están sujetos a disponibilidad.",
+        "deposit": "Para reservar se solicita un adelanto del 50 %, que no es reembolsable si se cancela el pedido; el resto se cancela el día de la entrega.",
+        "receipt": "Una vez realizado el abono, envíanos el comprobante de pago.",
         "delivery": "Las gelatinas grandes se entregan en su caja; las porciones individuales, con tapa y cucharilla.",
+        "deliveryFee": "Delivery con costo adicional.",
+        "deliveryArea": "Entregas en La California.",
         "currency": "Precios en dólares. Los pagos en bolívares se calculan a la tasa BCV del día."
       }
     }

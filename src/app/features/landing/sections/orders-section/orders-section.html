@@ -1,27 +1,37 @@
 <ng-container *transloco="let translate">
   <section [id]="sections.orders" class="scroll-mt-anchor px-6 py-26 text-center sm:px-10 lg:py-30">
-    <p class="mx-auto max-w-[24ch] font-display text-statement text-ink">
-      {{ translate(t.landing.orders.statement) }}
-    </p>
-    <ul
-      class="mx-auto mt-10 grid max-w-3xl gap-x-10 gap-y-3 text-left text-body-sm text-ink-muted sm:grid-cols-2"
-    >
-      @for (note of notes; track note) {
-        <li class="flex gap-3">
-          <span
-            class="mt-2.5 size-1.5 shrink-0 rounded-full bg-line-tint"
-            aria-hidden="true"
-          ></span>
-          {{ translate(note) }}
-        </li>
+    <h2 class="mx-auto max-w-[24ch] font-display text-statement text-ink">
+      {{ translate(t.landing.orders.title) }}
+    </h2>
+
+    <div class="mx-auto mt-12 grid max-w-5xl gap-10 text-left md:grid-cols-3 md:gap-8 lg:gap-12">
+      @for (group of groups; track group.id) {
+        <div>
+          <h3 class="flex items-center gap-3 text-accent-text">
+            <svg class="size-6 shrink-0" aria-hidden="true">
+              <use [attr.href]="group.icon" />
+            </svg>
+            <span class="font-body text-eyebrow font-medium tracking-eyebrow uppercase">{{
+              translate(group.titleKey)
+            }}</span>
+          </h3>
+          <ul class="mt-4 border-t border-line-tint">
+            @for (note of group.notes; track note) {
+              <li class="border-b border-line-tint py-3 text-body-sm text-ink-muted">
+                {{ translate(note) }}
+              </li>
+            }
+          </ul>
+        </div>
       }
-    </ul>
+    </div>
+
     <a
       [href]="order.chatUrl()"
       argLead="orders"
       target="_blank"
       rel="noopener"
-      class="button button--secondary mt-10"
+      class="button button--secondary mt-12"
     >
       {{ translate(t.landing.orders.action) }}
     </a>
