@@ -20,20 +20,21 @@ bun start                # http://localhost:4200
 
 ## Commands
 
-| Command                     | What it does                                                                     |
-| --------------------------- | -------------------------------------------------------------------------------- |
-| `bun start`                 | Dev server with HMR                                                              |
-| `bun run build`             | Prerenders every route to static HTML in `dist/argelee/browser`                  |
-| `bun run verify`            | i18n + contrast + templates + lint + build. The gate before every commit.        |
-| `bun run test`              | Vitest                                                                           |
-| `bun run lint` / `lint:fix` | ESLint (type-aware)                                                              |
-| `bun run format`            | Prettier, with Tailwind class sorting                                            |
-| `bun run i18n`              | Regenerates typed translation keys from `public/i18n/es.json`                    |
-| `bun run images`            | Builds responsive AVIF derivatives and social cards from `assets-src/`           |
-| `bun run favicon`           | Outlines the wordmark's "A" into `favicon.svg`, `favicon.ico` and the touch icon |
-| `bun run social-card`       | Draws the brand card behind the home page link preview, then runs `images`       |
-| `bun run palette`           | Re-derives the colour scale from the brand hex                                   |
-| `bun run contrast`          | WCAG AA check across every token pairing, both themes                            |
+| Command                     | What it does                                                                      |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| `bun start`                 | Dev server with HMR                                                               |
+| `bun run build`             | Prerenders every route to static HTML in `dist/argelee/browser`                   |
+| `bun run verify`            | i18n + contrast + templates + lint + build. The gate before every commit.         |
+| `bun run test`              | Vitest                                                                            |
+| `bun run lint` / `lint:fix` | ESLint (type-aware)                                                               |
+| `bun run format`            | Prettier, with Tailwind class sorting                                             |
+| `bun run i18n`              | Regenerates typed translation keys from `public/i18n/es.json`                     |
+| `bun run images`            | Builds responsive AVIF derivatives and social cards from `assets-src/`            |
+| `bun run favicon`           | Outlines the wordmark's "A" into `favicon.svg`, `favicon.ico` and the touch icon  |
+| `bun run social-card`       | Draws the brand card behind the home page link preview, then runs `images`        |
+| `bun run catalog-pdf`       | Rebuilds the price-list PDF from the menu data (Edge prints `assets-src/catalog`) |
+| `bun run palette`           | Re-derives the colour scale from the brand hex                                    |
+| `bun run contrast`          | WCAG AA check across every token pairing, both themes                             |
 
 ## Deploying
 
@@ -70,3 +71,4 @@ Set these in the build environment (`.env` locally, the workflow in CI):
 | `docs/CONVENTIONS.md`   | Naming, components, i18n, images, comments, commits     |
 | `docs/SEO.md`           | Localized URLs, metadata, prerendering, crawler files   |
 | `docs/TOOLING.md`       | Which skills and MCP servers to use                     |
+| `docs/CATALOG.md`       | How the price-list PDF is generated and edited          |

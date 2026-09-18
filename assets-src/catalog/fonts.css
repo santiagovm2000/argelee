@@ -1,0 +1,22 @@
+/* The site's own font files, so the printed catalogue and the page set the same faces.
+   Paths are relative to this folder; Edge resolves them over file:// when printing. */
+@font-face {
+  font-family: 'Italiana';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../src/styles/fonts/italiana-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Karla';
+  font-style: normal;
+  font-weight: 300 600;
+  src: url('../../src/styles/fonts/karla-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Parisienne';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../src/styles/fonts/parisienne-latin.woff2') format('woff2');
+}

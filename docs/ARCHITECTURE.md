@@ -75,8 +75,9 @@ public/
 .github/workflows/               CI: deploys main to argelees.com
 
 assets-src/images/               original images, source for the pipeline
+assets-src/catalog/              the price-list PDF: A4 template, print fonts, photos (docs/CATALOG.md)
 tests/                           every spec, mirroring src/app (no colocated tests)
-scripts/                         config, i18n, palette, contrast, images, finalize, checks
+scripts/                         config, i18n, palette, contrast, images, catalog-pdf, finalize, checks
 docs/                            this folder
 ```
 
@@ -96,6 +97,7 @@ core/catalog/
   pricing.ts             quote(), startingPrice(), formatPrice(): pure, unit-tested
   catalog.service.ts     lookup by slug
   order.service.ts       turns a selection into the pre-filled wa.me link
+  order-conditions.data.ts the order conditions grouped by theme, shared by the landing and the PDF
 ```
 
 `ProductId`, `LayerId` and `FruitId` are `keyof typeof T.catalog.<group>`, so a piece cannot exist

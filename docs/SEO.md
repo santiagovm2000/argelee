@@ -113,8 +113,8 @@ actually prerendered, not from a hand-kept list, so a new page cannot go missing
 - **Headers** come from `public/_headers`: immutable caching for hashed bundles and fonts, a day for
   images and video, plus HSTS, CSP and the other security headers. Cloudflare compresses (Brotli)
   on its own.
-- **Prices** in `catalog.data.ts` are the owner's list (`public/ArGeles-catalogo.pdf`), in US
-  dollars. `SITE.whatsappNumber` is the real business line, in the digits-only form wa.me links take.
+- **Prices** in `catalog.data.ts` are the owner's list, in US dollars; `public/ArGeles-catalogo.pdf`
+  is generated from them (`bun run catalog-pdf`, see `docs/CATALOG.md`). `SITE.whatsappNumber` is the real business line, in the digits-only form wa.me links take.
 - **Search Console** is verified through a DNS TXT record on the zone, not a meta tag, so a rebuild
   can never drop it. The sitemap is submitted there; Bing imports from Search Console.
 - **Cloudflare Web Analytics** runs from the beacon `<script>` in `src/index.html`. Cloudflare cannot

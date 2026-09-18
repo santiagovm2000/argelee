@@ -15,6 +15,7 @@ Detail lives in `docs/` — read the file you need, when you need it:
 | How do I name it, write it, translate it?      | `docs/CONVENTIONS.md`   |
 | How do pages, URLs and metadata work?          | `docs/SEO.md`           |
 | Which skill or MCP helps here?                 | `docs/TOOLING.md`       |
+| How do I change the price list PDF?            | `docs/CATALOG.md`       |
 
 ---
 
@@ -94,6 +95,7 @@ bun run i18n           # regenerate typed translation keys after editing a local
 bun run images         # regenerate responsive AVIF derivatives + social cards + manifest
 bun run favicon        # regenerate favicon.svg / .ico / apple-touch-icon from the wordmark font
 bun run social-card    # redraw the brand card behind the home link preview, then run images
+bun run catalog-pdf    # rebuild public/ArGeles-catalogo.pdf from the menu data (see docs/CATALOG.md)
 bun run palette        # re-derive the colour scale after changing the brand hex
 bun run contrast       # WCAG AA check on the token pairings
 bun run finalize       # sitemap + robots + llms + 404.html (runs inside build)
@@ -113,5 +115,6 @@ bun run test           # vitest, reads only from tests/
 - `.env` holds `SITE_ORIGIN` and `SITE_INDEXABLE`, and is git-ignored. Never treat a value in the
   bundle as secret: minification is not encryption, so anything the browser needs is public.
 - Prices, sizes and piece descriptions come from the owner's price list, published as
-  `public/ArGeles-catalogo.pdf`. Change the PDF, `catalog.data.ts` and the locale files together.
+  `public/ArGeles-catalogo.pdf`. That PDF is generated: edit `catalog.data.ts` and the locale files,
+  then run `bun run catalog-pdf` and commit the result with the change. See `docs/CATALOG.md`.
   `SITE.whatsappNumber` is the real business line, in the digits-only form wa.me links take.

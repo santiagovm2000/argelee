@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ArGeles, frutas y sabores por pieza</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root {
+    --surface: #F5F8FB; --panel: #FFFFFF; --tint: #EAF1F8; --line: #B9CFE7;
+    --azul-text: #3B5876; --ink: #151D26; --ink-muted: #5C6C7D; --vino: #8C2F3C;
+    --display: 'Italiana', 'Didot', serif; --body: 'Karla', 'Segoe UI', sans-serif; --script: 'Parisienne', cursive;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--surface); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: var(--body); font-weight: 300; color: var(--ink); font-size: 9.5pt; line-height: 1.5; }
+  .page { width: 210mm; height: 297mm; overflow: hidden; padding: 11mm 16mm 8mm; background: var(--surface); }
+  .head { display: flex; align-items: baseline; justify-content: space-between; gap: 8mm; padding-bottom: 3mm; border-bottom: 1px solid var(--line); }
+  .wordmark { font-family: var(--script); color: var(--vino); font-size: 24pt; line-height: 1.1; }
+  .head h1 { font-family: var(--display); font-weight: 400; font-size: 17pt; line-height: 1.1; }
+  .intro { margin-top: 3.5mm; color: var(--ink-muted); font-size: 9pt; line-height: 1.5; }
+  .intro strong { font-weight: 500; color: var(--ink); }
+  .row { display: grid; grid-template-columns: 26mm 1fr 1fr; gap: 5mm; padding: 3mm 0; border-bottom: 1px solid var(--line); break-inside: avoid; }
+  .row:last-of-type { border-bottom: 0; }
+  .photo { width: 26mm; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .name { grid-column: 2 / 4; font-family: var(--display); font-weight: 400; font-size: 12.5pt; line-height: 1.15; }
+  .col label { display: block; font-weight: 500; font-size: 7.5pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--azul-text); margin-bottom: 1mm; }
+  .col p { font-size: 8.5pt; line-height: 1.45; }
+  .col p.note { color: var(--ink-muted); font-size: 8.5pt; margin-top: 1mm; }
+  .cell { display: flex; flex-direction: column; gap: 1.5mm; }
+  .cell .name { grid-column: auto; }
+  .warn { margin-top: 4mm; background: var(--tint); border-radius: 8px; padding: 3.5mm 5mm; font-size: 8.5pt; line-height: 1.5; color: var(--ink); }
+  .warn strong { font-weight: 500; }
+</style>
+</head>
+<body>
+<section class="page">
+  <header class="head">
+    <div class="wordmark">ArGeles</div>
+    <h1>Frutas y sabores por pieza</h1>
+  </header>
+  <p class="intro"><strong>Sabores Sonrissa disponibles en Venezuela:</strong> fresa, cereza, frambuesa, uva, limón, piña y tutti frutti. Cajas de 66 g (500 ml) y sobres de 132 g (1 L). La gelatina tres leches y la capa cristalina se hacen con gelatina sin sabor.</p>
+
+  <div class="row">
+    <div class="photo"><img src="photos/frutas.jpg" alt="" style="object-position:50% 24%"></div>
+    <div class="cell">
+      <div class="name">Encapsulada de frutas</div>
+      <div class="col"><label>Frutas</label><p>Fresa, uva verde y morada, melocotón en almíbar, mango, mora, arándano, cereza, mandarina en gajos, piña en almíbar.</p></div>
+    </div>
+    <div class="cell">
+      <div class="col"><label>Sabores Sonrissa</label><p>La capa cristalina va sin sabor. Para las franjas de la base: fresa, cereza o frambuesa (rojo), limón (verde), piña (amarillo), uva (morado).</p></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="photo"><img src="photos/franjas.jpg" alt=""></div>
+    <div class="cell">
+      <div class="name">Napolitana de frutas</div>
+      <div class="col"><label>Frutas</label><p>Fresa laminada, melocotón en almíbar en láminas, mango en láminas, uva partida a la mitad, mora.</p></div>
+    </div>
+    <div class="cell">
+      <div class="col"><label>Sabores Sonrissa</label><p>Tres franjas de colores distintos: fresa, cereza o frambuesa; limón; piña; uva. Tutti frutti como nota mixta. Combinaciones clásicas: fresa, limón y piña; uva, limón y fresa.</p></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="photo"><img src="photos/anillo.jpg" alt="" style="object-position:50% 10%"></div>
+    <div class="cell">
+      <div class="name">Corona tres leches</div>
+      <div class="col"><label>Frutas</label><p>No lleva. Opcional: fresas, uvas o cerezas en el centro del anillo al servir.</p></div>
+    </div>
+    <div class="cell">
+      <div class="col"><label>Sabores Sonrissa</label><p>Un solo sabor alternado con la gelatina tres leches: cereza, fresa, frambuesa, uva, limón, piña o tutti frutti.</p></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="photo"><img src="photos/uva.jpg" alt=""></div>
+    <div class="cell">
+      <div class="name">Bicolor coronada</div>
+      <div class="col"><label>Frutas</label><p>Para coronar: uvas, fresas, cerezas, moras, arándanos, gajos de mandarina.</p></div>
+    </div>
+    <div class="cell">
+      <div class="col"><label>Sabores Sonrissa</label><p>El mismo sabor en los dos tonos, uno puro y otro con leche condensada: uva, fresa, cereza, frambuesa, piña o limón. La fruta de arriba va a juego con el sabor.</p></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="photo"><img src="photos/fresa.jpg" alt="" style="object-position:50% 74%"></div>
+    <div class="cell">
+      <div class="name">Mosaico de fruta fresca</div>
+      <div class="col"><label>Frutas</label><p>En cubitos: fresa, melocotón en almíbar, uva, mango, mora, arándano, piña en almíbar.</p></div>
+    </div>
+    <div class="cell">
+      <div class="col"><label>Sabores Sonrissa</label><p>Fresa, cereza, frambuesa, uva, piña o tutti frutti, en la capa de arriba y en las franjas con leche condensada.</p></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="photo"><img src="photos/cereza.jpg" alt=""></div>
+    <div class="cell">
+      <div class="name">Cristal y crema</div>
+      <div class="col"><label>Frutas</label><p>No lleva.</p></div>
+    </div>
+    <div class="cell">
+      <div class="col"><label>Sabores Sonrissa</label><p>Cualquiera de los siete: la capa transparente y la base cremosa con leche condensada van del mismo sabor. Cereza, fresa y frambuesa dan el rojo más intenso; uva y limón, un contraste bonito con la crema.</p></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="photo"><img src="photos/potecitos.jpg" alt="" style="object-position:50% 55%"></div>
+    <div class="cell">
+      <div class="name">Porción individual</div>
+      <div class="col"><label>Frutas</label><p>En cubitos: fresa, uva, melocotón en almíbar, mora, arándano, mango.</p></div>
+    </div>
+    <div class="cell">
+      <div class="col"><label>Sabores Sonrissa</label><p>Base cremosa y capa de fruta: fresa, cereza, frambuesa, uva, piña o limón. La flor puede ir en un sabor de contraste, por ejemplo limón sobre fresa.</p></div>
+    </div>
+  </div>
+
+  <p class="warn"><strong>Frutas que no dejan cuajar la gelatina en fresco:</strong> piña, kiwi, lechosa, mango verde y parchita cruda tienen enzimas que la deshacen. Úsalas en almíbar o cocidas. La fresa, la uva, la mora, el arándano, la cereza, el melocotón y la mandarina van bien crudas.</p>
+</section>
+</body>
+</html>

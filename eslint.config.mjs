@@ -5,7 +5,14 @@ import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', '.angular/**', 'node_modules/**', '**/*.generated.ts'],
+    ignores: [
+      'dist/**',
+      '.angular/**',
+      'node_modules/**',
+      '**/*.generated.ts',
+      // Print templates for the catalogue PDF: HTML, but not Angular templates.
+      'assets-src/**',
+    ],
   },
 
   // ---------------------------------------------------------------- TypeScript

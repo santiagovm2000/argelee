@@ -53,3 +53,6 @@ src/app/core/config/build-config.generated.ts
 
 # Browser MCP scratch output (snapshots, console logs, screenshots)
 .playwright-mcp/
+
+# The catalogue template with its data filled in, written and removed by `bun run catalog-pdf`
+assets-src/catalog/catalog.filled.html

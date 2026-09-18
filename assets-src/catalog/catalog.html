@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ArGeles, catálogo</title>
+<!-- Source of public/ArGeles-catalogo.pdf. Print it with `bun run catalog-pdf`; see docs/CATALOG.md. -->
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root {
+    --surface: #F5F8FB;
+    --panel: #FFFFFF;
+    --tint: #EAF1F8;
+    --line: #B9CFE7;
+    --azul: #4E6E90;
+    --azul-text: #3B5876;
+    --ink: #151D26;
+    --ink-muted: #5C6C7D;
+    --vino: #8C2F3C;
+    --navy: #0E141A;
+    --navy-line: #232E39;
+    --rose: #D8AFB6;
+    --on-navy: #ECF2F8;
+    --steel: #9FBAD8;
+    --display: 'Italiana', 'Didot', 'Times New Roman', serif;
+    --body: 'Karla', 'Segoe UI', sans-serif;
+    --script: 'Parisienne', cursive;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--surface); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: var(--body); font-weight: 300; color: var(--ink); font-size: 10.5pt; line-height: 1.55; }
+
+  .page {
+    width: 210mm; height: 297mm; overflow: hidden; position: relative;
+    padding: 13mm 16mm 12mm; background: var(--surface);
+    display: flex; flex-direction: column;
+    break-after: page; page-break-after: always;
+  }
+  .page:last-child { break-after: auto; page-break-after: auto; }
+
+  /* Brand card */
+  .brand { text-align: center; padding-top: 0; }
+  .wordmark { font-family: var(--script); font-weight: 400; color: var(--vino); font-size: 46pt; line-height: 1.1; letter-spacing: 0.005em; }
+  .ornament { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 1.5mm auto 3.5mm; }
+  .ornament::before, .ornament::after { content: ""; width: 14mm; height: 1px; background: var(--line); }
+  .ornament span { width: 4px; height: 4px; border-radius: 50%; background: var(--azul); display: block; }
+  .statement { font-family: var(--display); font-size: 16pt; line-height: 1.25; color: var(--ink); }
+  .edition { color: var(--ink-muted); font-size: 9.5pt; margin-top: 0.5mm; }
+
+  .brand--small { text-align: left; display: flex; align-items: baseline; justify-content: space-between; padding-top: 0; }
+  .brand--small .wordmark { font-size: 26pt; }
+  .brand--small .edition { margin: 0; }
+
+  /* Groups: the party size is the heading, the volume is the detail. */
+  .group { margin-top: 5mm; }
+  .group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 6mm; padding-bottom: 2.2mm; border-bottom: 1px solid var(--line); }
+  .group-head h2 { font-family: var(--display); font-weight: 400; font-size: 19pt; line-height: 1.1; }
+  .group-head .volume { font-weight: 500; font-size: 8pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--azul-text); white-space: nowrap; }
+
+  .grid { display: grid; gap: 5mm 8mm; margin-top: 4mm; }
+  .grid--2 { grid-template-columns: 1fr 1fr; }
+  .grid--3 { grid-template-columns: 1fr 1fr 1fr; gap: 6mm 6mm; }
+
+  .piece { display: flex; flex-direction: column; }
+  .photo { width: 100%; aspect-ratio: 1; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
+  .grid--3 .photo { aspect-ratio: 4 / 5; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .piece-head { display: flex; align-items: baseline; justify-content: space-between; gap: 4mm; margin-top: 2.5mm; }
+  .piece h3 { font-family: var(--display); font-weight: 400; font-size: 15.5pt; line-height: 1.15; }
+  .grid--3 .piece h3 { font-size: 14pt; }
+  .price { font-family: var(--display); font-size: 20pt; line-height: 1; white-space: nowrap; }
+  .price small { font-size: 12pt; margin-right: 1px; }
+  .piece p { color: var(--ink-muted); font-size: 9.5pt; line-height: 1.5; margin-top: 1.4mm; max-width: 60ch; }
+  .piece p.size { color: var(--azul-text); font-weight: 500; font-size: 8.5pt; margin-top: 0.8mm; }
+
+  /* One wide piece: photo beside the text. */
+  .piece--wide { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; align-items: center; margin-top: 4mm; margin-bottom: 4mm; }
+  .photo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .piece--wide .photo { aspect-ratio: 4 / 5; }
+  .page-2 .group { margin-top: 5mm; }
+  .page-2 .grid--2 .photo { aspect-ratio: 4 / 3; }
+  .piece--wide .piece-text h3 { font-size: 15.5pt; }
+  .price-block { display: flex; align-items: baseline; gap: 2.5mm; margin-top: 2mm; }
+  .piece--wide .price { font-size: 26pt; }
+  .piece--wide .price small { font-size: 15pt; }
+  .price-unit { color: var(--ink-muted); font-size: 9.5pt; }
+  .piece--wide p { max-width: 52ch; }
+  .pos-frutas { object-position: 50% 24%; }
+  .pos-anillo { object-position: 50% 10%; }
+  .pos-fresa { object-position: 50% 74%; }
+  .img-low { object-position: 50% 55%; }
+
+  /* Cover: a steel-blue sweep across the lower page, the brand top left, one framed piece in the middle. */
+  .cover { padding: 0; display: block; }
+  .cover-bg { position: absolute; inset: 0; width: 210mm; height: 297mm; display: block; }
+  .cover-brand { position: absolute; left: 18mm; top: 16mm; text-align: left; }
+  .cover .wordmark { font-size: 40pt; line-height: 1.05; }
+  .cover-sub { font-weight: 500; font-size: 8pt; letter-spacing: 0.22em; text-transform: uppercase; color: var(--azul-text); margin-top: 1mm; margin-left: 2mm; }
+  .cover-frame { position: absolute; left: 50%; top: 58mm; transform: translateX(-50%); width: 120mm; }
+  .cover-photo { width: 100%; aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); box-shadow: 0 18px 40px -24px rgba(21, 29, 38, 0.45); }
+  .cover-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
+  .cover-title { position: absolute; left: 18mm; top: 226mm; font-family: var(--display); font-weight: 400; font-size: 44pt; line-height: 1; letter-spacing: 0.04em; color: #FFFFFF; }
+  .cover-lead { position: absolute; left: 18mm; top: 248mm; width: 130mm; font-size: 10.5pt; line-height: 1.55; color: #ECF2F8; }
+  .cover-tag { position: absolute; right: 18mm; bottom: 14mm; font-weight: 500; font-size: 8pt; letter-spacing: 0.22em; text-transform: uppercase; color: #D7E3EF; }
+
+  .page-1 .group { margin-top: 7mm; }
+  .page-1 .grid { gap: 8mm; margin-top: 5mm; }
+  .page-1 .piece-head { margin-top: 3mm; }
+
+  /* Order panel */
+  .order-wrap { margin-top: auto; padding-top: 4mm; }
+  .order { background: var(--tint); border-radius: 8px; padding: 4mm 7mm 5mm; }
+  .order-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8mm; }
+  .order h2 { font-family: var(--display); font-weight: 400; font-size: 18pt; line-height: 1.15; }
+  .order .number { font-family: var(--display); font-size: 20pt; line-height: 1.1; letter-spacing: 0.02em; }
+  .order p { color: var(--ink-muted); font-size: 9.5pt; line-height: 1.55; margin-top: 1.5mm; }
+  /* Conditions page: three columns, a glyph and a tracked label over hairline rows. */
+  .conditions { margin-top: 9mm; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 9mm; align-items: start; }
+  .condition-title { display: flex; align-items: center; gap: 2.5mm; font-family: var(--body); font-weight: 500; font-size: 8.5pt; letter-spacing: 0.22em; text-transform: uppercase; color: var(--azul-text); }
+  .condition-icon { width: 6mm; height: 6mm; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .condition-list { list-style: none; margin-top: 4mm; border-top: 1px solid var(--line); }
+  .condition-list li { padding: 3.5mm 0; border-bottom: 1px solid var(--line); color: var(--ink-muted); font-size: 10pt; line-height: 1.55; }
+  .page-2 .order { padding: 6mm 8mm; }
+  .page-2 .order p { max-width: 62ch; }
+
+  .foot { margin-top: 4mm; padding-top: 2mm; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; color: var(--ink-muted); font-size: 8pt; }
+  .page-1 .foot, .page-2 .foot, .page-3 .foot { margin-top: auto; }
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <svg class="cover-bg" viewBox="0 0 210 297" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="sweep" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0" stop-color="#3B5876"/>
+        <stop offset="1" stop-color="#4E6E90"/>
+      </linearGradient>
+    </defs>
+    <circle cx="222" cy="12" r="82" fill="#EAF1F8"/>
+    <path d="M0,206 C70,196 125,162 210,140 L210,297 L0,297 Z" fill="#B9CFE7"/>
+    <path d="M0,214 C70,204 125,171 210,148 L210,297 L0,297 Z" fill="url(#sweep)"/>
+  </svg>
+  <header class="cover-brand">
+    <div class="wordmark">ArGeles</div>
+    <div class="cover-sub">Gelatinas artesanales</div>
+  </header>
+  <div class="cover-frame">
+    <div class="cover-photo"><img src="photos/frutas.jpg" alt=""></div>
+  </div>
+  <h1 class="cover-title">Catálogo</h1>
+  <p class="cover-lead">Gelatinas artesanales con fruta fresca<br>para tus eventos más especiales.</p>
+  <span class="cover-tag">Carta de precios</span>
+</section>
+
+<section class="page page-1">
+  <header class="brand brand--small">
+    <div class="wordmark">ArGeles</div>
+  </header>
+
+  <div class="group">
+    <div class="group-head">
+      <h2>Para 16 a 20 personas</h2>
+    </div>
+    <div class="grid grid--2">
+      <article class="piece" data-product="encapsulated-fruit">
+        <div class="photo"><img src="photos/frutas.jpg" alt="" class="pos-frutas"></div>
+        <div class="piece-head"><h3>Encapsulada de frutas</h3><span class="price"><small>$</small>60</span></div>
+        <p data-description>Fruta fresca a elección suspendida en una capa de gelatina transparente, sobre una base de gelatina tres leches.</p>
+      </article>
+      <article class="piece" data-product="neapolitan-fruit">
+        <div class="photo"><img src="photos/franjas.jpg" alt=""></div>
+        <div class="piece-head"><h3>Napolitana de frutas</h3><span class="price"><small>$</small>45</span></div>
+        <p data-description>Fruta fresca laminada sobre franjas finas de gelatina de sabores frutales a elección y gelatina tres leches.</p>
+      </article>
+      <article class="piece" data-product="tres-leches-crown">
+        <div class="photo"><img src="photos/anillo.jpg" alt="" class="pos-anillo"></div>
+        <div class="piece-head"><h3>Corona tres leches</h3><span class="price"><small>$</small>35</span></div>
+        <p data-description>Gelatina de sabor frutal a elección y gelatina tres leches alternadas en molde de anillo.</p>
+      </article>
+      <article class="piece" data-product="crowned-two-tone">
+        <div class="photo"><img src="photos/uva.jpg" alt=""></div>
+        <div class="piece-head"><h3>Bicolor coronada</h3><span class="price"><small>$</small>30</span></div>
+        <p data-description>Gelatina de sabor frutal a elección en dos tonos, una capa intensa y otra con leche condensada, coronada con fruta fresca.</p>
+      </article>
+    </div>
+  </div>
+
+  <footer class="foot"><span>2 de 4</span></footer>
+</section>
+
+<section class="page page-2">
+  <header class="brand brand--small">
+    <div class="wordmark">ArGeles</div>
+  </header>
+
+  <div class="group">
+    <div class="group-head">
+      <h2>Para 8 a 16 personas</h2>
+    </div>
+    <div class="grid grid--2">
+      <article class="piece" data-product="fresh-fruit-mosaic">
+        <div class="photo"><img src="photos/fresa.jpg" alt="" class="pos-fresa"></div>
+        <div class="piece-head"><h3>Mosaico de fruta fresca</h3><span class="price"><small>$</small>30</span></div>
+        <p class="size" data-serves></p>
+        <p data-description>Cubitos de fruta fresca en la capa superior y franjas de gelatina de sabor frutal con leche condensada.</p>
+      </article>
+      <article class="piece" data-product="crystal-and-cream">
+        <div class="photo"><img src="photos/cereza.jpg" alt=""></div>
+        <div class="piece-head"><h3>Cristal y crema</h3><span class="price"><small>$</small>20</span></div>
+        <p class="size" data-serves></p>
+        <p data-description>Gelatina de sabor frutal a elección en dos capas, una transparente y una base cremosa con leche condensada.</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-head">
+      <h2>Porciones individuales</h2>
+      <span class="volume">Con tapa y cucharilla</span>
+    </div>
+    <article class="piece piece--wide" data-product="individual-portion">
+      <div class="photo-pair">
+        <div class="photo"><img src="photos/potecitos.jpg" alt="" class="img-low"></div>
+        <div class="photo"><img src="photos/envase-lado.jpg" alt=""></div>
+      </div>
+      <div class="piece-text">
+        <h3>Porción individual</h3>
+        <div class="price-block">
+          <span class="price"><small>$</small>3,50</span>
+          <span class="price-unit">por unidad</span>
+        </div>
+        <p data-description>Base cremosa de gelatina de sabor frutal, cubitos de fruta fresca y una flor de gelatina. Listos para servir.</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="order-wrap">
+    <div class="order">
+      <div class="order-head">
+        <h2>Pedidos por WhatsApp</h2>
+        <div class="number">0424 186 0627</div>
+      </div>
+      <p>Escríbenos con la pieza que te gusta y la fecha de tu celebración, y te confirmamos disponibilidad.</p>
+    </div>
+  </div>
+
+  <footer class="foot"><span>3 de 4</span></footer>
+</section>
+
+<section class="page page-3">
+  <header class="brand brand--small">
+    <div class="wordmark">ArGeles</div>
+  </header>
+
+  <div class="group">
+    <div class="group-head">
+      <h2 data-conditions-title></h2>
+    </div>
+    <div class="conditions" data-conditions></div>
+  </div>
+
+  <footer class="foot"><span>4 de 4</span></footer>
+</section>
+
+<!-- Filled by scripts/catalog-pdf.ts from ORDER_CONDITION_GROUPS: one per group. -->
+<template id="condition-group">
+  <section class="condition-group">
+    <h3 class="condition-title"><svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"></svg><span></span></h3>
+    <ul class="condition-list"></ul>
+  </section>
+</template>
+
+</body>
+</html>
