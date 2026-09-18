@@ -72,7 +72,7 @@ public/
   images/                        generated AVIF derivatives + JPEG social cards (committed)
   video/                         the hero loop, encoded once with ffmpeg (mp4 + webm, no audio)
 
-.github/workflows/               CI: deploys main to argelees.com, plus the GitHub Pages preview
+.github/workflows/               CI: deploys main to argelees.com
 
 assets-src/images/               original images, source for the pipeline
 tests/                           every spec, mirroring src/app (no colocated tests)

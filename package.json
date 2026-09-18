@@ -23,7 +23,6 @@
     "verify": "bun run config && bun run i18n:check && bun run contrast && bun run check:templates && bun run check:structure && bun run lint && bun run test && bun run build",
     "check:structure": "bun run scripts/check-structure.ts",
     "config": "bun run scripts/config.ts",
-    "build:pages": "bun run config && ng build --configuration production,pages && bun run finalize",
     "finalize": "bun run scripts/finalize.ts"
   },
   "private": true,

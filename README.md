@@ -60,11 +60,6 @@ Set these in the build environment (`.env` locally, the workflow in CI):
 | `SITE_ORIGIN`    | absolute origin for canonical, hreflang, og:image and sitemap URLs |
 | `SITE_INDEXABLE` | `false` on previews — emits `noindex` and `Disallow: /`            |
 
-### Public preview
-
-Every push to `main` publishes a non-indexable preview to GitHub Pages at
-<https://santiagovm2000.github.io/argelee/> via `.github/workflows/deploy-preview.yml`.
-
 ## Documentation
 
 | File                    | Contents                                                |

@@ -71,9 +71,6 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
-            },
-            "pages": {
-              "baseHref": "/argelee/"
             }
           },
           "defaultConfiguration": "production"

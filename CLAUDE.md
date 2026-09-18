@@ -87,7 +87,6 @@ the animation does not run.
 bun install
 bun start              # dev server
 bun run build          # prerendered static build -> dist/argelee/browser
-bun run build:pages    # same, with the /argelee/ base href for the GitHub Pages preview
 bun run deploy         # build + upload to Cloudflare Workers (argelees.com); needs `wrangler login` once
 bun run verify         # i18n + contrast + templates + structure + lint + test + build.
 
