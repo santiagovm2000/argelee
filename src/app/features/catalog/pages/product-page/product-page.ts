@@ -10,6 +10,7 @@ import type {
   Product,
   Selection,
 } from '../../../../core/catalog/catalog.model';
+import type { LeadItem } from '../../../../core/analytics/analytics.service';
 import { CatalogService } from '../../../../core/catalog/catalog.service';
 import { OrderService } from '../../../../core/catalog/order.service';
 import { formatPrice, listedPrice, quote } from '../../../../core/catalog/pricing';
@@ -21,6 +22,7 @@ import { srcsetFor } from '../../../../core/images/image.loader';
 import { LanguageService } from '../../../../core/i18n/language.service';
 import { T } from '../../../../core/i18n/translation-keys.generated';
 import { SeoService } from '../../../../core/seo/seo.service';
+import { Lead } from '../../../../shared/directives/lead';
 import { ChoiceGroup, type ChoiceOption } from '../../../../shared/ui/choice-group/choice-group';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { choiceIconUrl } from '../../../../shared/ui/icons/icons';
@@ -45,6 +47,7 @@ const NO_LIMITS: ChoiceLimits = { min: 0, max: null };
     ChoiceGroup,
     EmptyState,
     QuantityInput,
+    Lead,
   ],
   templateUrl: './product-page.html',
 })
@@ -89,6 +92,14 @@ export class ProductPage {
     const product = this.product();
     const selection = this.selection();
     return product === null || selection === null ? '' : this.order.orderUrl(product, selection);
+  });
+
+  /** What the order button reports to analytics: the piece and the price it shows. */
+  protected readonly leadItem = computed((): LeadItem | null => {
+    const product = this.product();
+    const selection = this.selection();
+    if (product === null || selection === null) return null;
+    return { id: product.id, price: quote(product, selection) };
   });
 
   /** "Para 16 a 20 personas" for a whole piece; empty for a piece sold by the unit. */

@@ -8,6 +8,7 @@ import { IMAGES } from '../../../../core/images/image-manifest.generated';
 import { LanguageService } from '../../../../core/i18n/language.service';
 import { T } from '../../../../core/i18n/translation-keys.generated';
 import { SeoService } from '../../../../core/seo/seo.service';
+import { Lead } from '../../../../shared/directives/lead';
 import { ICON_URLS } from '../../../../shared/ui/icons/icons';
 import { Wordmark } from '../../../../shared/ui/wordmark/wordmark';
 
@@ -17,7 +18,7 @@ import { Wordmark } from '../../../../shared/ui/wordmark/wordmark';
  */
 @Component({
   selector: 'arg-links-page',
-  imports: [RouterLink, TranslocoDirective, Wordmark],
+  imports: [RouterLink, TranslocoDirective, Wordmark, Lead],
   templateUrl: './links-page.html',
 })
 export class LinksPage implements OnInit {

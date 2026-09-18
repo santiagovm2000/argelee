@@ -3,10 +3,11 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { OrderService } from '../../../../core/catalog/order.service';
 import { SECTION_IDS } from '../../../../core/config/routes';
 import { T } from '../../../../core/i18n/translation-keys.generated';
+import { Lead } from '../../../../shared/directives/lead';
 
 @Component({
   selector: 'arg-orders-section',
-  imports: [TranslocoDirective],
+  imports: [TranslocoDirective, Lead],
   templateUrl: './orders-section.html',
   host: { class: 'block' },
 })

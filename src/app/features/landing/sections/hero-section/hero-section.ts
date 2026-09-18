@@ -10,6 +10,7 @@ import { srcsetFor } from '../../../../core/images/image.loader';
 import { LanguageService } from '../../../../core/i18n/language.service';
 import { T } from '../../../../core/i18n/translation-keys.generated';
 import { REDUCED_MOTION_MEDIA_QUERY } from '../../../../core/theme/theme.constants';
+import { Lead } from '../../../../shared/directives/lead';
 import { HERO_VIDEO, HERO_VIDEO_START_TIMEOUT_MS } from './hero.constants';
 
 /**
@@ -19,7 +20,7 @@ import { HERO_VIDEO, HERO_VIDEO_START_TIMEOUT_MS } from './hero.constants';
  */
 @Component({
   selector: 'arg-hero-section',
-  imports: [NgOptimizedImage, RouterLink, TranslocoDirective],
+  imports: [NgOptimizedImage, RouterLink, TranslocoDirective, Lead],
   templateUrl: './hero-section.html',
   host: { class: 'block' },
 })

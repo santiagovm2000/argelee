@@ -19,6 +19,7 @@ import {
   type ViewTransitionInfo,
 } from '@angular/router';
 import { routes } from '../../app.routes';
+import { AnalyticsService } from '../analytics/analytics.service';
 import { provideI18n } from '../i18n/i18n.providers';
 import { provideImages } from '../images/image.loader';
 
@@ -86,6 +87,7 @@ export function provideCore(): EnvironmentProviders {
       if (!isPlatformBrowser(inject(PLATFORM_ID))) return;
       const document = inject(DOCUMENT);
       inject(ViewportScroller).setOffset(() => anchorOffset(document));
+      inject(AnalyticsService).init();
     }),
   ]);
 }
