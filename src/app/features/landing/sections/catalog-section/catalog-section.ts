@@ -37,7 +37,7 @@ export class CatalogSection {
     const language = this.language.current();
     return this.catalog.products.map((product) => ({
       product,
-      link: localizedUrl(language, productSegments(product.id)),
+      link: localizedUrl(language, productSegments(product.slug)),
       price: formatPrice(listedPrice(product), language),
     }));
   });

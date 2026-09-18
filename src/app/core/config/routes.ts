@@ -4,13 +4,13 @@ import {
   type SupportedLanguage,
 } from '../i18n/i18n.constants';
 
-// Path segments are language-neutral on purpose: `/catalogo/x` and `/en/catalogo/x`
-// share every segment after the prefix, which is what keeps hreflang pairs, the
-// language switcher and the sitemap exact inverses of each other.
+// Path segments are English in every language on purpose: `/catalog/x` and
+// `/en/catalog/x` share every segment after the prefix, which is what keeps hreflang
+// pairs, the language switcher and the sitemap exact inverses of each other.
 export const ROUTE_PATHS = {
   home: '',
-  catalog: 'catalogo',
-  links: 'enlaces',
+  catalog: 'catalog',
+  links: 'links',
   notFound: '**',
 } as const;
 
@@ -20,8 +20,8 @@ export const ROUTE_PARAMS = {
 
 // In-page anchors on the landing page.
 export const SECTION_IDS = {
-  catalog: 'carta',
-  orders: 'encargos',
+  catalog: 'catalog',
+  orders: 'orders',
 } as const;
 
 /** Builds the URL a page lives at in a given language: '/' for the default, '/en/...' otherwise. */

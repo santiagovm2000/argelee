@@ -80,63 +80,63 @@
       "tally": "{{count}}/{{max}}"
     },
     "flavours": {
-      "fresa": "Strawberry",
-      "cereza": "Cherry",
-      "frambuesa": "Raspberry",
-      "uva": "Grape",
-      "limon": "Lime",
-      "pina": "Pineapple",
+      "strawberry": "Strawberry",
+      "cherry": "Cherry",
+      "raspberry": "Raspberry",
+      "grape": "Grape",
+      "lemon": "Lime",
+      "pineapple": "Pineapple",
       "tutti-frutti": "Tutti frutti"
     },
     "fruits": {
-      "fresa": "Strawberry",
-      "uva": "Grape",
-      "melocoton": "Peach",
+      "strawberry": "Strawberry",
+      "grape": "Grape",
+      "peach": "Peach",
       "mango": "Mango",
-      "mora": "Blackberry",
-      "arandano": "Blueberry",
-      "cereza": "Cherry",
-      "mandarina": "Tangerine",
-      "pina": "Pineapple"
+      "blackberry": "Blackberry",
+      "blueberry": "Blueberry",
+      "cherry": "Cherry",
+      "tangerine": "Tangerine",
+      "pineapple": "Pineapple"
     },
     "products": {
-      "encapsulada-de-frutas": {
+      "encapsulated-fruit": {
         "name": "Encapsulated Fruit",
         "note": "Fresh fruit in clear jelly over tres leches",
         "description": "Fresh fruit of your choice suspended in a layer of clear jelly, over a base of tres leches jelly.",
         "imageAlt": "Clear jelly crown with strawberries, purple grapes, peach and green grapes"
       },
-      "napolitana-de-frutas": {
+      "neapolitan-fruit": {
         "name": "Neapolitan Fruit",
         "note": "Sliced fruit over fruit stripes and tres leches",
         "description": "Sliced fresh fruit over fine stripes of fruit-flavoured jelly of your choice and tres leches jelly.",
         "imageAlt": "Rectangular jelly with red, white and green layers, sliced strawberries on top"
       },
-      "corona-tres-leches": {
+      "tres-leches-crown": {
         "name": "Tres Leches Crown",
         "note": "Fruit flavour and tres leches in a ring mould",
         "description": "Fruit-flavoured jelly of your choice and tres leches jelly alternating in a ring mould.",
         "imageAlt": "Flower-mould jelly, red on top and cream below, on a gold board"
       },
-      "bicolor-coronada": {
+      "crowned-two-tone": {
         "name": "Crowned Two-Tone",
         "note": "Two tones of fruit, crowned with fresh fruit",
         "description": "Fruit-flavoured jelly of your choice in two tones, one intense and one with condensed milk, crowned with fresh fruit.",
         "imageAlt": "Fluted jelly mould, dark purple over a lilac layer, with grapes at the centre"
       },
-      "mosaico-de-fruta-fresca": {
+      "fresh-fruit-mosaic": {
         "name": "Fresh Fruit Mosaic",
         "note": "Fruit cubes over stripes with condensed milk",
         "description": "Fresh fruit cubes in the top layer and stripes of fruit-flavoured jelly with condensed milk.",
         "imageAlt": "Round scalloped pink jelly with strawberry cubes in its clear top layer"
       },
-      "cristal-y-crema": {
+      "crystal-and-cream": {
         "name": "Crystal and Cream",
         "note": "One clear layer and one creamy base",
         "description": "Fruit-flavoured jelly of your choice in two layers, one clear and a creamy base with condensed milk.",
         "imageAlt": "Red jelly in a round pearl mould on a white plate"
       },
-      "porcion-individual": {
+      "individual-portion": {
         "name": "Individual Portion",
         "note": "With a lid and a spoon, ready to serve",
         "description": "A creamy fruit-flavoured jelly base, fresh fruit cubes and a jelly flower. Ready to serve, with its lid and spoon.",

@@ -10,6 +10,12 @@ describe('menu data', () => {
     for (const id of ids) expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
   });
 
+  it('has unique, URL-safe slugs', () => {
+    const slugs = PRODUCTS.map((product) => product.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    for (const slug of slugs) expect(slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+  });
+
   it('lists every price on the price step', () => {
     for (const product of PRODUCTS) {
       expect(product.price).toBeGreaterThan(0);

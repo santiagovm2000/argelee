@@ -80,63 +80,63 @@
       "tally": "{{count}}/{{max}}"
     },
     "flavours": {
-      "fresa": "Fresa",
-      "cereza": "Cereza",
-      "frambuesa": "Frambuesa",
-      "uva": "Uva",
-      "limon": "Limón",
-      "pina": "Piña",
+      "strawberry": "Fresa",
+      "cherry": "Cereza",
+      "raspberry": "Frambuesa",
+      "grape": "Uva",
+      "lemon": "Limón",
+      "pineapple": "Piña",
       "tutti-frutti": "Tutti frutti"
     },
     "fruits": {
-      "fresa": "Fresa",
-      "uva": "Uva",
-      "melocoton": "Melocotón",
+      "strawberry": "Fresa",
+      "grape": "Uva",
+      "peach": "Melocotón",
       "mango": "Mango",
-      "mora": "Mora",
-      "arandano": "Arándano",
-      "cereza": "Cereza",
-      "mandarina": "Mandarina",
-      "pina": "Piña"
+      "blackberry": "Mora",
+      "blueberry": "Arándano",
+      "cherry": "Cereza",
+      "tangerine": "Mandarina",
+      "pineapple": "Piña"
     },
     "products": {
-      "encapsulada-de-frutas": {
+      "encapsulated-fruit": {
         "name": "Encapsulada de frutas",
         "note": "Fruta fresca en gelatina transparente sobre tres leches",
         "description": "Fruta fresca a elección suspendida en una capa de gelatina transparente, sobre una base de gelatina tres leches.",
         "imageAlt": "Corona de gelatina transparente con fresas, uvas moradas, durazno y uva verde"
       },
-      "napolitana-de-frutas": {
+      "neapolitan-fruit": {
         "name": "Napolitana de frutas",
         "note": "Fruta laminada sobre franjas frutales y tres leches",
         "description": "Fruta fresca laminada sobre franjas finas de gelatina de sabores frutales a elección y gelatina tres leches.",
         "imageAlt": "Gelatina rectangular de capas rojas, blancas y verdes con láminas de fresa encima"
       },
-      "corona-tres-leches": {
+      "tres-leches-crown": {
         "name": "Corona tres leches",
         "note": "Sabor frutal y tres leches en molde de anillo",
         "description": "Gelatina de sabor frutal a elección y gelatina tres leches alternadas en molde de anillo.",
         "imageAlt": "Gelatina en molde de flor, roja arriba y crema abajo, sobre base dorada"
       },
-      "bicolor-coronada": {
+      "crowned-two-tone": {
         "name": "Bicolor coronada",
         "note": "Dos tonos de fruta, coronada con fruta fresca",
         "description": "Gelatina de sabor frutal a elección en dos tonos, una capa intensa y otra con leche condensada, coronada con fruta fresca.",
         "imageAlt": "Gelatina en molde acanalado, morada oscura sobre capa lila, con uvas en el centro"
       },
-      "mosaico-de-fruta-fresca": {
+      "fresh-fruit-mosaic": {
         "name": "Mosaico de fruta fresca",
         "note": "Cubitos de fruta sobre franjas con leche condensada",
         "description": "Cubitos de fruta fresca en la capa superior y franjas de gelatina de sabor frutal con leche condensada.",
         "imageAlt": "Gelatina redonda festoneada, rosada, con cubitos de fresa en su capa superior transparente"
       },
-      "cristal-y-crema": {
+      "crystal-and-cream": {
         "name": "Cristal y crema",
         "note": "Una capa transparente y una base cremosa",
         "description": "Gelatina de sabor frutal a elección en dos capas, una transparente y una base cremosa con leche condensada.",
         "imageAlt": "Gelatina roja en molde redondo de perlas sobre un plato blanco"
       },
-      "porcion-individual": {
+      "individual-portion": {
         "name": "Porción individual",
         "note": "Con tapa y cucharilla, lista para servir",
         "description": "Base cremosa de gelatina de sabor frutal, cubitos de fruta fresca y una flor de gelatina. Lista para servir, con su tapa y su cucharilla.",

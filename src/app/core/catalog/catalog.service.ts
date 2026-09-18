@@ -15,6 +15,6 @@ export class CatalogService {
 
   /** Resolves a URL slug to a piece; unknown slugs give null so the page can show an empty state. */
   find(slug: string): Product | null {
-    return PRODUCTS.find((product) => product.id === slug) ?? null;
+    return PRODUCTS.find((product) => product.slug === slug) ?? null;
   }
 }

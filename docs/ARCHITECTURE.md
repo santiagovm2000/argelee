@@ -38,11 +38,13 @@ src/
       images/                    NgOptimizedImage loader, width/sizes constants, generated manifest
       seo/                       SeoService (title, description, canonical, OG, JSON-LD)
       theme/                     ThemeService (light / dark / system)
+      analytics/                 AnalyticsService: GA4 loader + the lead event WhatsApp links send
       providers/core.providers.ts  the single provideCore() the app boots with
 
     shared/
       ui/                        wordmark, product-card, choice-group, empty-state — inputs in, outputs out
-      directives/  pipes/  utils/
+      directives/                lead.ts: `a[argLead]` counts a WhatsApp click as a lead
+      pipes/  utils/
 
     layout/
       site-header/  site-footer/  theme-toggle/  language-switcher/  whatsapp-button/
@@ -70,7 +72,7 @@ public/
   images/                        generated AVIF derivatives + JPEG social cards (committed)
   video/                         the hero loop, encoded once with ffmpeg (mp4 + webm, no audio)
 
-.github/workflows/               CI: builds and publishes the GitHub Pages preview
+.github/workflows/               CI: deploys main to argelees.com, plus the GitHub Pages preview
 
 assets-src/images/               original images, source for the pipeline
 tests/                           every spec, mirroring src/app (no colocated tests)
@@ -105,8 +107,8 @@ choice beyond them costs the flat extra in `catalog.constants.ts`. A group set t
 absent from the configurator. A group never goes empty.
 
 The shelf and the product page both read `PRODUCTS`; the prerenderer reads it too, to know which
-`/catalogo/<slug>` pages to emit; the sitemap is built from what was emitted. **Adding a piece** is
-therefore: one entry in `catalog.data.ts`, its names in both locale files, the photo in
+`/catalog/<slug>` pages to emit; the sitemap is built from what was emitted. **Adding a piece** is
+therefore: one entry in `catalog.data.ts` (an English `id`, which is its translation key, and the Spanish `slug` its URL uses), its names in both locale files, the photo in
 `assets-src/images/catalog/`, then `bun run images` and `bun run i18n`. Nothing else changes. A
 piece sold by the unit (an individual portion) sets `serves: null`: the configurator then asks how
 many, never fewer than `MIN_UNIT_QUANTITY`, and its `price` is the price of one. Sizes are stated
@@ -130,7 +132,7 @@ the default language at the root and the rest path-prefixed (`/en`). A `CanActiv
 route's language before render, so each prerendered file carries the right `<html lang>` and copy.
 
 `app.routes.server.ts` prerenders everything by default. Parameterised routes need their values:
-the product route gets them from `PRODUCTS` through `getPrerenderParams`. The bare `catalogo`
+the product route gets them from `PRODUCTS` through `getPrerenderParams`. The bare `catalog`
 segment is marked `RenderMode.Client` on purpose — it is not a page, and left to the prerenderer
 it would become a 404 rendered into a file and then listed in the sitemap. See `docs/SEO.md`.
 

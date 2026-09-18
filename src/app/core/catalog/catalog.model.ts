@@ -24,6 +24,8 @@ export type PeopleRange = readonly [from: number, to: number];
 
 export interface Product {
   readonly id: ProductId;
+  /** The URL segment: the piece's own name, in Spanish, because that is what the brand calls it. */
+  readonly slug: string;
   readonly image: ImageKey;
   /** The listed price: of the whole piece, or of one unit for a piece sold by the unit. */
   readonly price: number;

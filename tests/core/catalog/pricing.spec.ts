@@ -14,8 +14,8 @@ const byId = (id: Product['id']): Product => {
 const rounded = (value: number): number => Math.round(value / PRICE_STEP) * PRICE_STEP;
 
 describe('quote', () => {
-  const crystal = byId('encapsulada-de-frutas');
-  const portion = byId('porcion-individual');
+  const crystal = byId('encapsulated-fruit');
+  const portion = byId('individual-portion');
 
   it('prices a whole piece at its listed price, whatever the choices', () => {
     expect(quote(crystal, defaultSelection(crystal))).toBe(crystal.price);

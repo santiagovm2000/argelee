@@ -11,7 +11,7 @@ const productPattern = `${ROUTE_PATHS.catalog}/:${ROUTE_PARAMS.productSlug}`;
 
 /** One prerendered page per product; the catalogue data is the only source of slugs. */
 const productParams = (): Promise<Record<string, string>[]> =>
-  Promise.resolve(PRODUCTS.map((product) => ({ [ROUTE_PARAMS.productSlug]: product.id })));
+  Promise.resolve(PRODUCTS.map((product) => ({ [ROUTE_PARAMS.productSlug]: product.slug })));
 
 const withLanguage = (language: SupportedLanguage, path: string): string =>
   language === DEFAULT_LANGUAGE ? path : `${language}/${path}`;
