@@ -1,0 +1,25 @@
+// Cloudflare Workers, static assets only: there is no Worker script, so every request is
+// answered from dist/ at the edge, free and unmetered. `bun run deploy` builds and uploads.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "argelees",
+  "compatibility_date": "2026-09-17",
+  "assets": {
+    "directory": "./dist/argelee/browser",
+    // Canonical URLs carry no trailing slash (see docs/SEO.md); `/en/` redirects to `/en`.
+    "html_handling": "drop-trailing-slash",
+    // A miss returns 404.html (the CSR shell) with a real 404 status, so the app boots and
+    // search engines still learn the URL does not exist.
+    "not_found_handling": "404-page",
+  },
+  // Custom domains make the Worker the origin: Cloudflare writes the DNS records and issues
+  // the certificates on deploy. `www` exists only to be redirected to the apex (a zone rule).
+  "routes": [
+    { "pattern": "argelees.com", "custom_domain": true },
+    { "pattern": "www.argelees.com", "custom_domain": true },
+  ],
+  // No workers.dev or preview hostnames: a second public copy of the site would be
+  // duplicate content competing with the real domain.
+  "workers_dev": false,
+  "preview_urls": false,
+}

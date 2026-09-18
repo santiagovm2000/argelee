@@ -3,7 +3,7 @@
 Landing page and made-to-order menu for **ArGeles**, artisan jellies; orders convert through
 WhatsApp. Angular 22 + Tailwind CSS 4, built and run with **Bun**. No component library: every
 component is ours. No backend: the site prerenders to static HTML (`outputMode: "static"`) and
-deploys to any static host.
+deploys to Cloudflare Workers (static assets) at argelees.com.
 
 This file is loaded on every session, so it holds only rules that are always true.
 Detail lives in `docs/` — read the file you need, when you need it:
@@ -88,6 +88,7 @@ bun install
 bun start              # dev server
 bun run build          # prerendered static build -> dist/argelee/browser
 bun run build:pages    # same, with the /argelee/ base href for the GitHub Pages preview
+bun run deploy         # build + upload to Cloudflare Workers (argelees.com); needs `wrangler login` once
 bun run verify         # i18n + contrast + templates + structure + lint + test + build.
 
 bun run i18n           # regenerate typed translation keys after editing a locale JSON

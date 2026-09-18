@@ -16,5 +16,12 @@
   </head>
   <body>
     <arg-root></arg-root>
+    <!-- Cloudflare Web Analytics (privacy-first, no cookies). The token identifies the
+         argelees.com site in the dashboard; the CSP in public/_headers allows this origin. -->
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "41fbec6698b74681a739d18f22fb012d"}'
+    ></script>
   </body>
 </html>

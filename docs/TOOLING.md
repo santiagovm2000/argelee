@@ -22,8 +22,8 @@ Two things learnt the hard way with the DevTools server: a screenshot of a **bac
 until the protocol timeout, so call `select_page` with `bringToFront` first; and a Lighthouse run
 leaves its mobile emulation on the page, so reset the viewport with `emulate` afterwards.
 
-Not wanted on this project: the Figma MCP. Skip anything database-, backend- or deploy-related
-too: this project has no backend.
+Not wanted on this project: the Figma MCP. Skip anything database- or backend-related: this
+project has no backend. Deploys go through `wrangler` (`bun run deploy`), not through an MCP.
 
 ## Skills
 

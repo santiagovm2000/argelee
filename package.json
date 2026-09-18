@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "bun run config && ng serve",
     "build": "bun run config && ng build && bun run finalize",
+    "deploy": "bun run build && wrangler deploy",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint .",
@@ -62,6 +63,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.69.0",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "wrangler": "^4.134.0"
   }
 }

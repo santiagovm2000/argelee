@@ -1,0 +1,59 @@
+# Publishes the prerendered build to Cloudflare Workers (static assets) at https://argelees.com.
+#
+# The Worker, its custom domains and the response headers are declared in wrangler.jsonc
+# and public/_headers, so this job only builds and uploads. Secrets:
+#   CLOUDFLARE_API_TOKEN   an "Edit Cloudflare Workers" token
+#   CLOUDFLARE_ACCOUNT_ID  the account that owns the argelees.com zone
+name: Deploy to argelees.com
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never let two deploys race; queue instead of cancelling a half-finished one.
+concurrency:
+  group: cloudflare-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://argelees.com
+    env:
+      SITE_ORIGIN: https://argelees.com
+      SITE_INDEXABLE: 'true'
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.10
+
+      - run: bun install --frozen-lockfile
+
+      # build-config.generated.ts is git-ignored, and lint/test are type-aware and
+      # import it, so it has to exist before any check runs.
+      - run: bun run config
+
+      # The same gates as `bun run verify`; its build is the one below.
+      - run: bun run i18n:check
+      - run: bun run contrast
+      - run: bun run check:templates
+      - run: bun run check:structure
+      - run: bun run lint
+      - run: bun run test
+
+      - run: bun run build
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: bun
+          command: deploy

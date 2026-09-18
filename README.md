@@ -37,17 +37,28 @@ bun start                # http://localhost:4200
 
 ## Deploying
 
-`bun run build` produces plain static files. Point any static host (Vercel, Netlify, Cloudflare
-Pages, S3, nginx) at `dist/argelee/browser`. There is no server to run.
+Production is **Cloudflare Workers with static assets** at <https://argelees.com>. There is no
+server: the files in `dist/argelee/browser` are served from Cloudflare's edge, free and unmetered.
+`wrangler.jsonc` declares the Worker, its two custom domains (`argelees.com`, `www.argelees.com`)
+and how HTML paths resolve; `public/_headers` sets the cache and security headers. Zone-level
+settings (HTTPS enforcement, HSTS, DNSSEC, the `www` → apex redirect) live in the Cloudflare
+dashboard, not in the repo.
 
-Set these in the host's environment:
+```bash
+bun run wrangler login   # once per machine, opens the browser
+bun run deploy           # build + upload
+```
+
+Every push to `main` also deploys through `.github/workflows/deploy.yml`, which needs two
+repository secrets: `CLOUDFLARE_API_TOKEN` (an "Edit Cloudflare Workers" token) and
+`CLOUDFLARE_ACCOUNT_ID`.
+
+Set these in the build environment (`.env` locally, the workflow in CI):
 
 | Variable         | Purpose                                                            |
 | ---------------- | ------------------------------------------------------------------ |
 | `SITE_ORIGIN`    | absolute origin for canonical, hreflang, og:image and sitemap URLs |
 | `SITE_INDEXABLE` | `false` on previews — emits `noindex` and `Disallow: /`            |
-
-Enable Brotli/gzip and long-lived caching on hashed assets — see `docs/SEO.md`.
 
 ### Public preview
 
