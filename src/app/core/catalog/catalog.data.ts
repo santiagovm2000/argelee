@@ -29,17 +29,7 @@ export const PRODUCTS: readonly Product[] = [
       max: 3,
     },
     fruits: {
-      options: [
-        'strawberry',
-        'grape',
-        'peach',
-        'mango',
-        'blackberry',
-        'blueberry',
-        'cherry',
-        'tangerine',
-        'pineapple',
-      ],
+      options: ['strawberry', 'grape', 'peach', 'blackberry', 'blueberry', 'cherry', 'pineapple'],
       defaults: ['strawberry', 'grape', 'peach'],
       min: OPTIONAL,
       max: 4,
@@ -58,7 +48,7 @@ export const PRODUCTS: readonly Product[] = [
       max: 3,
     },
     fruits: {
-      options: ['strawberry', 'peach', 'mango', 'grape', 'blackberry'],
+      options: ['strawberry', 'peach', 'grape', 'blackberry'],
       defaults: ['strawberry'],
       min: OPTIONAL,
       max: 2,
@@ -96,7 +86,7 @@ export const PRODUCTS: readonly Product[] = [
       max: ONE_CHOICE,
     },
     fruits: {
-      options: ['grape', 'strawberry', 'cherry', 'blackberry', 'blueberry', 'tangerine'],
+      options: ['grape', 'strawberry', 'cherry', 'blackberry', 'blueberry'],
       defaults: ['grape'],
       min: OPTIONAL,
       max: 2,
@@ -115,7 +105,7 @@ export const PRODUCTS: readonly Product[] = [
       max: ONE_CHOICE,
     },
     fruits: {
-      options: ['strawberry', 'peach', 'grape', 'mango', 'blackberry', 'blueberry', 'pineapple'],
+      options: ['strawberry', 'peach', 'grape', 'blackberry', 'blueberry', 'pineapple'],
       defaults: ['strawberry'],
       min: OPTIONAL,
       max: 3,
@@ -148,7 +138,7 @@ export const PRODUCTS: readonly Product[] = [
       max: ONE_CHOICE,
     },
     fruits: {
-      options: ['strawberry', 'grape', 'peach', 'blackberry', 'blueberry', 'mango'],
+      options: ['strawberry', 'grape', 'peach', 'blackberry', 'blueberry'],
       defaults: ['strawberry'],
       min: OPTIONAL,
       max: 2,
