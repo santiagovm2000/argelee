@@ -41,7 +41,7 @@
         @if (byUnit()) {
           {{ translate(t.catalog.card.unitPrice, { price: price() }) }}
         } @else {
-          {{ price() }}
+          {{ translate(t.catalog.card.price, { price: price() }) }}
         }
         ·
         {{ translate(t.catalog.card.customize) }}

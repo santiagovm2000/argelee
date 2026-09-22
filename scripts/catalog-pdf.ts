@@ -88,7 +88,9 @@ function fillTemplate(): string {
       );
     }
     heading.textContent = translate(translations, keys.name);
-    price.innerHTML = `<small>$</small>${priceDigits(product.price)}`;
+    price.innerHTML =
+      `<span class="from">${translate(translations, T.catalog.customizer.from)}</span>` +
+      `<span class="amount"><small>$</small>${priceDigits(product.price)}</span>`;
     description.textContent = translate(translations, keys.description);
 
     const serves = article.querySelector('[data-serves]');

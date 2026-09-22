@@ -20,7 +20,7 @@
     "switchToDarkTheme": "Activar tema oscuro",
     "switchToLightTheme": "Activar tema claro",
     "openWhatsapp": "Escribir por WhatsApp",
-    "priceUpdated": "Precio actualizado: {{total}}",
+    "priceUpdated": "Precio actualizado: desde {{total}}",
     "previousPiece": "Pieza anterior",
     "nextPiece": "Pieza siguiente",
     "pieces": "Piezas de la carta",
@@ -73,7 +73,8 @@
       "subtitle": "Cada pieza se elabora por encargo, con fruta fresca seleccionada. Elige la tuya y encárgala por WhatsApp."
     },
     "card": {
-      "unitPrice": "{{price}} por unidad",
+      "price": "Desde {{price}}",
+      "unitPrice": "Desde {{price}} por unidad",
       "customize": "Ver y encargar"
     },
     "groups": {
@@ -84,7 +85,7 @@
       "flavours": "Sabores de gelatina"
     },
     "hints": {
-      "quantity": "Precio por unidad: {{price}} · mínimo {{min}}",
+      "quantity": "Precio por unidad: desde {{price}} · mínimo {{min}}",
       "pickOne": "Elige uno",
       "pickAny": "Elige las que quieras",
       "tally": "{{count}}/{{max}}"
@@ -155,7 +156,8 @@
       "eyebrow": "Pieza por encargo",
       "back": "Volver a la carta",
       "order": "Encargar esta pieza",
-      "serves": "Para {{from}} a {{to}} personas"
+      "serves": "Para {{from}} a {{to}} personas",
+      "from": "Desde"
     },
     "order": {
       "greeting": "Hola, quiero encargar una pieza.",

@@ -111,11 +111,16 @@
                 class="mt-9 flex flex-col gap-5 border-t border-line-tint pt-6 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div class="min-w-0 flex-1">
-                  <p class="font-display text-price text-ink" aria-live="polite">
+                  <p aria-live="polite">
                     <span class="sr-only">
                       {{ translate(t.a11y.priceUpdated, { total: total() }) }}
                     </span>
-                    <span aria-hidden="true">{{ total() }}</span>
+                    <span class="flex items-baseline gap-3" aria-hidden="true">
+                      <span class="text-eyebrow font-medium text-accent-text uppercase">
+                        {{ translate(t.catalog.customizer.from) }}
+                      </span>
+                      <span class="font-display text-price text-ink">{{ total() }}</span>
+                    </span>
                   </p>
                 </div>
                 <a

@@ -23,7 +23,9 @@ The PDF is Spanish only, like the printed price list it replaces.
 ## How it is built
 
 1. `catalog-pdf.ts` loads `catalog.html` with jsdom and fills every `[data-product="<id>"]` slot:
-   the `<h3>` gets the piece's name, `.price` its price (`$60`, `$3,50`), `[data-description]` its
+   the `<h3>` gets the piece's name, `.price` its base price with the `catalog.customizer.from` label
+   in front (`Desde $60`, `Desde $3,50`: every price is a starting price, the final one depends on
+   the choices), `[data-description]` its
    description and `[data-serves]` the "Para X a Y personas" line, all from `PRODUCTS` and `es.json`.
 2. Page 4 is the conditions page: `[data-conditions-title]` gets the landing section's title and
    `[data-conditions]` is built from `ORDER_CONDITION_GROUPS`, one column per group with its glyph,

@@ -20,7 +20,7 @@
     "switchToDarkTheme": "Switch to dark theme",
     "switchToLightTheme": "Switch to light theme",
     "openWhatsapp": "Message on WhatsApp",
-    "priceUpdated": "Price updated: {{total}}",
+    "priceUpdated": "Price updated: from {{total}}",
     "previousPiece": "Previous piece",
     "nextPiece": "Next piece",
     "pieces": "Pieces on the menu",
@@ -73,7 +73,8 @@
       "subtitle": "Every piece is made to order with selected fresh fruit. Choose yours and order it on WhatsApp."
     },
     "card": {
-      "unitPrice": "{{price}} each",
+      "price": "From {{price}}",
+      "unitPrice": "From {{price}} each",
       "customize": "View and order"
     },
     "groups": {
@@ -84,7 +85,7 @@
       "flavours": "Jelly flavours"
     },
     "hints": {
-      "quantity": "Price per unit: {{price}} · minimum {{min}}",
+      "quantity": "Price per unit: from {{price}} · minimum {{min}}",
       "pickOne": "Pick one",
       "pickAny": "Pick as many as you like",
       "tally": "{{count}}/{{max}}"
@@ -155,7 +156,8 @@
       "eyebrow": "Made to order",
       "back": "Back to the menu",
       "order": "Order this piece",
-      "serves": "Serves {{from}} to {{to}}"
+      "serves": "Serves {{from}} to {{to}}",
+      "from": "From"
     },
     "order": {
       "greeting": "Hi, I'd like to order a piece.",

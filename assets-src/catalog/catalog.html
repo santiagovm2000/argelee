@@ -68,7 +68,10 @@
   .piece-head { display: flex; align-items: baseline; justify-content: space-between; gap: 4mm; margin-top: 2.5mm; }
   .piece h3 { font-family: var(--display); font-weight: 400; font-size: 15.5pt; line-height: 1.15; }
   .grid--3 .piece h3 { font-size: 14pt; }
-  .price { font-family: var(--display); font-size: 20pt; line-height: 1; white-space: nowrap; }
+  /* A price is a base price: a tracked "Desde" label, then the amount in the display face. */
+  .price { display: inline-flex; align-items: baseline; gap: 1.6mm; white-space: nowrap; }
+  .price .from { font-weight: 500; font-size: 7.5pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--azul-text); }
+  .price .amount { font-family: var(--display); font-size: 20pt; line-height: 1; }
   .price small { font-size: 12pt; margin-right: 1px; }
   .piece p { color: var(--ink-muted); font-size: 9.5pt; line-height: 1.5; margin-top: 1.4mm; max-width: 60ch; }
   .piece p.size { color: var(--azul-text); font-weight: 500; font-size: 8.5pt; margin-top: 0.8mm; }
@@ -81,7 +84,7 @@
   .page-2 .grid--2 .photo { aspect-ratio: 4 / 3; }
   .piece--wide .piece-text h3 { font-size: 15.5pt; }
   .price-block { display: flex; align-items: baseline; gap: 2.5mm; margin-top: 2mm; }
-  .piece--wide .price { font-size: 26pt; }
+  .piece--wide .price .amount { font-size: 26pt; }
   .piece--wide .price small { font-size: 15pt; }
   .price-unit { color: var(--ink-muted); font-size: 9.5pt; }
   .piece--wide p { max-width: 52ch; }
@@ -165,22 +168,22 @@
     <div class="grid grid--2">
       <article class="piece" data-product="encapsulated-fruit">
         <div class="photo"><img src="photos/frutas.jpg" alt="" class="pos-frutas"></div>
-        <div class="piece-head"><h3>Encapsulada de frutas</h3><span class="price"><small>$</small>60</span></div>
+        <div class="piece-head"><h3>Encapsulada de frutas</h3><span class="price"><span class="from">Desde</span><span class="amount"><small>$</small>60</span></span></div>
         <p data-description>Fruta fresca a elección suspendida en una capa de gelatina transparente, sobre una base de gelatina tres leches.</p>
       </article>
       <article class="piece" data-product="neapolitan-fruit">
         <div class="photo"><img src="photos/franjas.jpg" alt=""></div>
-        <div class="piece-head"><h3>Napolitana de frutas</h3><span class="price"><small>$</small>45</span></div>
+        <div class="piece-head"><h3>Napolitana de frutas</h3><span class="price"><span class="from">Desde</span><span class="amount"><small>$</small>45</span></span></div>
         <p data-description>Fruta fresca laminada sobre franjas finas de gelatina de sabores frutales a elección y gelatina tres leches.</p>
       </article>
       <article class="piece" data-product="tres-leches-crown">
         <div class="photo"><img src="photos/anillo.jpg" alt="" class="pos-anillo"></div>
-        <div class="piece-head"><h3>Corona tres leches</h3><span class="price"><small>$</small>35</span></div>
+        <div class="piece-head"><h3>Corona tres leches</h3><span class="price"><span class="from">Desde</span><span class="amount"><small>$</small>35</span></span></div>
         <p data-description>Gelatina de sabor frutal a elección y gelatina tres leches alternadas en molde de anillo.</p>
       </article>
       <article class="piece" data-product="crowned-two-tone">
         <div class="photo"><img src="photos/uva.jpg" alt=""></div>
-        <div class="piece-head"><h3>Bicolor coronada</h3><span class="price"><small>$</small>30</span></div>
+        <div class="piece-head"><h3>Bicolor coronada</h3><span class="price"><span class="from">Desde</span><span class="amount"><small>$</small>30</span></span></div>
         <p data-description>Gelatina de sabor frutal a elección en dos tonos, una capa intensa y otra con leche condensada, coronada con fruta fresca.</p>
       </article>
     </div>
@@ -201,13 +204,13 @@
     <div class="grid grid--2">
       <article class="piece" data-product="fresh-fruit-mosaic">
         <div class="photo"><img src="photos/fresa.jpg" alt="" class="pos-fresa"></div>
-        <div class="piece-head"><h3>Mosaico de fruta fresca</h3><span class="price"><small>$</small>30</span></div>
+        <div class="piece-head"><h3>Mosaico de fruta fresca</h3><span class="price"><span class="from">Desde</span><span class="amount"><small>$</small>30</span></span></div>
         <p class="size" data-serves></p>
         <p data-description>Cubitos de fruta fresca en la capa superior y franjas de gelatina de sabor frutal con leche condensada.</p>
       </article>
       <article class="piece" data-product="crystal-and-cream">
         <div class="photo"><img src="photos/cereza.jpg" alt=""></div>
-        <div class="piece-head"><h3>Cristal y crema</h3><span class="price"><small>$</small>20</span></div>
+        <div class="piece-head"><h3>Cristal y crema</h3><span class="price"><span class="from">Desde</span><span class="amount"><small>$</small>20</span></span></div>
         <p class="size" data-serves></p>
         <p data-description>Gelatina de sabor frutal a elección en dos capas, una transparente y una base cremosa con leche condensada.</p>
       </article>
@@ -227,7 +230,7 @@
       <div class="piece-text">
         <h3>Porción individual</h3>
         <div class="price-block">
-          <span class="price"><small>$</small>3,50</span>
+          <span class="price"><span class="from">Desde</span><span class="amount"><small>$</small>3,50</span></span>
           <span class="price-unit">por unidad</span>
         </div>
         <p data-description>Base cremosa de gelatina de sabor frutal, cubitos de fruta fresca y una flor de gelatina. Listos para servir.</p>
