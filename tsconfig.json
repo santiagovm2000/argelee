@@ -10,7 +10,10 @@
       "@core/*": ["./src/app/core/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@features/*": ["./src/app/features/*"],
-      "@layout/*": ["./src/app/layout/*"]
+      "@layout/*": ["./src/app/layout/*"],
+      "@workers/*": ["./workers/*"],
+      "@admin/*": ["./projects/admin/src/app/*"],
+      "@locales/*": ["./public/i18n/*"]
     },
 
     /* Strictness. Every flag here is deliberate — do not relax them to make code compile. */
@@ -44,8 +47,20 @@
   },
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.spec.json" },
-    { "path": "./tsconfig.scripts.json" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.scripts.json"
+    },
+    {
+      "path": "./tsconfig.workers.json"
+    },
+    {
+      "path": "./projects/admin/tsconfig.app.json"
+    }
   ]
 }

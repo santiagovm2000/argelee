@@ -4,17 +4,27 @@
  * Enforces three rules a compiler cannot see:
  *  1. Every test lives under tests/. No spec files scattered next to source.
  *  2. No filename carries the project name.
- *  3. Every flavour and fruit the menu offers has its glyph file in public/icons/choices.
+ *  3. Every flavour and fruit the locale file knows has its glyph file in public/icons/choices.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join, relative, resolve, sep } from 'node:path';
-import { PRODUCTS } from '../src/app/core/catalog/catalog.data';
+import { DEFAULT_LANGUAGE } from '../src/app/core/i18n/i18n.constants';
 
 const ROOT = resolve(import.meta.dir, '..');
 const TESTS_DIR = 'tests';
-const SCANNED_DIRS = ['src', 'tests', 'scripts', 'public', 'assets-src', 'docs'];
+const SCANNED_DIRS = [
+  'src',
+  'tests',
+  'scripts',
+  'public',
+  'assets-src',
+  'docs',
+  'workers',
+  'projects',
+];
 const TEST_SUFFIXES = ['.spec.ts', '.test.ts'];
 const CHOICE_GLYPHS_DIR = join('public', 'icons', 'choices');
+const SOURCE_LOCALE_FILE = join('public', 'i18n', `${DEFAULT_LANGUAGE}.json`);
 
 const projectName = (
   JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as { name: string }
@@ -64,12 +74,15 @@ for (const dir of SCANNED_DIRS) {
   }
 }
 
-const offered = new Set(
-  PRODUCTS.flatMap((product) => [
-    ...(product.flavours?.options ?? []),
-    ...(product.fruits?.options ?? []),
-  ]),
-);
+// The locale file is the registry of choices a piece may offer (see catalog.model.ts),
+// so every id there must be drawable, whether or not a piece currently uses it.
+const locale = JSON.parse(readFileSync(join(ROOT, SOURCE_LOCALE_FILE), 'utf8')) as {
+  catalog: { flavours: Record<string, string>; fruits: Record<string, string> };
+};
+const offered = new Set([
+  ...Object.keys(locale.catalog.flavours),
+  ...Object.keys(locale.catalog.fruits),
+]);
 for (const option of offered) {
   const glyph = join(CHOICE_GLYPHS_DIR, `${option}.svg`);
   if (!existsSync(join(ROOT, glyph))) {

@@ -1,0 +1,15 @@
+<div class="min-w-0">
+  <p class="text-eyebrow font-medium text-accent-text uppercase">{{ legend() }}</p>
+  <ul class="mt-4 flex flex-wrap gap-2.5">
+    @for (option of options(); track option.id) {
+      <li
+        class="inline-flex min-h-11 items-center gap-2.5 rounded-control border border-line-tint py-2.5 pr-5 pl-4 text-body-sm text-ink"
+      >
+        <svg class="size-6 shrink-0" aria-hidden="true">
+          <use [attr.href]="option.icon" />
+        </svg>
+        {{ option.label }}
+      </li>
+    }
+  </ul>
+</div>

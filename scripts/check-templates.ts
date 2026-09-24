@@ -13,7 +13,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 
 const ROOT = resolve(import.meta.dir, '..');
-const SRC = join(ROOT, 'src');
+const SOURCE_DIRS = [join(ROOT, 'src'), join(ROOT, 'projects')];
 
 /* Attributes whose value reaches a user (and so must be translated) are listed
    inline in the attribute regex below: alt, title, placeholder, aria-label,
@@ -93,7 +93,7 @@ function inspect(file: string): Finding[] {
   return findings;
 }
 
-const findings = htmlFiles(SRC).flatMap(inspect);
+const findings = SOURCE_DIRS.flatMap((dir) => htmlFiles(dir)).flatMap(inspect);
 
 if (findings.length > 0) {
   console.error(`check:templates — ${findings.length} violation(s):\n`);

@@ -1,0 +1,87 @@
+<ng-container *transloco="let translate">
+  <section class="grid min-h-dvh lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+    <div
+      class="arg-dark relative isolate flex min-h-[42svh] items-end overflow-hidden bg-surface lg:min-h-dvh"
+    >
+      <img
+        [ngSrc]="poster.path"
+        fill
+        priority
+        [ngSrcset]="posterSrcset"
+        [placeholder]="poster.placeholder"
+        sizes="(max-width: 1024px) 100vw, 45vw"
+        class="object-cover"
+        alt=""
+      />
+      <div
+        class="absolute inset-0 bg-linear-to-t from-surface/90 via-surface/35 to-surface/10"
+        aria-hidden="true"
+      ></div>
+      <div class="relative px-8 pt-24 pb-10 sm:px-12 lg:px-16 lg:pb-16">
+        <div class="text-wordmark">
+          <arg-wordmark size="display" />
+        </div>
+        <p class="mt-3 max-w-[30ch] text-body text-ink-muted">{{ translate(t.login.tagline) }}</p>
+      </div>
+    </div>
+
+    <div class="relative flex items-center bg-surface px-6 pt-20 pb-12 sm:px-12 sm:pt-12 lg:px-20">
+      <div class="absolute top-5 right-5 flex items-center gap-2.5 sm:top-8 sm:right-10">
+        <a [href]="siteUrl" class="control">
+          {{ translate(t.login.site) }}
+          <svg
+            class="size-3.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7m0 0H9m8 0v8" />
+          </svg>
+        </a>
+        <arg-theme-toggle />
+      </div>
+      <form class="w-full max-w-sm" (submit)="submit($event)">
+        <h1 class="font-display text-subtitle text-ink">{{ translate(t.login.title) }}</h1>
+        <div class="ornament mt-4 w-fit" aria-hidden="true"><span></span></div>
+        <p class="mt-5 max-w-[38ch] text-body-sm text-ink-muted">{{ translate(t.login.lead) }}</p>
+
+        <div class="mt-9 flex flex-col gap-6">
+          <div>
+            <label class="field-label" for="login-user">{{ translate(t.login.user) }}</label>
+            <input
+              id="login-user"
+              class="field"
+              type="text"
+              autocomplete="username"
+              autocapitalize="none"
+              spellcheck="false"
+              [formField]="f.user"
+            />
+          </div>
+          <div>
+            <label class="field-label" for="login-password">{{
+              translate(t.login.password)
+            }}</label>
+            <input
+              id="login-password"
+              class="field"
+              type="password"
+              autocomplete="current-password"
+              [formField]="f.password"
+            />
+          </div>
+        </div>
+
+        @if (failure(); as failure) {
+          <p class="mt-5 text-body-sm text-vino" role="alert">{{ translate(failure) }}</p>
+        }
+
+        <button type="submit" class="button button--primary mt-9 w-full" [disabled]="busy()">
+          {{ translate(busy() ? t.login.submitting : t.login.submit) }}
+        </button>
+      </form>
+    </div>
+  </section>
+</ng-container>

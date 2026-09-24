@@ -1,12 +1,14 @@
-export const SUPPORTED_LANGUAGES = ['es', 'en'] as const;
+export const SUPPORTED_LANGUAGES = ['es'] as const;
 
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 
-export const DEFAULT_LANGUAGE: SupportedLanguage = 'es';
+export const DEFAULT_LANGUAGE = 'es' satisfies SupportedLanguage;
+
+/** The one language every piece of catalogue text must carry; the others fall back to it. */
+export type DefaultLanguage = typeof DEFAULT_LANGUAGE;
 
 export const LANGUAGE_TAGS: Readonly<Record<SupportedLanguage, string>> = {
   es: 'es-ES',
-  en: 'en-US',
 };
 
 // Relative on purpose: the browser resolves it against <base href>, so it keeps

@@ -1,0 +1,7 @@
+# Copy to admin/.dev.vars (git-ignored), or let `bun run admin:credentials --local` write it.
+# The password is stored only as a salted PBKDF2 digest; the plain text never touches a file.
+ADMIN_USER=
+ADMIN_PASSWORD_HASH=
+SESSION_SECRET=
+# Optional locally: the Browser Rendering API token used to render the PDF.
+BROWSER_RENDERING_TOKEN=

@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ApplicationRef, Component, inject, PLATFORM_ID } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { filter, map } from 'rxjs';
+import { CatalogService } from './core/catalog/catalog.service';
 import { FULL_CHROME, pageChrome } from './core/config/page-chrome';
 import { T } from './core/i18n/translation-keys.generated';
 import { SiteFooter } from './layout/site-footer/site-footer';
@@ -27,4 +29,20 @@ export class App {
     ),
     { initialValue: FULL_CHROME },
   );
+
+  constructor() {
+    if (isPlatformBrowser(inject(PLATFORM_ID))) this.refreshCatalogOnceSettled();
+  }
+
+  /**
+   * Adopts the live catalogue only after hydration and the first navigation are
+   * done: the prerendered DOM was made from the build snapshot, and changing the
+   * data underneath it mid-hydration would be a mismatch Angular cannot repair.
+   */
+  private refreshCatalogOnceSettled(): void {
+    const catalog = inject(CatalogService);
+    void inject(ApplicationRef)
+      .whenStable()
+      .then(() => catalog.refresh());
+  }
 }

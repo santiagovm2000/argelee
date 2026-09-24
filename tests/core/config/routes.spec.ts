@@ -2,21 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { localizedUrl, pathSegments, productSegments, ROUTE_PATHS } from '@core/config/routes';
 
 describe('localizedUrl', () => {
-  it('keeps the default language at the root', () => {
+  it('keeps the only language at the root', () => {
     expect(localizedUrl('es')).toBe('/');
     expect(localizedUrl('es', ['pricing'])).toBe('/pricing');
-  });
-
-  it('prefixes every other language', () => {
-    expect(localizedUrl('en')).toBe('/en');
-    expect(localizedUrl('en', ['pricing'])).toBe('/en/pricing');
   });
 });
 
 describe('pathSegments', () => {
   it('strips a leading language segment', () => {
-    expect(pathSegments('/en/pricing')).toEqual(['pricing']);
-    expect(pathSegments('/en')).toEqual([]);
+    expect(pathSegments('/es/pricing')).toEqual(['pricing']);
+    expect(pathSegments('/es')).toEqual([]);
   });
 
   it('leaves a path that carries no language untouched', () => {
@@ -25,23 +20,16 @@ describe('pathSegments', () => {
   });
 
   it('ignores the query string and fragment', () => {
-    expect(pathSegments('/en/pricing?utm=x#plans')).toEqual(['pricing']);
-  });
-
-  it('round-trips with localizedUrl so hreflang pairs stay reciprocal', () => {
-    for (const url of ['/', '/en', '/pricing', '/en/pricing']) {
-      const segments = pathSegments(url);
-      expect(localizedUrl('es', segments)).toBe(pathSegments(url).length ? '/pricing' : '/');
-      expect(pathSegments(localizedUrl('en', segments)).length).toBe(segments.length);
-    }
+    expect(pathSegments('/pricing?utm=x#plans')).toEqual(['pricing']);
   });
 });
 
 describe('productSegments', () => {
-  it('nests the slug under the catalogue segment in every language', () => {
-    const segments = productSegments('jardin-de-frutas');
-    expect(localizedUrl('es', segments)).toBe(`/${ROUTE_PATHS.catalog}/jardin-de-frutas`);
-    expect(localizedUrl('en', segments)).toBe(`/en/${ROUTE_PATHS.catalog}/jardin-de-frutas`);
-    expect(pathSegments(localizedUrl('en', segments))).toEqual(segments);
+  it('nests the slug under the catalogue segment', () => {
+    const segments = productSegments('0f3a1c2e-1234-4abc-9def-0123456789ab');
+    expect(localizedUrl('es', segments)).toBe(
+      `/${ROUTE_PATHS.catalog}/0f3a1c2e-1234-4abc-9def-0123456789ab`,
+    );
+    expect(pathSegments(localizedUrl('es', segments))).toEqual(segments);
   });
 });

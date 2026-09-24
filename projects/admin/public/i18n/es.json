@@ -1,0 +1,140 @@
+{
+  "app": {
+    "title": "Panel administrativo",
+    "skipToContent": "Ir al contenido"
+  },
+  "nav": {
+    "catalog": "Panel administrativo",
+    "site": "Ver el sitio",
+    "logout": "Salir",
+    "menu": "Menú",
+    "darkTheme": "Tema oscuro"
+  },
+  "login": {
+    "title": "Panel administrativo",
+    "user": "Usuario",
+    "password": "Contraseña",
+    "submit": "Entrar",
+    "submitting": "Entrando…",
+    "failed": "Usuario o contraseña incorrectos.",
+    "tooMany": "Demasiados intentos. Espera un minuto y vuelve a probar.",
+    "offline": "No se pudo conectar. Revisa la conexión e inténtalo de nuevo.",
+    "tagline": "Gelatinas artesanales con fruta fresca, hechas por encargo.",
+    "lead": "Desde aquí se configuran las piezas, los precios, las fotos y el PDF que ven los clientes.",
+    "site": "Ir al sitio"
+  },
+  "catalog": {
+    "title": "Catálogo",
+    "count": "{{count}} piezas, {{published}} publicadas",
+    "new": "Nueva pieza",
+    "loading": "Cargando el catálogo…",
+    "empty": "Todavía no hay piezas. Crea la primera.",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirmDeleteTitle": "¿Eliminar «{{name}}»?",
+    "confirmDeleteBody": "Desaparece del sitio cuando guardes los cambios.",
+    "published": "Publicada",
+    "hidden": "Oculta",
+    "noPhoto": "Sin foto",
+    "perUnit": "por unidad",
+    "serves": "{{from}} a {{to}} personas",
+    "search": "Buscar por nombre",
+    "noMatches": "Ninguna pieza coincide con «{{query}}».",
+    "reorder": "Mover «{{name}}», posición {{position}}. Arrastra o usa las flechas del teclado."
+  },
+  "save": {
+    "dirty": "Tienes cambios sin guardar.",
+    "action": "Guardar cambios",
+    "saving": "Guardando…",
+    "conflict": "Se guardó otra versión desde otro lugar. Recarga para verla y vuelve a aplicar tus cambios.",
+    "reload": "Recargar",
+    "invalid": "No se pudo guardar. Revisa:",
+    "offline": "No se pudo guardar. Revisa la conexión e inténtalo de nuevo.",
+    "discard": "Descartar cambios"
+  },
+  "pdf": {
+    "current": "Todo guardado y el PDF está al día.",
+    "stale": "El PDF no tiene los últimos cambios. Genéralo de nuevo.",
+    "staleAfterSave": "Guardado. El sitio lo muestra en menos de un minuto. Ahora genera el PDF para que también los tenga.",
+    "missing": "Todavía no hay PDF. Genéralo para tener el catálogo descargable.",
+    "generate": "Generar PDF",
+    "generating": "Generando el PDF…",
+    "failed": "No se pudo generar el PDF. Inténtalo de nuevo en un momento.",
+    "open": "Abrir PDF"
+  },
+  "product": {
+    "newTitle": "Nueva pieza",
+    "editTitle": "Editar pieza",
+    "back": "Volver al catálogo",
+    "save": "Guardar pieza",
+    "saving": "Guardando…",
+    "missing": "Esta pieza ya no existe.",
+    "sections": {
+      "text": "Textos",
+      "photo": "Foto",
+      "size": "Tamaño",
+      "flavours": "Sabores",
+      "fruits": "Frutas",
+      "pricing": "Precio",
+      "visibility": "Visibilidad"
+    },
+    "fields": {
+      "spanish": "Lo que leen los clientes",
+      "name": "Nombre",
+      "note": "Subtítulo",
+      "noteHint": "Una línea bajo el nombre en la tarjeta del menú.",
+      "description": "Descripción",
+      "descriptionHint": "Se lee en la página de la pieza y en el PDF.",
+      "published": "Publicada en el sitio",
+      "publishedHint": "Sin foto no se puede publicar."
+    },
+    "size": {
+      "whole": "Pieza entera",
+      "unit": "Por unidad",
+      "from": "Personas, desde",
+      "to": "hasta"
+    },
+    "options": {
+      "enabledFlavours": "La ficha indica los sabores de gelatina",
+      "enabledFruits": "La ficha indica las frutas",
+      "offered": "Opciones disponibles"
+    },
+    "pricing": {
+      "mode": "Cómo se fija el precio",
+      "fixed": "Precio fijo",
+      "calculated": "Calculado",
+      "cost": "Costo total de fabricación",
+      "marginKind": "Ganancia como",
+      "percent": "Porcentaje",
+      "amount": "Monto fijo",
+      "marginValue": "Ganancia",
+      "price": "Precio final",
+      "choice": "Qué precio usar",
+      "exact": "Exacto",
+      "rounded": "Redondeado",
+      "effective": "Ganancia real: {{amount}}"
+    },
+    "photo": {
+      "upload": "Subir foto",
+      "replace": "Cambiar foto",
+      "uploading": "Subiendo la foto…",
+      "failed": "No se pudo subir la foto. Inténtalo de nuevo.",
+      "hint": "JPG o PNG. Se reduce sola a un tamaño razonable.",
+      "empty": "Todavía no hay foto"
+    },
+    "errors": {
+      "title": "Revisa esto antes de guardar:",
+      "required": "Obligatorio"
+    }
+  },
+  "a11y": {
+    "photoOf": "Foto de {{name}}",
+    "pieces": "Piezas del catálogo",
+    "switchToDarkTheme": "Activar tema oscuro",
+    "switchToLightTheme": "Activar tema claro",
+    "search": "Buscar piezas por nombre"
+  },
+  "dialog": {
+    "cancel": "Cancelar"
+  }
+}

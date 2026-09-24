@@ -1,0 +1,411 @@
+<ng-container *transloco="let translate">
+  <section class="mx-auto max-w-content px-6 pt-10 pb-40 sm:px-10">
+    <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+      <div>
+        <h1 class="font-display text-headline text-ink">{{ translate(t.catalog.title) }}</h1>
+        @if (catalog.loaded()) {
+          <p class="mt-2 text-body-sm text-ink-muted">
+            {{
+              translate(t.catalog.count, {
+                count: rows().length,
+                published: publishedCount(),
+              })
+            }}
+          </p>
+        }
+      </div>
+      <a [routerLink]="newLink" class="button button--secondary button--compact">
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" d="M12 5v14M5 12h14" />
+        </svg>
+        {{ translate(t.catalog.new) }}
+      </a>
+    </div>
+
+    @if (!catalog.loaded()) {
+      <p class="mt-12 text-body text-ink-muted" aria-live="polite">
+        {{ translate(catalog.loadFailed() ? t.save.offline : t.catalog.loading) }}
+      </p>
+    } @else if (rows().length === 0) {
+      <p class="mt-12 text-body text-ink-muted">{{ translate(t.catalog.empty) }}</p>
+    } @else {
+      <label class="relative mt-8 block max-w-sm">
+        <span class="sr-only">{{ translate(t.a11y.search) }}</span>
+        <svg
+          class="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-ink-subtle"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <path stroke-linecap="round" d="m20 20-3.5-3.5" />
+        </svg>
+        <input
+          type="search"
+          class="field field--search"
+          autocomplete="off"
+          [placeholder]="translate(t.catalog.search)"
+          [value]="query()"
+          (input)="search($event)"
+        />
+      </label>
+      @if (visibleRows().length === 0) {
+        <p class="mt-8 text-body text-ink-muted" aria-live="polite">
+          {{ translate(t.catalog.noMatches, { query: query() }) }}
+        </p>
+      }
+      <ul
+        class="mt-6 border-t border-line"
+        role="list"
+        [attr.aria-label]="translate(t.a11y.pieces)"
+        cdkDropList
+        [cdkDropListData]="visibleRows()"
+        [cdkDropListDisabled]="query() !== ''"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (row of visibleRows(); track row.product.id) {
+          <li
+            class="grid grid-cols-[auto_4.5rem_1fr] items-start gap-x-4 gap-y-3 border-b border-line bg-surface py-5 sm:grid-cols-[auto_4.5rem_1fr_auto] sm:items-center"
+            cdkDrag
+            [cdkDragStartDelay]="dragDelay"
+            [cdkDragDisabled]="query() !== ''"
+          >
+            <button
+              type="button"
+              cdkDragHandle
+              class="flex min-h-10 w-10 cursor-grab flex-col items-center justify-center gap-1 rounded-control text-ink-subtle transition-colors duration-quick hover:bg-surface-hover hover:text-ink active:cursor-grabbing disabled:cursor-default disabled:opacity-40"
+              [disabled]="query() !== ''"
+              [attr.aria-label]="
+                translate(t.catalog.reorder, { name: row.name, position: row.position })
+              "
+              (keydown.arrowUp)="move(row, -1)"
+              (keydown.arrowDown)="move(row, 1)"
+            >
+              <span class="text-body font-medium text-ink">{{ row.position }}</span>
+              <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="9" cy="6" r="1.4" />
+                <circle cx="15" cy="6" r="1.4" />
+                <circle cx="9" cy="12" r="1.4" />
+                <circle cx="15" cy="12" r="1.4" />
+                <circle cx="9" cy="18" r="1.4" />
+                <circle cx="15" cy="18" r="1.4" />
+              </svg>
+            </button>
+
+            <div
+              class="relative aspect-square overflow-hidden rounded-card border border-line-tint bg-surface-tint"
+              [class.opacity-60]="!row.product.published"
+            >
+              @if (row.product.photo; as photo) {
+                <img
+                  [ngSrc]="photo.key"
+                  fill
+                  [placeholder]="photo.placeholder"
+                  sizes="4.5rem"
+                  class="object-contain"
+                  [alt]="translate(t.a11y.photoOf, { name: row.name })"
+                />
+              } @else {
+                <span
+                  class="absolute inset-0 grid place-items-center px-1 text-center text-eyebrow text-ink-subtle uppercase"
+                >
+                  {{ translate(t.catalog.noPhoto) }}
+                </span>
+              }
+            </div>
+
+            <div class="min-w-0" [class.opacity-60]="!row.product.published">
+              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <a
+                  [routerLink]="row.editLink"
+                  class="font-display text-title text-ink transition-colors duration-quick hover:text-accent-text"
+                >
+                  {{ row.name }}
+                </a>
+                <span class="text-body font-medium text-accent-text">{{ row.price }}</span>
+              </div>
+              <p class="mt-1 text-caption text-ink-muted">{{ row.note }}</p>
+              <p class="mt-1 text-caption text-ink-subtle">{{ row.serves }}</p>
+            </div>
+
+            <div
+              class="col-start-2 col-end-4 flex min-w-0 items-center justify-between gap-x-3 sm:col-start-auto sm:col-end-auto sm:justify-end"
+            >
+              <label
+                class="inline-flex min-h-11 items-center gap-2.5 text-caption text-ink-muted sm:mr-2"
+              >
+                <span class="switch">
+                  <input
+                    type="checkbox"
+                    class="sr-only"
+                    [checked]="row.product.published"
+                    (change)="togglePublished(row)"
+                  />
+                </span>
+                <span class="min-w-[5.5rem]">
+                  {{ translate(row.product.published ? t.catalog.published : t.catalog.hidden) }}
+                </span>
+              </label>
+              <span class="flex items-center gap-2">
+                <a
+                  [routerLink]="row.editLink"
+                  class="control control--icon"
+                  [attr.aria-label]="translate(t.catalog.edit)"
+                  [title]="translate(t.catalog.edit)"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3Zm9.5-13.5 3 3"
+                    />
+                  </svg>
+                </a>
+                <button
+                  type="button"
+                  class="control control--icon control--danger"
+                  [attr.aria-label]="translate(t.catalog.delete)"
+                  [title]="translate(t.catalog.delete)"
+                  (click)="remove(row)"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4 7h16M10 11v6m4-6v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"
+                    />
+                  </svg>
+                </button>
+              </span>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  @if (catalog.loaded()) {
+    <div
+      class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface-raised/95 backdrop-blur"
+    >
+      <div
+        class="mx-auto flex max-w-content flex-col gap-3 px-6 py-3 sm:flex-row sm:items-center sm:gap-6 sm:px-10 sm:py-4"
+      >
+        <div
+          class="flex min-w-0 flex-1 items-start gap-2 text-body-sm"
+          [class.text-ink]="bar().tone === 'neutral'"
+          [class.text-ink-muted]="bar().tone === 'ok'"
+          [class.text-vino]="bar().tone === 'warn' || bar().tone === 'error'"
+          [class.font-medium]="bar().tone === 'warn' || bar().tone === 'error'"
+          role="status"
+          aria-live="polite"
+        >
+          @switch (bar().tone) {
+            @case ('ok') {
+              <svg
+                class="mt-0.5 size-4 shrink-0"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="m5 12 4.5 4.5L19 7" />
+              </svg>
+            }
+            @case ('warn') {
+              <svg
+                class="mt-0.5 size-4 shrink-0"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9v4m0 4h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"
+                />
+              </svg>
+            }
+            @case ('error') {
+              <svg
+                class="mt-0.5 size-4 shrink-0"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            }
+          }
+          <div>
+            {{ translate(bar().key) }}
+            @if (bar().details.length > 0) {
+              <ul class="mt-1 list-disc pl-5 text-caption font-normal">
+                @for (detail of bar().details; track detail) {
+                  <li>{{ detail }}</li>
+                }
+              </ul>
+            }
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          @if (bar().discardable) {
+            <button
+              type="button"
+              class="button button--secondary button--compact shrink-0"
+              [attr.aria-label]="translate(t.save.discard)"
+              [disabled]="bar().busy"
+              (click)="discard()"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"
+                />
+              </svg>
+              <span class="sr-only sm:not-sr-only">{{ translate(t.save.discard) }}</span>
+            </button>
+          }
+          @if (bar().openable) {
+            <a
+              [href]="pdfUrl"
+              target="_blank"
+              rel="noopener"
+              class="button button--secondary button--compact flex-1 sm:flex-none"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M14 5h5v5M19 5l-8 8M17 13v6H5V7h6"
+                />
+              </svg>
+              {{ translate(t.pdf.open) }}
+            </a>
+          }
+          @switch (bar().primary) {
+            @case ('save') {
+              <button
+                type="button"
+                class="button button--primary button--compact flex-1 sm:flex-none"
+                [disabled]="bar().busy"
+                (click)="save()"
+              >
+                <svg
+                  class="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 4h11l3 3v13H5V4Zm3 0v5h7V4M8 20v-6h8v6"
+                  />
+                </svg>
+                {{ translate(bar().busy ? t.save.saving : t.save.action) }}
+              </button>
+            }
+            @case ('pdf') {
+              <button
+                type="button"
+                class="button button--primary button--compact flex-1 sm:flex-none"
+                [disabled]="bar().busy"
+                (click)="generatePdf()"
+              >
+                <svg
+                  class="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M14 3H6v18h12V7l-4-4Zm0 0v4h4M9 13h6M9 17h6"
+                  />
+                </svg>
+                {{ translate(bar().busy ? t.pdf.generating : t.pdf.generate) }}
+              </button>
+            }
+            @case ('reload') {
+              <button
+                type="button"
+                class="button button--primary button--compact flex-1 sm:flex-none"
+                (click)="reload()"
+              >
+                <svg
+                  class="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"
+                  />
+                </svg>
+                {{ translate(t.save.reload) }}
+              </button>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  }
+</ng-container>

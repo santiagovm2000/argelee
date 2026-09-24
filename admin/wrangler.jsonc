@@ -1,0 +1,31 @@
+// The admin panel: an Angular SPA plus the Worker that signs the owner in and writes the
+// catalogue (workers/admin). It shares the KV namespace and the R2 bucket with the site.
+// Secrets (ADMIN_USER, ADMIN_PASSWORD_HASH, SESSION_SECRET, BROWSER_RENDERING_TOKEN) are set
+// with `bun run admin:credentials --remote` and `wrangler secret put`, never written here.
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "argelees-admin",
+  "main": "../workers/admin/index.ts",
+  "compatibility_date": "2026-09-17",
+  "assets": {
+    "directory": "../dist/admin/browser",
+    "binding": "ASSETS",
+    // A single-page app: any unknown path gets the shell; the Worker runs first so every
+    // response, assets included, carries the admin security headers.
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true,
+  },
+  "kv_namespaces": [{ "binding": "CATALOG", "id": "ed178ac922ab4f8890aba762c54a7813" }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "argelees-media" }],
+  // Five login attempts per minute per client.
+  "ratelimits": [
+    { "name": "LOGIN_LIMITER", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } },
+  ],
+  "vars": { "CF_ACCOUNT_ID": "74bf4c4781cde9a5a815a58f09ac7d91" },
+  // The order-condition glyphs are bundled as text, so the PDF can inline them.
+  "rules": [{ "type": "Text", "globs": ["**/*.svg"], "fallthrough": true }],
+  "routes": [{ "pattern": "admin.argelees.com", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+}

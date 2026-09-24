@@ -1,0 +1,104 @@
+<ng-container *transloco="let translate">
+  <button
+    type="button"
+    class="control control--icon"
+    [attr.aria-label]="translate(t.nav.menu)"
+    [attr.aria-expanded]="open()"
+    aria-haspopup="menu"
+    (click)="toggle()"
+  >
+    <svg
+      class="size-4"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      aria-hidden="true"
+    >
+      <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  </button>
+
+  @if (open()) {
+    <div
+      class="absolute top-full right-0 z-50 mt-2 w-60 rounded-panel border border-line-tint bg-surface-raised p-1.5 shadow-overlay"
+      role="menu"
+    >
+      <a
+        [href]="siteUrl"
+        target="_blank"
+        rel="noopener"
+        role="menuitem"
+        class="flex min-h-11 items-center gap-3 rounded-control px-3 text-body-sm text-ink transition-colors duration-quick hover:bg-surface-hover"
+        (click)="close()"
+      >
+        <svg
+          class="size-4 text-ink-muted"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7m0 0H9m8 0v8" />
+        </svg>
+        {{ translate(t.nav.site) }}
+      </a>
+      <button
+        type="button"
+        role="menuitem"
+        class="flex min-h-11 w-full items-center gap-3 rounded-control px-3 text-left text-body-sm text-ink transition-colors duration-quick hover:bg-surface-hover"
+        (click)="logout()"
+      >
+        <svg
+          class="size-4 text-ink-muted"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 12H4m0 0 4-4m-4 4 4 4m6-11h5v14h-5"
+          />
+        </svg>
+        {{ translate(t.nav.logout) }}
+      </button>
+
+      <div class="my-1.5 border-t border-line" role="separator"></div>
+
+      <label
+        class="flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-control px-3 text-body-sm text-ink"
+      >
+        <span class="flex items-center gap-3">
+          <svg
+            class="size-4 text-ink-muted"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"
+            />
+          </svg>
+          {{ translate(t.nav.darkTheme) }}
+        </span>
+        <span class="switch" #themeSwitch>
+          <input
+            type="checkbox"
+            class="sr-only"
+            role="switch"
+            [checked]="theme.isDark()"
+            (change)="flipTheme()"
+          />
+        </span>
+      </label>
+    </div>
+  }
+</ng-container>

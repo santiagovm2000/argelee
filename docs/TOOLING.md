@@ -22,8 +22,9 @@ Two things learnt the hard way with the DevTools server: a screenshot of a **bac
 until the protocol timeout, so call `select_page` with `bringToFront` first; and a Lighthouse run
 leaves its mobile emulation on the page, so reset the viewport with `emulate` afterwards.
 
-Not wanted on this project: the Figma MCP. Skip anything database- or backend-related: this
-project has no backend. Deploys go through `wrangler` (`bun run deploy`), not through an MCP.
+Not wanted on this project: the Figma MCP, and anything database-related: the only "backend" is
+two small Cloudflare Workers over KV and R2 (`docs/ADMIN.md`), driven with `wrangler`. Deploys go
+through `bun run deploy`, not through an MCP.
 
 ## Skills
 
@@ -40,7 +41,8 @@ project has no backend. Deploys go through `wrangler` (`bun run deploy`), not th
   patterns, sluggish interactions. Run after a section is built, before calling it done.
 - **`qa`** / **`qa-only`** — systematic functional pass. `qa-only` reports without editing.
 - **`code-review`** — correctness review of the diff. Use `--fix` to apply findings.
-- **`security-review`** — thin surface here (no backend), but worth it before going public.
+- **`security-review`** — the admin Worker (login, session cookie, uploads) is the surface that
+  matters; run it on any change under `workers/admin/`.
 
 ### Shipping
 
@@ -66,7 +68,7 @@ keywords like "landing" or "design" — ignore them.
 
 ```
 1. frontend-design           decide the direction before writing markup
-2. build                     bun start, iterate
+2. build                     bun start (site 4200, panel 4300), iterate
 3. bun run verify            i18n + contrast + templates + structure + lint + test + build
 4. chrome-devtools           screenshot at 360 / 768 / 1280 / 1920, Lighthouse, trace
 5. design-review             designer's-eye pass, fix what it finds

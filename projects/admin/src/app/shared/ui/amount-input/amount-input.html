@@ -1,0 +1,31 @@
+<div class="relative">
+  @if (prefix(); as prefix) {
+    <span
+      class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-body-sm text-ink-subtle"
+      aria-hidden="true"
+    >
+      {{ prefix }}
+    </span>
+  }
+  <input
+    #field
+    [id]="id()"
+    type="text"
+    class="field"
+    [class.field--prefixed]="prefix() !== null"
+    [class.field--suffixed]="suffix() !== null"
+    [attr.inputmode]="inputMode()"
+    autocomplete="off"
+    (focus)="onFocus()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  />
+  @if (suffix(); as suffix) {
+    <span
+      class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-body-sm text-ink-subtle"
+      aria-hidden="true"
+    >
+      {{ suffix }}
+    </span>
+  }
+</div>

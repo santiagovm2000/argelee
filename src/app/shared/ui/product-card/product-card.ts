@@ -1,12 +1,14 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import type { Product, ProductId } from '../../../core/catalog/catalog.model';
-import { IMAGES } from '../../../core/images/image-manifest.generated';
+import { localizedText } from '../../../core/catalog/localized-text';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { T } from '../../../core/i18n/translation-keys.generated';
 import { IMAGE_SIZES } from '../../../core/images/image.constants';
 import { srcsetFor } from '../../../core/images/image.loader';
-import { T } from '../../../core/i18n/translation-keys.generated';
+import { photoImage } from '../../../core/images/photo';
 
 /** One piece on the shelf: the photo, its name, a note and the listed price. */
 @Component({
@@ -23,9 +25,14 @@ export class ProductCard {
   readonly featured = input<boolean>(false);
   readonly chosen = output<ProductId>();
 
+  private readonly language = inject(LanguageService);
+
   protected readonly t = T;
   protected readonly sizes = IMAGE_SIZES.card;
-  protected readonly image = computed(() => IMAGES[this.product().image]);
+  protected readonly text = computed(() =>
+    localizedText(this.product().text, this.language.current()),
+  );
+  protected readonly image = computed(() => photoImage(this.product().photo));
   protected readonly srcset = computed(() => srcsetFor(this.image()));
   protected readonly piece = computed(() => (this.featured() ? this.product().id : null));
   protected readonly byUnit = computed(() => this.product().serves === null);

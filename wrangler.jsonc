@@ -1,19 +1,29 @@
-// Cloudflare Workers, static assets only: there is no Worker script, so every request is
-// answered from dist/ at the edge, free and unmetered. `bun run deploy` builds and uploads.
+// Cloudflare Workers: the prerendered site as static assets, answered at the edge for free,
+// plus a small script for what is not a file — the catalogue API, uploaded photos, the
+// sitemap and the pages of pieces published since the last build (workers/site).
+// `bun run deploy` builds and uploads.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "argelees",
+  "main": "workers/site/index.ts",
+  "tsconfig": "tsconfig.workers.json",
   "compatibility_date": "2026-09-17",
   "assets": {
     "directory": "./dist/argelee/browser",
+    "binding": "ASSETS",
     // Canonical URLs carry no trailing slash (see docs/SEO.md); `/en/` redirects to `/en`.
     "html_handling": "drop-trailing-slash",
-    // A miss returns 404.html (the CSR shell) with a real 404 status, so the app boots and
-    // search engines still learn the URL does not exist.
-    "not_found_handling": "404-page",
+    // A miss must reach the Worker: it decides between a published piece's page (200) and
+    // 404.html with a real 404. Any other setting would answer navigations before the script.
+    "not_found_handling": "none",
   },
+  "observability": { "enabled": true },
   // Custom domains make the Worker the origin: Cloudflare writes the DNS records and issues
   // the certificates on deploy. `www` exists only to be redirected to the apex (a zone rule).
+  // The owner's catalogue: one JSON document in KV, photos and the PDF in R2. The admin
+  // Worker writes them; the site (build snapshot + runtime API) only reads.
+  "kv_namespaces": [{ "binding": "CATALOG", "id": "ed178ac922ab4f8890aba762c54a7813" }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "argelees-media" }],
   "routes": [
     { "pattern": "argelees.com", "custom_domain": true },
     { "pattern": "www.argelees.com", "custom_domain": true },

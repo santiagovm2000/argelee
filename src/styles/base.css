@@ -127,7 +127,12 @@
      something a template has to remember. Disabled controls keep the arrow. */
   button:not(:disabled),
   [role='button']:not([aria-disabled='true']),
-  summary {
+  summary,
+  input[type='checkbox']:not(:disabled),
+  input[type='radio']:not(:disabled),
+  label:has(input[type='checkbox']:not(:disabled)),
+  label:has(input[type='radio']:not(:disabled)),
+  label:has(input[type='file']:not(:disabled)) {
     cursor: pointer;
   }
 

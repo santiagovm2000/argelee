@@ -1,0 +1,18 @@
+<ng-container *transloco="let translate">
+  <a
+    [routerLink]="[]"
+    fragment="main"
+    class="sr-only rounded-control bg-accent px-4 py-2 text-accent-ink focus-visible:not-sr-only focus-visible:absolute focus-visible:top-4 focus-visible:left-4 focus-visible:z-50"
+  >
+    {{ translate(t.app.skipToContent) }}
+  </a>
+
+  @if (session.user() !== null) {
+    <arg-admin-header />
+  }
+
+  <main id="main" class="min-h-dvh bg-surface">
+    <router-outlet />
+  </main>
+  <arg-confirm-dialog />
+</ng-container>

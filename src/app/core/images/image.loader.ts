@@ -1,7 +1,9 @@
 import { IMAGE_CONFIG, IMAGE_LOADER, type ImageLoaderConfig } from '@angular/common';
 import type { Provider } from '@angular/core';
+import { DEPLOYMENT } from '../config/build-config.generated';
 import { IMAGES, type ResponsiveImage } from './image-manifest.generated';
 import { FALLBACK_IMAGE_WIDTH, IMAGE_EXTENSION, IMAGE_WIDTHS } from './image.constants';
+import { isPhotoPath, photoUrl } from './photo';
 
 // The pipeline never upscales, so a small original has fewer derivatives than
 // IMAGE_WIDTHS lists. The loader must never point at a width that was not emitted.
@@ -9,8 +11,13 @@ const LARGEST_WIDTH_BY_PATH = new Map<string, number>(
   Object.values(IMAGES).map((image) => [image.path, Math.max(...image.widths)]),
 );
 
-/** Resolves a manifest path plus a width to a derivative that actually exists on disk. */
+/**
+ * Resolves a path plus a width to a URL that exists: an edge-resized uploaded
+ * photo, or a manifest derivative that is actually on disk.
+ */
 export function responsiveImageLoader(config: ImageLoaderConfig): string {
+  if (isPhotoPath(config.src))
+    return photoUrl(config.src, config.width, DEPLOYMENT.imageTransforms);
   const largest = LARGEST_WIDTH_BY_PATH.get(config.src) ?? FALLBACK_IMAGE_WIDTH;
   const wanted = Math.min(config.width ?? FALLBACK_IMAGE_WIDTH, largest);
   const width =

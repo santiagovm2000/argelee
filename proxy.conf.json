@@ -1,0 +1,18 @@
+{
+  "/api": {
+    "target": "http://localhost:8787",
+    "secure": false
+  },
+  "/photos": {
+    "target": "http://localhost:8787",
+    "secure": false
+  },
+  "/sitemap.xml": {
+    "target": "http://localhost:8787",
+    "secure": false
+  },
+  "/ArGeles-catalogo.pdf": {
+    "target": "http://localhost:8787",
+    "secure": false
+  }
+}

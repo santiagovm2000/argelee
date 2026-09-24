@@ -1,63 +1,47 @@
 # SEO
 
-The whole reason this project prerenders is SEO: a crawler receives complete, localized HTML with
-no JavaScript execution required. Everything below exists to keep that true as the site grows.
+The whole reason this project prerenders is SEO: a crawler receives complete HTML with no
+JavaScript execution required. Everything below exists to keep that true as the menu changes
+without a deploy.
 
-## Localized URLs
+## URLs
 
-Spanish is the default and lives at the root; every other language is path-prefixed.
+The site is Spanish only and lives at the root. Path segments are English on purpose.
 
 ```
-/                            es    canonical + x-default
-/en                          en
-/catalog/corona-tres-leches  es    one page per piece, generated from PRODUCTS
-/en/catalog/corona-tres-leches en
+/                     home            canonical
+/catalog/<id>         one page per piece; <id> is the piece's UUID from the panel
+/links                the link hub
 ```
 
-Segments after the language prefix are **the same in every language, on purpose**: the structural
-words are English (`catalog`, `links`, the `#catalog` and `#orders` anchors) and the piece's slug is
-the piece's own name, Spanish because that is what the brand calls it (`corona-tres-leches`). The
-slug is the `slug` field in `catalog.data.ts`; the `id` next to it is English, like every identifier
-in the code, and doubles as the translation key. Everything that pairs the two languages —
-`SeoService` alternates, the language switcher, the sitemap — derives the twin URL by swapping the
-prefix and nothing else. A localized slug would need a lookup in all three places and would break
-silently in one of them. The owner wants no Spanish structural segment in the address bar, and no
-redirects from old paths.
+The structural words (`catalog`, `links`, the `#catalog` and `#orders` anchors) are English because
+that is what the code, the Worker and the sitemap all build URLs from; a Spanish segment would have
+to be translated in every one of them. The owner wants no Spanish structural segment in the address
+bar, and no redirects from old paths: a path that changes simply changes.
 
-This is the part that cannot be skipped. With a single URL and runtime language switching, a
-crawler only ever sees the default language and the translation is never indexed. Separate URLs
-plus reciprocal `hreflang` is what makes both versions rank.
-
-`app.routes.ts` builds one route tree per language from `SUPPORTED_LANGUAGES`; `applyRouteLanguage`
-(a `CanActivateFn`) sets the language _before_ the page renders, so prerendered HTML carries the
-right `<html lang>` and the right copy. `localizedUrl()`, `pathSegments()` and `productSegments()`
-in `core/config/routes.ts` are the only places URL shape is decided — they are unit-tested because
-hreflang correctness depends on them being exact inverses.
-
-Never add a route that exists in only one language. It breaks the reciprocal hreflang set, and
-Google silently ignores one-way annotations.
+`localizedUrl()`, `pathSegments()` and `productSegments()` in `core/config/routes.ts` are the only
+places URL shape is decided — they are unit-tested because the canonical depends on them being
+exact. The language plumbing they carry (`SUPPORTED_LANGUAGES` has one entry) is what a second
+language would use; do not remove it, and do not add a route for one language only.
 
 ## What every page must emit
 
-`SeoService.apply()` writes all of it from typed translation keys. It waits for the active
-translation to be loaded first: on the client the locale file arrives over HTTP after the first
-render, and writing the tags earlier would put a raw key into `<title>`.
+`SeoService.apply()` writes all of it from typed translation keys, or from strings already
+resolved (`title`, `description`) when the words come from the catalogue rather than a locale
+file. It waits for the active translation to be loaded first: on the client the locale file arrives
+over HTTP after the first render, and writing the tags earlier would put a raw key into `<title>`.
 
-| Tag                                                          | Purpose                                 |
-| ------------------------------------------------------------ | --------------------------------------- |
-| `<title>`, `<meta name="description">`                       | the search result itself                |
-| `<link rel="canonical">`                                     | which URL is authoritative              |
-| `<link rel="alternate" hreflang>` per language + `x-default` | which translation serves which audience |
-| `og:*` + `twitter:*`, including `og:image`                   | how the link renders when shared        |
-| `og:locale` + `og:locale:alternate`                          | language of the shared card             |
-| JSON-LD `Organization` / `WebSite` / `WebPage`               | rich-result eligibility                 |
-| JSON-LD `Product` with an `AggregateOffer` (piece pages)     | price-aware rich results                |
+| Tag                                                      | Purpose                          |
+| -------------------------------------------------------- | -------------------------------- |
+| `<title>`, `<meta name="description">`                   | the search result itself         |
+| `<link rel="canonical">`                                 | which URL is authoritative       |
+| `og:*` + `twitter:*`, including `og:image`               | how the link renders when shared |
+| JSON-LD `Organization` / `WebSite` / `WebPage`           | rich-result eligibility          |
+| JSON-LD `Product` with an `AggregateOffer` (piece pages) | price-aware rich results         |
 
-The social card is a JPEG, not AVIF: WhatsApp and Facebook do not render AVIF previews. The image
-pipeline emits `<name>-social.jpg` at `OG_IMAGE_SIZE` for every source image, so any manifest entry
-can be handed to `apply({ image })`.
-The home page hands it the brand card, `IMAGES.brandWordmark`, drawn by `bun run social-card`;
-each piece hands its own photo, so a shared piece previews as that piece.
+The social card is a JPEG, not AVIF: WhatsApp and Facebook do not render AVIF previews. Brand
+images get a `<name>-social.jpg` from `bun run images`; a piece's card is its photo through
+Cloudflare's image transformations (`photoSocialUrl()`), 1200×630, JPEG.
 
 Adding a page:
 
@@ -75,46 +59,54 @@ export class PricingPage implements OnInit {
 }
 ```
 
-`segments` is the path **without** the language prefix — the service derives the canonical and all
-alternates from it. Get this wrong and the canonical points at the wrong page. Titles can take
-`paramKeys` (interpolation values that are themselves translation keys); the piece page uses that
-to build "ArGeles — `<name>`" from the piece's own name key. The brand always comes first in a title.
+`segments` is the path from the root — the service derives the canonical from it. Get this wrong
+and the canonical points at the wrong page. Titles can take `params` (interpolation values); the
+piece page uses that to build "ArGeles — `<name>`" from the piece's own name. The brand always
+comes first in a title.
 
-## Prerendering data-driven pages
+## Pages that exist between deploys
 
-A parameterised route cannot be prerendered without its values. `app.routes.server.ts` registers
-`catalog/:slug` (and `en/catalog/:slug`) with `getPrerenderParams` reading `PRODUCTS`, so a new
-piece gets its two pages without touching the routes. The bare `catalog` segment is
-`RenderMode.Client`: it is not a page, and the sitemap is built from the files that exist.
+The build prerenders one page per piece in the catalogue snapshot (`getPrerenderParams` in
+`app.routes.server.ts`). A piece the owner publishes after that deploy has no file yet, so the site
+Worker steps in: for `/catalog/<id>` with no asset, it looks the id up in KV and, if the piece is
+published, serves the CSR shell with **200** and the piece's title, description, canonical and
+`og:*` tags injected by `HTMLRewriter` (`workers/site/product-shell.ts`); if not, `404.html` with a
+real 404. The app then hydrates and renders the piece from the live catalogue. The next deploy
+prerenders it properly. A piece that is hidden or deleted answers 404 as soon as KV propagates
+(under a minute), whatever the last build contained.
+
+`wrangler.jsonc` sets `not_found_handling: "none"` for this reason: with `404-page`, navigations to
+a missing asset would never reach the Worker.
 
 ## Crawler files
 
 | File          | Source                                       | Notes                                                                  |
 | ------------- | -------------------------------------------- | ---------------------------------------------------------------------- |
-| `sitemap.xml` | generated into `dist/` by `bun run finalize` | one entry per page per language with `xhtml:link` alternates           |
+| `sitemap.xml` | the site Worker, `workers/site/sitemap.ts`   | fixed pages plus every published piece in KV, always current           |
 | `robots.txt`  | generated into `dist/` by `bun run finalize` | points at the sitemap, or disallows everything on a preview deployment |
 | `llms.txt`    | generated into `dist/` by `bun run finalize` | orientation for AI crawlers                                            |
-| `404.html`    | copy of the CSR shell, by `bun run finalize` | so a deep link on a static host still boots the app                    |
+| `404.html`    | copy of the CSR shell, by `bun run finalize` | served with a 404 status by the Worker for every unknown path          |
 
-`bun run finalize` runs inside `bun run build`. The sitemap is built from the routes Angular
-actually prerendered, not from a hand-kept list, so a new page cannot go missing.
+`bun run finalize` runs inside `bun run build`. The sitemap is not a build artefact any more: it is
+answered live from the catalogue, so a piece published from the panel is listed within a minute.
 
 ## Production
 
 - **`SITE_ORIGIN` is `https://argelees.com`**, set in `.env` locally and in
-  `.github/workflows/deploy.yml`. Every canonical, hreflang, `og:image` and sitemap URL derives from
-  it. It defaults to `http://localhost:4200`, so a build without it is not publishable.
+  `.github/workflows/deploy.yml`. Every canonical, `og:image` and sitemap URL derives from it. It
+  defaults to `http://localhost:4200`, so a build without it is not publishable.
 - **URLs carry no trailing slash.** `wrangler.jsonc` sets `html_handling: drop-trailing-slash`, so
-  `/en/` redirects to `/en` and the served URL always equals the canonical one. Unknown paths get
-  `404.html` with a real 404 status.
+  the served URL always equals the canonical one. Unknown paths get `404.html` with a real 404.
 - **One hostname.** `www.argelees.com` and plain `http://` redirect (301) to
   `https://argelees.com` through Cloudflare zone rules, and the Worker has no `workers.dev` URL, so
-  there is a single indexable copy of the site.
-- **Headers** come from `public/_headers`: immutable caching for hashed bundles and fonts, a day for
-  images and video, plus HSTS, CSP and the other security headers. Cloudflare compresses (Brotli)
-  on its own.
-- **Prices** in `catalog.data.ts` are the owner's list, in US dollars; `public/ArGeles-catalogo.pdf`
-  is generated from them (`bun run catalog-pdf`, see `docs/CATALOG.md`). `SITE.whatsappNumber` is the real business line, in the digits-only form wa.me links take.
+  there is a single indexable copy of the site. The panel lives on `admin.argelees.com`, behind a
+  login and with `noindex`; it is not part of the site.
+- **Headers**: the Workers set the security headers themselves (`workers/shared/security-headers.ts`)
+  and `bun run finalize` writes the same ones into `public/_headers` for the static assets, plus
+  immutable caching for hashed bundles and fonts. Cloudflare compresses (Brotli) on its own.
+- **Prices** are the owner's, in US dollars, edited in the panel; the price-list PDF at
+  `/ArGeles-catalogo.pdf` is rendered from the same data (see `docs/ADMIN.md`).
+  `SITE.whatsappNumber` is the real business line, in the digits-only form wa.me links take.
 - **Search Console** is verified through a DNS TXT record on the zone, not a meta tag, so a rebuild
   can never drop it. The sitemap is submitted there; Bing imports from Search Console.
 - **Cloudflare Web Analytics** runs from the beacon `<script>` in `src/index.html`. Cloudflare cannot
@@ -125,4 +117,4 @@ actually prerendered, not from a hand-kept list, so a new page cannot go missing
   `generate_lead` event named after the button (`hero`, `orders`, `widget`, `links`, `product`) and,
   on a piece page, the piece and its price. Page views come from GA4's enhanced measurement, which
   follows the router's history changes. The measurement id lives in `analytics.constants.ts`; an
-  empty id switches the whole thing off. The CSP in `public/_headers` allows the Google origins.
+  empty id switches the whole thing off. The CSP allows the Google origins.

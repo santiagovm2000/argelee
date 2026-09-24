@@ -1,0 +1,31 @@
+<ng-container *transloco="let translate">
+  <fieldset class="min-w-0">
+    <legend class="text-eyebrow font-medium text-accent-text uppercase">
+      {{ translate(titleKey()) }}
+    </legend>
+
+    <label class="mt-4 inline-flex min-h-11 items-center gap-3 text-body-sm text-ink">
+      <span class="switch">
+        <input
+          type="checkbox"
+          class="sr-only"
+          [checked]="draft().enabled"
+          (change)="setEnabled($event)"
+        />
+      </span>
+      {{ translate(enabledKey()) }}
+    </label>
+
+    @if (draft().enabled) {
+      <div class="mt-6">
+        <arg-choice-group
+          [legend]="translate(t.product.options.offered)"
+          [name]="name() + '-options'"
+          [options]="choices()"
+          [selected]="draft().options"
+          (selectedChange)="setOptions($event)"
+        />
+      </div>
+    }
+  </fieldset>
+</ng-container>

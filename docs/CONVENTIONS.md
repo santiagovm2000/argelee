@@ -4,15 +4,15 @@
 
 Files and folders are `kebab-case`. Classes are `PascalCase`. Constants are `SCREAMING_SNAKE_CASE`.
 
-| Kind      | File                                    | Symbol            |
-| --------- | --------------------------------------- | ----------------- |
-| Component | `hero-section.ts` + `hero-section.html` | `HeroSection`     |
-| Service   | `language.service.ts`                   | `LanguageService` |
-| Constants | `catalog.constants.ts`                  | `PRICE_STEP`      |
-| Data      | `catalog.data.ts`                       | `PRODUCTS`        |
-| Routes    | `landing.routes.ts`                     | `landingRoutes`   |
-| Generated | `translation-keys.generated.ts`         | —                 |
-| Spec      | `i18n.constants.spec.ts`                | —                 |
+| Kind      | File                                    | Symbol                   |
+| --------- | --------------------------------------- | ------------------------ |
+| Component | `hero-section.ts` + `hero-section.html` | `HeroSection`            |
+| Service   | `language.service.ts`                   | `LanguageService`        |
+| Constants | `catalog.constants.ts`                  | `PRICE_STEP`             |
+| Data      | `order-conditions.data.ts`              | `ORDER_CONDITION_GROUPS` |
+| Routes    | `landing.routes.ts`                     | `landingRoutes`          |
+| Generated | `translation-keys.generated.ts`         | —                        |
+| Spec      | `i18n.constants.spec.ts`                | —                        |
 
 Never put the project name in a filename. Component selectors use the `arg-` prefix
 (`arg-hero-section`); attribute directives use camelCase with the same prefix.
@@ -84,15 +84,18 @@ a string literal, and never build one by concatenation. Piece, layer and fruit i
 `bun run check:templates` fails on any literal text between tags and on user-facing attributes
 (`alt`, `title`, `placeholder`, `aria-label`, `aria-description`) that hold static words.
 
-Adding a language: add the code to `SUPPORTED_LANGUAGES` and a tag to `LANGUAGE_TAGS` in
-`core/i18n/i18n.constants.ts`, add `public/i18n/<code>.json`, run `bun run i18n`. Nothing else changes.
+The site and the panel are Spanish only. The language plumbing stays in place: a second language
+would be a code in `SUPPORTED_LANGUAGES` in `core/i18n/i18n.constants.ts`, a `public/i18n/<code>.json`
+and `bun run i18n`, plus the `text.<code>` field on every piece. Piece names and descriptions are
+never locale keys; they are data the owner types in the panel.
 
 ## The menu
 
-Pieces are data in `core/catalog/catalog.data.ts`, never markup. Each entry names its image by
-manifest key, its base price at the default size, the sizes it comes in, and only the option
-groups it can vary, each with its `options` and the `defaults` it comes with. See "The menu" in
-`docs/ARCHITECTURE.md` for the full add-a-piece recipe.
+Pieces are data, never markup, and the data is the catalogue document the owner edits in the
+panel (`docs/ADMIN.md`). The code knows its shape (`core/catalog/catalog.document.ts`), the fixed
+flavour and fruit choices, and how to project it for the site. Adding a piece is done in the panel;
+adding a field is a change to the document, its validation, the projection, the panel's form and
+the seed, in that order. See "The catalogue" in `docs/ARCHITECTURE.md`.
 
 Prices are money in whole currency units; `formatPrice()` is the only place they become text.
 Never format a price in a template.

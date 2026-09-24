@@ -50,9 +50,18 @@ Thumbs.db
 
 # Generated at build time — never commit
 src/app/core/config/build-config.generated.ts
+src/app/core/catalog/catalog.snapshot.generated.ts
+worker-configuration.d.ts
+
+# Local Worker secrets (the admin credentials as a hash, the session secret)
+.dev.vars
+**/.dev.vars
 
 # Browser MCP scratch output (snapshots, console logs, screenshots)
 .playwright-mcp/
 
 # The catalogue template with its data filled in, written and removed by `bun run catalog-pdf`
 assets-src/catalog/catalog.filled.html
+
+# wrangler dev / --local state (KV, R2) — never commit
+.wrangler/

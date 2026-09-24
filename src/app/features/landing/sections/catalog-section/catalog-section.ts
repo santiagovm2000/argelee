@@ -35,9 +35,9 @@ export class CatalogSection {
 
   protected readonly cards = computed(() => {
     const language = this.language.current();
-    return this.catalog.products.map((product) => ({
+    return this.catalog.products().map((product) => ({
       product,
-      link: localizedUrl(language, productSegments(product.slug)),
+      link: localizedUrl(language, productSegments(product.id)),
       price: formatPrice(listedPrice(product), language),
     }));
   });

@@ -9,7 +9,7 @@ export default tseslint.config(
       'dist/**',
       '.angular/**',
       'node_modules/**',
-      '**/*.generated.ts',
+      '**/*.generated.ts', '**/worker-configuration.d.ts', '**/.wrangler/**',
       // Print templates for the catalogue PDF: HTML, but not Angular templates.
       'assets-src/**',
     ],

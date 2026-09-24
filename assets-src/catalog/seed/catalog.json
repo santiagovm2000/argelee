@@ -1,0 +1,161 @@
+{
+  "products": [
+    {
+      "id": "0e5372e6-5a80-4193-af30-a75693943059",
+      "published": true,
+      "photoFile": "fruit-crystal-layer.jpg",
+      "text": {
+        "es": {
+          "name": "Encapsulada de frutas",
+          "note": "Fruta fresca en gelatina transparente sobre tres leches",
+          "description": "Fruta fresca a elección suspendida en una capa de gelatina transparente, sobre una base de gelatina tres leches."
+        }
+      },
+      "pricing": {
+        "mode": "fixed",
+        "price": 60
+      },
+      "serves": [16, 20],
+      "flavours": ["strawberry", "cherry", "raspberry", "lemon", "pineapple", "grape"],
+      "fruits": ["strawberry", "grape", "peach", "blackberry", "blueberry", "cherry", "pineapple"]
+    },
+    {
+      "id": "13efc5e5-be7b-4063-8841-40c955cf79c1",
+      "published": true,
+      "photoFile": "strawberry-stripes.jpg",
+      "text": {
+        "es": {
+          "name": "Napolitana de frutas",
+          "note": "Fruta laminada sobre franjas frutales y tres leches",
+          "description": "Fruta fresca laminada sobre franjas finas de gelatina de sabores frutales a elección y gelatina tres leches."
+        }
+      },
+      "pricing": {
+        "mode": "fixed",
+        "price": 45
+      },
+      "serves": [16, 20],
+      "flavours": [
+        "strawberry",
+        "cherry",
+        "raspberry",
+        "lemon",
+        "pineapple",
+        "grape",
+        "tutti-frutti"
+      ],
+      "fruits": ["strawberry", "peach", "grape", "blackberry"]
+    },
+    {
+      "id": "d5b69b87-3228-4169-bba6-16202a037fbe",
+      "published": true,
+      "photoFile": "cherry-tres-leches-ring.jpg",
+      "text": {
+        "es": {
+          "name": "Corona tres leches",
+          "note": "Sabor frutal y tres leches en molde de anillo",
+          "description": "Gelatina de sabor frutal a elección y gelatina tres leches alternadas en molde de anillo."
+        }
+      },
+      "pricing": {
+        "mode": "fixed",
+        "price": 35
+      },
+      "serves": [16, 20],
+      "flavours": [
+        "cherry",
+        "strawberry",
+        "raspberry",
+        "grape",
+        "lemon",
+        "pineapple",
+        "tutti-frutti"
+      ],
+      "fruits": ["strawberry", "grape", "cherry"]
+    },
+    {
+      "id": "7cbb5a22-5072-48b9-8893-25361a832b98",
+      "published": true,
+      "photoFile": "two-tone-grape.jpg",
+      "text": {
+        "es": {
+          "name": "Bicolor coronada",
+          "note": "Dos tonos de fruta, coronada con fruta fresca",
+          "description": "Gelatina de sabor frutal a elección en dos tonos, una capa intensa y otra con leche condensada, coronada con fruta fresca."
+        }
+      },
+      "pricing": {
+        "mode": "fixed",
+        "price": 30
+      },
+      "serves": [16, 20],
+      "flavours": ["grape", "strawberry", "cherry", "raspberry", "pineapple", "lemon"],
+      "fruits": ["grape", "strawberry", "cherry", "blackberry", "blueberry"]
+    },
+    {
+      "id": "c0b263d3-983e-4539-8f33-5dfb99fc32d9",
+      "published": true,
+      "photoFile": "strawberry-cubes.jpg",
+      "text": {
+        "es": {
+          "name": "Mosaico de fruta fresca",
+          "note": "Cubitos de fruta sobre franjas con leche condensada",
+          "description": "Cubitos de fruta fresca en la capa superior y franjas de gelatina de sabor frutal con leche condensada."
+        }
+      },
+      "pricing": {
+        "mode": "fixed",
+        "price": 30
+      },
+      "serves": [13, 16],
+      "flavours": ["strawberry", "cherry", "raspberry", "grape", "pineapple", "tutti-frutti"],
+      "fruits": ["strawberry", "peach", "grape", "blackberry", "blueberry", "pineapple"]
+    },
+    {
+      "id": "5544b1a0-a377-4ca3-8f3c-baa87d4ae97d",
+      "published": true,
+      "photoFile": "cherry-condensed-milk.jpg",
+      "text": {
+        "es": {
+          "name": "Cristal y crema",
+          "note": "Una capa transparente y una base cremosa",
+          "description": "Gelatina de sabor frutal a elección en dos capas, una transparente y una base cremosa con leche condensada."
+        }
+      },
+      "pricing": {
+        "mode": "fixed",
+        "price": 20
+      },
+      "serves": [8, 10],
+      "flavours": [
+        "cherry",
+        "strawberry",
+        "raspberry",
+        "grape",
+        "lemon",
+        "pineapple",
+        "tutti-frutti"
+      ],
+      "fruits": null
+    },
+    {
+      "id": "4c111d24-3c35-4af6-ba75-662b5a3739a2",
+      "published": true,
+      "photoFile": "strawberry-cup.jpg",
+      "text": {
+        "es": {
+          "name": "Porción individual",
+          "note": "Con tapa y cucharilla, lista para servir",
+          "description": "Base cremosa de gelatina de sabor frutal, cubitos de fruta fresca y una flor de gelatina. Lista para servir, con su tapa y su cucharilla."
+        }
+      },
+      "pricing": {
+        "mode": "fixed",
+        "price": 3.5
+      },
+      "serves": null,
+      "flavours": ["strawberry", "cherry", "raspberry", "grape", "pineapple", "lemon"],
+      "fruits": ["strawberry", "grape", "peach", "blackberry", "blueberry"]
+    }
+  ]
+}

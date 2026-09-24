@@ -1,6 +1,8 @@
 # Generated files are owned by their generator, not by prettier.
 *.generated.ts
+worker-configuration.d.ts
 bun.lock
 dist
 .angular
+.wrangler
 public/i18n

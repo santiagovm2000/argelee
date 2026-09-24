@@ -2,8 +2,10 @@
 
 Landing page and made-to-order menu for **ArGeles**, artisan jellies; orders convert through
 WhatsApp. Angular 22 + Tailwind CSS 4, built and run with **Bun**. No component library: every
-component is ours. No backend: the site prerenders to static HTML (`outputMode: "static"`) and
-deploys to Cloudflare Workers (static assets) at argelees.com.
+component is ours. No database and no server to run: the site prerenders to static HTML
+(`outputMode: "static"`) served by a Cloudflare Worker at argelees.com that also reads the live
+menu from KV; the owner edits that menu in a private panel (`projects/admin/`, admin.argelees.com).
+The site is Spanish only.
 
 This file is loaded on every session, so it holds only rules that are always true.
 Detail lives in `docs/` — read the file you need, when you need it:
@@ -15,7 +17,7 @@ Detail lives in `docs/` — read the file you need, when you need it:
 | How do I name it, write it, translate it?      | `docs/CONVENTIONS.md`   |
 | How do pages, URLs and metadata work?          | `docs/SEO.md`           |
 | Which skill or MCP helps here?                 | `docs/TOOLING.md`       |
-| How do I change the price list PDF?            | `docs/CATALOG.md`       |
+| How does the owner edit the menu and the PDF?  | `docs/ADMIN.md`         |
 
 ---
 
@@ -30,8 +32,9 @@ These are project law. If a change would break one, stop and say so instead of w
    Components have **no** stylesheet file — the schematics are configured with `style: none`.
    Every button shows `cursor: pointer` — Tailwind v4's preflight does not, so `base.css` sets it
    for `button`, `[role="button"]` and `summary`. It is global: never repeat it per button.
-3. **No hardcoded text, in any language.** Every string a visitor can read comes from
-   `public/i18n/<lang>.json` through a typed key from `T`. One JSON file per language, no splitting.
+3. **No hardcoded text.** Every string a person can read comes from a locale JSON through a typed
+   key from `T`: `public/i18n/es.json` for the site, `projects/admin/public/i18n/es.json` for the
+   panel. One file per app, no splitting. Piece names and descriptions are data, not locale keys.
 4. **No magic values.** Numbers and strings that carry meaning get a name in
    `core/config/app.constants.ts`, a `*.constants.ts`, a `*.data.ts`, or a local `const`.
 5. **Strong typing.** `strict` plus `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`.
@@ -48,11 +51,13 @@ These are project law. If a change would break one, stop and say so instead of w
 11. **All tests live in `tests/`.** One folder, mirroring the source tree, never a spec file
     sitting next to the code it covers. Import through the path aliases (`@core/...`).
     Schematics are configured with `skipTests: true` so generators cannot scatter them.
-12. **Every page exists in every language.** Routes are per-language (`/` es, `/en` en). Never add
-    a route to one language only — it breaks the reciprocal hreflang set. Every page calls
-    `SeoService.apply()` with typed keys and its path `segments`. See `docs/SEO.md`.
-13. **The menu is data.** Pieces, sizes, layers, fruit and prices live in `core/catalog/`; the
-    templates iterate them. Never describe a piece in HTML. See `docs/ARCHITECTURE.md`.
+12. **Every page declares its metadata.** Every page calls `SeoService.apply()` with typed keys
+    and its path `segments`; path segments are English even though the site is Spanish, and no
+    old path is kept alive with a redirect. See `docs/SEO.md`.
+13. **The menu is data, and it is not in the repo.** Pieces live in the catalogue document the
+    owner edits in the panel; the code holds only its shape (`core/catalog/`), the fixed flavour
+    and fruit choices, and the seed. Never describe a piece in HTML or in a locale file.
+    See `docs/ADMIN.md`.
 14. **No UI library.** Buttons, chips, the shelf, the toggle: all ours, all Tailwind utilities on
     native elements. Do not add a component library or an icon font; inline the SVG you need.
 15. **Conventional Commits, always.** `feat:`, `fix:`, `refactor:`, `style:`, `docs:`, `chore:`,
@@ -86,16 +91,20 @@ the animation does not run.
 
 ```bash
 bun install
-bun start              # dev server
-bun run build          # prerendered static build -> dist/argelee/browser
-bun run deploy         # build + upload to Cloudflare Workers (argelees.com); needs `wrangler login` once
+bun start              # the whole stack: site (4200), panel (4300), their Workers (8787, 8790)
+bun run build          # pull the catalogue, prerender the site, build the panel, finalize
+bun run deploy         # build + upload both Workers; needs `wrangler login` once
 bun run verify         # i18n + contrast + templates + structure + lint + test + build.
+
+bun run catalog:seed   # --local | --remote: load the seed document, photos and PDF into KV/R2
+bun run catalog:pull   # write the catalogue snapshot the build prerenders from (runs inside start/build)
+bun run admin:credentials # --local | --remote: set the panel's user and password hash
 
 bun run i18n           # regenerate typed translation keys after editing a locale JSON
 bun run images         # regenerate responsive AVIF derivatives + social cards + manifest
 bun run favicon        # regenerate favicon.svg / .ico / apple-touch-icon from the wordmark font
 bun run social-card    # redraw the brand card behind the home link preview, then run images
-bun run catalog-pdf    # rebuild public/ArGeles-catalogo.pdf from the menu data (see docs/CATALOG.md)
+bun run catalog-pdf    # print the price-list PDF locally from the snapshot; prod renders it from the panel
 bun run palette        # re-derive the colour scale after changing the brand hex
 bun run contrast       # WCAG AA check on the token pairings
 bun run finalize       # sitemap + robots + llms + 404.html (runs inside build)
@@ -112,9 +121,11 @@ bun run test           # vitest, reads only from tests/
   configured schematics apply.
 - After editing a locale JSON, run `bun run i18n` — a missing key in one language fails the build.
 - Never edit a `*.generated.ts` file. Change its source and re-run the generator.
-- `.env` holds `SITE_ORIGIN` and `SITE_INDEXABLE`, and is git-ignored. Never treat a value in the
-  bundle as secret: minification is not encryption, so anything the browser needs is public.
-- Prices, sizes and piece descriptions come from the owner's price list, published as
-  `public/ArGeles-catalogo.pdf`. That PDF is generated: edit `catalog.data.ts` and the locale files,
-  then run `bun run catalog-pdf` and commit the result with the change. See `docs/CATALOG.md`.
-  `SITE.whatsappNumber` is the real business line, in the digits-only form wa.me links take.
+- `.env` holds `SITE_ORIGIN`, `SITE_INDEXABLE`, `SITE_IMAGE_TRANSFORMS` and `CATALOG_SOURCE`, and
+  is git-ignored. Never treat a value in the bundle as secret: minification is not encryption, so
+  anything the browser needs is public. The panel's secrets live in the Worker
+  (`wrangler secret put`) and, locally, in `admin/.dev.vars`; the password exists only as a hash.
+- Prices, sizes, texts and photos are the owner's, edited in the panel and stored in KV/R2; the
+  price-list PDF is rendered from them by the panel. Nothing about a piece is committed.
+  See `docs/ADMIN.md`. `SITE.whatsappNumber` is the real business line, in the digits-only form
+  wa.me links take.

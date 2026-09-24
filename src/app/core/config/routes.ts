@@ -4,9 +4,9 @@ import {
   type SupportedLanguage,
 } from '../i18n/i18n.constants';
 
-// Path segments are English in every language on purpose: `/catalog/x` and
-// `/en/catalog/x` share every segment after the prefix, which is what keeps hreflang
-// pairs, the language switcher and the sitemap exact inverses of each other.
+// Path segments are English on purpose, whatever language the page is in: the site
+// and the Worker build the same URLs from these, so a Spanish segment would have to
+// be translated in both.
 export const ROUTE_PATHS = {
   home: '',
   catalog: 'catalog',
@@ -15,7 +15,7 @@ export const ROUTE_PATHS = {
 } as const;
 
 export const ROUTE_PARAMS = {
-  productSlug: 'slug',
+  productId: 'id',
 } as const;
 
 // In-page anchors on the landing page.
@@ -24,7 +24,7 @@ export const SECTION_IDS = {
   orders: 'orders',
 } as const;
 
-/** Builds the URL a page lives at in a given language: '/' for the default, '/en/...' otherwise. */
+/** Builds the URL a page lives at in a given language: '/' for the default, '/<lang>/...' otherwise. */
 export function localizedUrl(
   language: SupportedLanguage,
   segments: readonly string[] = [],
@@ -41,12 +41,12 @@ export function pathSegments(url: string): string[] {
   return first !== undefined && isSupportedLanguage(first) ? segments.slice(1) : segments;
 }
 
-/** The language-neutral segments of a product page, ready for localizedUrl(). */
-export function productSegments(slug: string): string[] {
-  return [ROUTE_PATHS.catalog, slug];
+/** The segments of a product page, ready for localizedUrl(). */
+export function productSegments(id: string): string[] {
+  return [ROUTE_PATHS.catalog, id];
 }
 
 /** The router pattern a product page is registered under, inside the catalog feature. */
 export function productRoutePattern(): string {
-  return `:${ROUTE_PARAMS.productSlug}`;
+  return `:${ROUTE_PARAMS.productId}`;
 }

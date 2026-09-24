@@ -6,14 +6,14 @@ import { take } from 'rxjs';
 import { SITE } from '../config/app.constants';
 import { DEPLOYMENT } from '../config/build-config.generated';
 import { localizedUrl } from '../config/routes';
-import { LANGUAGE_TAGS, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '../i18n/i18n.constants';
+import { LANGUAGE_TAGS } from '../i18n/i18n.constants';
 import { LanguageService } from '../i18n/language.service';
 import type { TranslationKey } from '../i18n/translation-keys.generated';
-import { ALTERNATE_LINK_MARKER, JSON_LD_ID, OG_IMAGE_SIZE } from './seo.constants';
+import { JSON_LD_ID, OG_IMAGE_SIZE } from './seo.constants';
 
 export interface ProductSeo {
-  readonly nameKey: TranslationKey;
-  readonly descriptionKey: TranslationKey;
+  readonly name: string;
+  readonly description: string;
   readonly lowPrice: number;
   readonly currency: string;
 }
@@ -23,6 +23,8 @@ export interface PageSeo {
   readonly descriptionKey: TranslationKey;
   /** Interpolation values for title and description, given as keys and resolved once translations load. */
   readonly paramKeys?: Readonly<Record<string, TranslationKey>>;
+  /** Interpolation values already in the visitor's language: catalogue text, which is data, not locale copy. */
+  readonly params?: Readonly<Record<string, string>>;
   /** Path without the language prefix; the canonical and every alternate derive from it. */
   readonly segments?: readonly string[];
   /** Site-relative path of the social card (JPEG, OG_IMAGE_SIZE). */
@@ -39,7 +41,7 @@ export class SeoService {
   private readonly document = inject(DOCUMENT);
 
   /**
-   * Writes localized title, description, canonical, hreflang, social tags and JSON-LD.
+   * Writes the title, description, canonical, social tags and JSON-LD.
    * Waits for the active translation so the tags never carry a raw key: on the
    * client the locale file arrives over HTTP after the first render.
    */
@@ -55,7 +57,7 @@ export class SeoService {
   private write(seo: PageSeo): void {
     const segments = seo.segments ?? [];
     const active = this.language.current();
-    const params = this.resolveParams(seo.paramKeys);
+    const params = { ...this.resolveParams(seo.paramKeys), ...seo.params };
     const pageTitle = this.transloco.translate(seo.titleKey, params);
     const description = this.transloco.translate(seo.descriptionKey, params);
     const url = this.absolute(localizedUrl(active, segments));
@@ -88,7 +90,6 @@ export class SeoService {
     }
 
     this.setCanonical(url);
-    this.setAlternates(segments);
     this.setStructuredData(pageTitle, description, url, image, seo.product);
   }
 
@@ -121,35 +122,6 @@ export class SeoService {
   /** Tells search engines which URL is authoritative for this page. */
   private setCanonical(url: string): void {
     this.upsertLink('canonical', { rel: 'canonical', href: url });
-  }
-
-  /**
-   * Emits one hreflang link per language plus x-default. Without these, only the
-   * default-language URL gets indexed and the translations are treated as duplicates.
-   */
-  private setAlternates(segments: readonly string[]): void {
-    for (const stale of this.document.head.querySelectorAll(`link[${ALTERNATE_LINK_MARKER}]`)) {
-      stale.remove();
-    }
-
-    const alternateLocales: string[] = [];
-    for (const language of SUPPORTED_LANGUAGES) {
-      const href = this.absolute(localizedUrl(language, segments));
-      this.appendLink({ rel: 'alternate', hreflang: language, href });
-      if (language !== this.language.current()) {
-        alternateLocales.push(LANGUAGE_TAGS[language].replace('-', '_'));
-      }
-    }
-    this.appendLink({
-      rel: 'alternate',
-      hreflang: 'x-default',
-      href: this.absolute(localizedUrl(DEFAULT_LANGUAGE, segments)),
-    });
-
-    this.meta.removeTag("property='og:locale:alternate'");
-    for (const locale of alternateLocales) {
-      this.meta.addTag({ property: 'og:locale:alternate', content: locale });
-    }
   }
 
   /** Publishes Organization, WebSite and WebPage entities, plus a Product on product pages. */
@@ -190,8 +162,8 @@ export class SeoService {
     if (product !== undefined) {
       graph.push({
         '@type': 'Product',
-        name: this.transloco.translate(product.nameKey),
-        description: this.transloco.translate(product.descriptionKey),
+        name: product.name,
+        description: product.description,
         url,
         ...(image === undefined ? {} : { image }),
         brand: { '@id': organizationId },
@@ -222,7 +194,6 @@ export class SeoService {
     for (const [name, value] of Object.entries(attributes)) {
       link.setAttribute(name, value);
     }
-    if (attributes['rel'] === 'alternate') link.setAttribute(ALTERNATE_LINK_MARKER, '');
     this.document.head.appendChild(link);
   }
 }
