@@ -60,7 +60,9 @@ src/
       providers/core.providers.ts  the single provideCore() the app boots with
 
     shared/
-      ui/                        wordmark, product-card, choice-group, empty-state — inputs in, outputs out
+      ui/                        wordmark (the logo), product-card, price-sticker, caustics (the water),
+                                 bloom (sunflowers), seal, choice-list, empty-state — inputs in, outputs out;
+                                 brand/brand-art.ts names the brand drawings
       directives/                lead.ts: `a[argLead]` counts a WhatsApp click as a lead
       pipes/  utils/
 
@@ -74,7 +76,7 @@ src/
 
   styles/
     styles.css                   entry: layer order, tailwind, then the files below
-    fonts.css + fonts/           self-hosted @font-face (Italiana, Karla, Parisienne); bundled and hashed
+    fonts.css + fonts/           self-hosted @font-face (Lato 400/700/900, Great Vibes); bundled and hashed
     tokens.css                   @theme design tokens
     base.css                     semantic aliases + element base + reduced motion
     patterns.css                 the shelf, the ornament, buttons, fields, switch, controls
@@ -101,7 +103,8 @@ wrangler.jsonc                   the site Worker's config
 
 public/
   i18n/es.json                   the site's texts, fetched at runtime
-  fonts/                         the three woff2 files by stable URL, for the PDF renderer
+  brand/                         the brand drawings traced from its artwork: logo, monogram, daisy,
+                                 caustics (the water pattern, one path per layer)
   images/                        generated AVIF derivatives + JPEG social cards (brand assets only)
   icons/choices/  icons/orders/  glyphs for the flavour/fruit choices and the order conditions
   video/                         the hero loop, encoded once with ffmpeg (mp4 + webm, no audio)

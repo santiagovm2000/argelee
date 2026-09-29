@@ -158,6 +158,10 @@
               {
                 "glob": "icons/choices/*",
                 "input": "public"
+              },
+              {
+                "glob": "brand/*",
+                "input": "public"
               }
             ],
             "styles": ["src/styles/styles.css"]

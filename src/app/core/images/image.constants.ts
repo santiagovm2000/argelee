@@ -13,7 +13,7 @@ export const PHOTO_SOCIAL_QUALITY = 82;
 
 // `sizes` hints per placement, so the browser picks the smallest derivative that fills it.
 export const IMAGE_SIZES = {
-  hero: '100vw',
-  card: '(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw',
-  product: '(max-width: 1024px) 92vw, 46vw',
+  hero: '(min-width: 1024px) 30rem, 80vw',
+  card: '(max-width: 767px) 15rem, (max-width: 1023px) 45vw, 20rem',
+  product: '(max-width: 1023px) 92vw, 32rem',
 } as const;

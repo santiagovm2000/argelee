@@ -31,13 +31,13 @@ resolved (`title`, `description`) when the words come from the catalogue rather 
 file. It waits for the active translation to be loaded first: on the client the locale file arrives
 over HTTP after the first render, and writing the tags earlier would put a raw key into `<title>`.
 
-| Tag                                                      | Purpose                          |
-| -------------------------------------------------------- | -------------------------------- |
-| `<title>`, `<meta name="description">`                   | the search result itself         |
-| `<link rel="canonical">`                                 | which URL is authoritative       |
-| `og:*` + `twitter:*`, including `og:image`               | how the link renders when shared |
-| JSON-LD `Organization` / `WebSite` / `WebPage`           | rich-result eligibility          |
-| JSON-LD `Product` with an `AggregateOffer` (piece pages) | price-aware rich results         |
+| Tag                                                                            | Purpose                               |
+| ------------------------------------------------------------------------------ | ------------------------------------- |
+| `<title>`, `<meta name="description">`                                         | the search result itself              |
+| `<link rel="canonical">`                                                       | which URL is authoritative            |
+| `og:*` + `twitter:*`, including `og:image`                                     | how the link renders when shared      |
+| JSON-LD `Organization` (with its city, `SITE.address`) / `WebSite` / `WebPage` | rich-result eligibility, local search |
+| JSON-LD `Product` with an `AggregateOffer` (piece pages)                       | price-aware rich results              |
 
 The social card is a JPEG, not AVIF: WhatsApp and Facebook do not render AVIF previews. Brand
 images get a `<name>-social.jpg` from `bun run images`; a piece's card is its photo through

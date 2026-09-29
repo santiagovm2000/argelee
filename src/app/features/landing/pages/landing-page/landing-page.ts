@@ -5,10 +5,11 @@ import { SeoService } from '../../../../core/seo/seo.service';
 import { CatalogSection } from '../../sections/catalog-section/catalog-section';
 import { HeroSection } from '../../sections/hero-section/hero-section';
 import { OrdersSection } from '../../sections/orders-section/orders-section';
+import { PromiseSection } from '../../sections/promise-section/promise-section';
 
 @Component({
   selector: 'arg-landing-page',
-  imports: [HeroSection, CatalogSection, OrdersSection],
+  imports: [HeroSection, CatalogSection, PromiseSection, OrdersSection],
   templateUrl: './landing-page.html',
 })
 export class LandingPage implements OnInit {

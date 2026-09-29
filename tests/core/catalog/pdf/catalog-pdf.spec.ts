@@ -23,6 +23,10 @@ function render(catalog: PublicCatalog = PUBLIC_CATALOG_FIXTURE): string {
       photoUrl: (key) => `https://argelees.com/${key}`,
       coverPhotoUrl: (key) => `https://argelees.com/cover/${key}`,
       iconMarkup: (group) => `<path data-icon="${group}"/>`,
+      artSvg: (art) =>
+        art === 'caustics'
+          ? '<svg viewBox="0 0 9 12"><path id="light" d="M0 0h1"/><path id="dark" d="M1 1h1"/><path id="glint" d="M2 2h1"/></svg>'
+          : `<svg id="glyph" viewBox="0 0 10 10"><path data-art="${art}"/></svg>`,
     },
   });
 }
@@ -82,7 +86,22 @@ describe('renderCatalogHtml', () => {
     expect(html).toContain(LOCALE.landing.orders.title);
     expect(html).toContain('data-icon="payment"');
     expect(html).toContain('0424 186 0627');
-    expect(html).toContain('https://argelees.com/fonts/display.woff2');
+    expect(html).toContain('https://argelees.com/fonts/script.woff2');
+  });
+
+  it('draws the brand once as symbols and uses them wherever it appears', () => {
+    expect(count(html, 'data-art="daisy"')).toBe(1);
+    expect(count(html, 'href="#art-daisy"')).toBeGreaterThan(1);
+    expect(html).toContain('id="art-caustics-light"');
+    expect(html).toContain('id="art-caustics-glint"');
+    expect(html).not.toContain('id="dark"');
+    expect(html).toContain('href="#art-logo"');
+    expect(html).toContain(LOCALE.brand.seal.top);
+  });
+
+  it('draws the logo in place in the page heads, which Chrome repeats without their <use>', () => {
+    expect(count(html, 'class="page-logo"')).toBe(2);
+    expect(count(html, 'data-art="logo"')).toBe(3);
   });
 
   it('escapes what it prints', () => {

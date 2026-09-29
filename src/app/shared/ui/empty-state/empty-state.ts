@@ -2,6 +2,7 @@ import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import type { TranslationKey } from '../../../core/i18n/translation-keys.generated';
+import { BRAND_ART } from '../brand/brand-art';
 
 @Component({
   selector: 'arg-empty-state',
@@ -14,4 +15,5 @@ export class EmptyState {
   readonly actionKey = input.required<TranslationKey>();
   readonly link = input.required<string>();
   readonly fragment = input<string | undefined>(undefined);
+  protected readonly daisy = BRAND_ART.daisy;
 }

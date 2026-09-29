@@ -1,13 +1,56 @@
 <ng-container *transloco="let translate">
-  <footer class="border-t border-line">
+  <footer class="water scene-timeline relative isolate overflow-clip bg-surface text-ink">
+    <arg-caustics motion="drift" />
+    <arg-bloom
+      arrangement="column"
+      class="rise pointer-events-none absolute -bottom-6 -left-14 w-32 sm:-left-10 sm:w-44 lg:w-52"
+    />
+
     <div
-      class="mx-auto flex max-w-wide flex-col gap-4 px-6 py-10 sm:flex-row sm:items-end sm:justify-between sm:px-10 lg:px-14"
+      class="relative mx-auto max-w-wide px-6 pt-20 pb-8 sm:px-10 sm:pl-44 lg:px-14 lg:pt-28 lg:pl-60"
     >
-      <div class="flex flex-col gap-1">
-        <arg-wordmark class="text-wordmark" />
-        <p class="text-caption text-ink-muted">{{ translate(t.footer.tagline) }}</p>
+      <div class="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
+        <div class="pl-16 sm:pl-0">
+          <arg-wordmark class="w-56 text-wordmark sm:w-72 lg:w-80" />
+          <p class="mt-4 max-w-[26ch] text-body-lg font-bold">{{ translate(t.brand.tagline) }}</p>
+        </div>
+
+        <nav
+          class="flex flex-col items-start gap-1 pl-16 sm:pl-0 lg:items-end"
+          [attr.aria-label]="translate(t.a11y.footerNavigation)"
+        >
+          <a
+            [routerLink]="language.homeUrl()"
+            [fragment]="sections.catalog"
+            class="inline-flex min-h-11 items-center text-label font-bold underline decoration-transparent decoration-2 underline-offset-4 transition-colors duration-quick hover:decoration-current"
+          >
+            {{ translate(t.navigation.catalog) }}
+          </a>
+          <a
+            [routerLink]="language.homeUrl()"
+            [fragment]="sections.orders"
+            class="inline-flex min-h-11 items-center text-label font-bold underline decoration-transparent decoration-2 underline-offset-4 transition-colors duration-quick hover:decoration-current"
+          >
+            {{ translate(t.navigation.orders) }}
+          </a>
+          <a
+            [href]="site.catalogPdf"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex min-h-11 items-center text-label font-bold underline decoration-transparent decoration-2 underline-offset-4 transition-colors duration-quick hover:decoration-current"
+          >
+            {{ translate(t.footer.pdf) }}
+          </a>
+        </nav>
       </div>
-      <p class="text-caption text-ink-muted">© {{ year }} {{ site.name }}</p>
+
+      <div
+        class="mt-14 flex flex-col gap-1 border-t-2 border-line-strong/20 pt-6 pl-16 text-caption font-bold sm:flex-row sm:justify-between sm:pl-0"
+      >
+        <p>{{ translate(t.footer.tagline) }}</p>
+        <p>{{ translate(t.footer.location) }}</p>
+        <p>© {{ year }} {{ site.name }}</p>
+      </div>
     </div>
   </footer>
 </ng-container>

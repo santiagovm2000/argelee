@@ -1,0 +1,34 @@
+<ng-container *transloco="let translate">
+  <section
+    class="lagoon scene-timeline relative isolate overflow-clip bg-surface py-24 text-ink lg:py-32"
+  >
+    <arg-caustics motion="drift" />
+    <arg-bloom
+      arrangement="trio"
+      class="drift-mid pointer-events-none absolute -top-8 -right-16 w-44 sm:w-56 lg:top-10 lg:-right-10 lg:w-72"
+    />
+
+    <div class="relative mx-auto max-w-content px-6 sm:px-10">
+      <h2 class="script max-w-[15ch] text-statement text-ink">
+        {{ translate(t.landing.promise.title) }}
+      </h2>
+      <p class="mt-6 max-w-[40ch] text-body-lg font-bold text-ink">
+        {{ translate(t.landing.promise.lead) }}
+      </p>
+
+      <ul class="mt-14 grid gap-10 md:grid-cols-3 md:gap-8 lg:mt-20 lg:gap-12">
+        @for (value of values; track value.id) {
+          <li class="flex flex-col">
+            <svg class="size-12" [attr.viewBox]="daisy.viewBox" aria-hidden="true">
+              <use [attr.href]="daisy.href" />
+            </svg>
+            <h3 class="mt-4 text-subtitle text-ink">{{ translate(value.titleKey) }}</h3>
+            <p class="mt-2 max-w-[34ch] text-body text-ink-muted">
+              {{ translate(value.bodyKey) }}
+            </p>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+</ng-container>

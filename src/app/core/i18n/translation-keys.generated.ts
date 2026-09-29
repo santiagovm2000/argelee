@@ -26,6 +26,7 @@ export const T = {
   a11y: {
     skipToContent: 'a11y.skipToContent',
     mainNavigation: 'a11y.mainNavigation',
+    footerNavigation: 'a11y.footerNavigation',
     changeLanguage: 'a11y.changeLanguage',
     switchToDarkTheme: 'a11y.switchToDarkTheme',
     switchToLightTheme: 'a11y.switchToLightTheme',
@@ -43,17 +44,41 @@ export const T = {
       en: 'common.language.en',
     },
   },
+  brand: {
+    tagline: 'brand.tagline',
+    seal: {
+      top: 'brand.seal.top',
+      bottom: 'brand.seal.bottom',
+    },
+  },
   navigation: {
     catalog: 'navigation.catalog',
     orders: 'navigation.orders',
   },
   landing: {
     hero: {
-      eyebrow: 'landing.hero.eyebrow',
       headline: 'landing.hero.headline',
       body: 'landing.hero.body',
       primaryAction: 'landing.hero.primaryAction',
       secondaryAction: 'landing.hero.secondaryAction',
+    },
+    promise: {
+      title: 'landing.promise.title',
+      lead: 'landing.promise.lead',
+      values: {
+        punctuality: {
+          title: 'landing.promise.values.punctuality.title',
+          body: 'landing.promise.values.punctuality.body',
+        },
+        organization: {
+          title: 'landing.promise.values.organization.title',
+          body: 'landing.promise.values.organization.body',
+        },
+        quality: {
+          title: 'landing.promise.values.quality.title',
+          body: 'landing.promise.values.quality.body',
+        },
+      },
     },
     orders: {
       title: 'landing.orders.title',
@@ -83,6 +108,8 @@ export const T = {
       subtitle: 'catalog.section.subtitle',
     },
     card: {
+      from: 'catalog.card.from',
+      each: 'catalog.card.each',
       price: 'catalog.card.price',
       unitPrice: 'catalog.card.unitPrice',
       customize: 'catalog.card.customize',
@@ -135,6 +162,8 @@ export const T = {
   },
   footer: {
     tagline: 'footer.tagline',
+    location: 'footer.location',
+    pdf: 'footer.pdf',
   },
   errors: {
     notFound: {
@@ -145,7 +174,6 @@ export const T = {
   },
   links: {
     title: 'links.title',
-    tagline: 'links.tagline',
     whatsapp: 'links.whatsapp',
     website: 'links.website',
     catalog: 'links.catalog',
@@ -171,4 +199,4 @@ export const T = {
 } as const;
 
 /** Every valid translation key, as a union of literal strings. */
-export type TranslationKey = 'meta.home.title' | 'meta.home.description' | 'meta.product.title' | 'meta.product.description' | 'meta.links.title' | 'meta.links.description' | 'a11y.skipToContent' | 'a11y.mainNavigation' | 'a11y.changeLanguage' | 'a11y.switchToDarkTheme' | 'a11y.switchToLightTheme' | 'a11y.openWhatsapp' | 'a11y.priceUpdated' | 'a11y.previousPiece' | 'a11y.nextPiece' | 'a11y.pieces' | 'a11y.fewerUnits' | 'a11y.moreUnits' | 'common.language.es' | 'common.language.en' | 'navigation.catalog' | 'navigation.orders' | 'landing.hero.eyebrow' | 'landing.hero.headline' | 'landing.hero.body' | 'landing.hero.primaryAction' | 'landing.hero.secondaryAction' | 'landing.orders.title' | 'landing.orders.action' | 'landing.orders.groups.piece' | 'landing.orders.groups.payment' | 'landing.orders.groups.delivery' | 'landing.orders.notes.notice' | 'landing.orders.notes.fruit' | 'landing.orders.notes.flavours' | 'landing.orders.notes.availability' | 'landing.orders.notes.deposit' | 'landing.orders.notes.receipt' | 'landing.orders.notes.delivery' | 'landing.orders.notes.deliveryFee' | 'landing.orders.notes.deliveryArea' | 'landing.orders.notes.currency' | 'catalog.section.title' | 'catalog.section.subtitle' | 'catalog.card.price' | 'catalog.card.unitPrice' | 'catalog.card.customize' | 'catalog.groups.size' | 'catalog.groups.quantity' | 'catalog.groups.fruit' | 'catalog.groups.flavours' | 'catalog.hints.quantity' | 'catalog.flavours.strawberry' | 'catalog.flavours.cherry' | 'catalog.flavours.raspberry' | 'catalog.flavours.grape' | 'catalog.flavours.lemon' | 'catalog.flavours.pineapple' | 'catalog.flavours.tutti-frutti' | 'catalog.fruits.strawberry' | 'catalog.fruits.grape' | 'catalog.fruits.peach' | 'catalog.fruits.blackberry' | 'catalog.fruits.blueberry' | 'catalog.fruits.cherry' | 'catalog.fruits.pineapple' | 'catalog.customizer.eyebrow' | 'catalog.customizer.back' | 'catalog.customizer.order' | 'catalog.customizer.serves' | 'catalog.customizer.from' | 'catalog.order.greeting' | 'catalog.order.product' | 'catalog.order.closing' | 'catalog.order.quantity' | 'catalog.missing.title' | 'catalog.missing.body' | 'catalog.missing.action' | 'footer.tagline' | 'errors.notFound.title' | 'errors.notFound.body' | 'errors.notFound.action' | 'links.title' | 'links.tagline' | 'links.whatsapp' | 'links.website' | 'links.catalog' | 'pdf.cover.sub' | 'pdf.cover.title' | 'pdf.cover.lead' | 'pdf.cover.tag' | 'pdf.band.serves' | 'pdf.band.unit' | 'pdf.band.unitVolume' | 'pdf.perUnit' | 'pdf.order.title' | 'pdf.order.lead';
+export type TranslationKey = 'meta.home.title' | 'meta.home.description' | 'meta.product.title' | 'meta.product.description' | 'meta.links.title' | 'meta.links.description' | 'a11y.skipToContent' | 'a11y.mainNavigation' | 'a11y.footerNavigation' | 'a11y.changeLanguage' | 'a11y.switchToDarkTheme' | 'a11y.switchToLightTheme' | 'a11y.openWhatsapp' | 'a11y.priceUpdated' | 'a11y.previousPiece' | 'a11y.nextPiece' | 'a11y.pieces' | 'a11y.fewerUnits' | 'a11y.moreUnits' | 'common.language.es' | 'common.language.en' | 'brand.tagline' | 'brand.seal.top' | 'brand.seal.bottom' | 'navigation.catalog' | 'navigation.orders' | 'landing.hero.headline' | 'landing.hero.body' | 'landing.hero.primaryAction' | 'landing.hero.secondaryAction' | 'landing.promise.title' | 'landing.promise.lead' | 'landing.promise.values.punctuality.title' | 'landing.promise.values.punctuality.body' | 'landing.promise.values.organization.title' | 'landing.promise.values.organization.body' | 'landing.promise.values.quality.title' | 'landing.promise.values.quality.body' | 'landing.orders.title' | 'landing.orders.action' | 'landing.orders.groups.piece' | 'landing.orders.groups.payment' | 'landing.orders.groups.delivery' | 'landing.orders.notes.notice' | 'landing.orders.notes.fruit' | 'landing.orders.notes.flavours' | 'landing.orders.notes.availability' | 'landing.orders.notes.deposit' | 'landing.orders.notes.receipt' | 'landing.orders.notes.delivery' | 'landing.orders.notes.deliveryFee' | 'landing.orders.notes.deliveryArea' | 'landing.orders.notes.currency' | 'catalog.section.title' | 'catalog.section.subtitle' | 'catalog.card.from' | 'catalog.card.each' | 'catalog.card.price' | 'catalog.card.unitPrice' | 'catalog.card.customize' | 'catalog.groups.size' | 'catalog.groups.quantity' | 'catalog.groups.fruit' | 'catalog.groups.flavours' | 'catalog.hints.quantity' | 'catalog.flavours.strawberry' | 'catalog.flavours.cherry' | 'catalog.flavours.raspberry' | 'catalog.flavours.grape' | 'catalog.flavours.lemon' | 'catalog.flavours.pineapple' | 'catalog.flavours.tutti-frutti' | 'catalog.fruits.strawberry' | 'catalog.fruits.grape' | 'catalog.fruits.peach' | 'catalog.fruits.blackberry' | 'catalog.fruits.blueberry' | 'catalog.fruits.cherry' | 'catalog.fruits.pineapple' | 'catalog.customizer.eyebrow' | 'catalog.customizer.back' | 'catalog.customizer.order' | 'catalog.customizer.serves' | 'catalog.customizer.from' | 'catalog.order.greeting' | 'catalog.order.product' | 'catalog.order.closing' | 'catalog.order.quantity' | 'catalog.missing.title' | 'catalog.missing.body' | 'catalog.missing.action' | 'footer.tagline' | 'footer.location' | 'footer.pdf' | 'errors.notFound.title' | 'errors.notFound.body' | 'errors.notFound.action' | 'links.title' | 'links.whatsapp' | 'links.website' | 'links.catalog' | 'pdf.cover.sub' | 'pdf.cover.title' | 'pdf.cover.lead' | 'pdf.cover.tag' | 'pdf.band.serves' | 'pdf.band.unit' | 'pdf.band.unitVolume' | 'pdf.perUnit' | 'pdf.order.title' | 'pdf.order.lead';

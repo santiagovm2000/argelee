@@ -139,7 +139,17 @@ export class SeoService {
     const websiteId = `${DEPLOYMENT.origin}/#website`;
     const inLanguage = LANGUAGE_TAGS[this.language.current()];
     const graph: Record<string, unknown>[] = [
-      { '@type': 'Organization', '@id': organizationId, name: SITE.name, url: DEPLOYMENT.origin },
+      {
+        '@type': 'Organization',
+        '@id': organizationId,
+        name: SITE.name,
+        url: DEPLOYMENT.origin,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: SITE.address.locality,
+          addressCountry: SITE.address.country,
+        },
+      },
       {
         '@type': 'WebSite',
         '@id': websiteId,

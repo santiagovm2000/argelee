@@ -8,13 +8,21 @@ export const PDF_PHOTO_WIDTH = 1200;
 export const PDF_COVER_PHOTO_WIDTH = 1400;
 export const PDF_PHOTO_QUALITY = 85;
 
-export const PDF_FONTS_PUBLIC_PATH = 'fonts/';
 export const PDF_FONT_FILES = {
-  display: 'italiana-latin.woff2',
-  body: 'karla-latin.woff2',
-  script: 'parisienne-latin.woff2',
+  regular: 'lato-400-latin.woff2',
+  bold: 'lato-700-latin.woff2',
+  black: 'lato-900-latin.woff2',
+  script: 'great-vibes-latin.woff2',
 } as const;
 export type PdfFontRole = keyof typeof PDF_FONT_FILES;
+
+export const PDF_ART_FILES = {
+  logo: 'brand/logo.svg',
+  monogram: 'brand/monogram.svg',
+  daisy: 'brand/daisy.svg',
+  caustics: 'brand/caustics.svg',
+} as const;
+export type PdfArt = keyof typeof PDF_ART_FILES;
 
 export const PDF_PAGE_WIDTH_MM = 210;
 export const PDF_PAGE_HEIGHT_MM = 297;

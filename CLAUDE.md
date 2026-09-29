@@ -76,16 +76,19 @@ These are project law. If a change would break one, stop and say so instead of w
 
 ## Design
 
-Read the `frontend-design` skill before building or reshaping any UI. The look is set and lives in
-`docs/DESIGN-SYSTEM.md`: Italiana for headings, Karla for text, Parisienne for the wordmark; a
-barely-blue white page, pale steel-blue panels, ink for the one call to action; straight corners,
-hairline rules, small tracked capitals for labels. **No AI slop** and no template defaults: every
-choice must be defensible for this brand.
+Read the `frontend-design` skill before building or reshaping any UI. The look is the owner's brand
+book and lives in `docs/DESIGN-SYSTEM.md`: Lato for everything a person reads, a script (Great
+Vibes, for the book's Bella Elegante) only for section titles and the brand's key phrases, and the
+logo as a drawing from `public/brand/`; a white page, the Azul Cristal water and Turquesa Vital
+lagoon as scenes, Naranja Coral for the one call to action, Amarillo Mango for the round labels;
+pill buttons and rounded, poured shapes; sentence case, no tracked capitals. **No AI slop** and no
+template defaults: every choice must be defensible for this brand.
 
 Motion is restraint. Nothing floats, breathes or cascades in on load. The only animation is CSS
-scroll-driven depth (`src/styles/motion.css`) that answers the visitor's own scrolling, plus quiet
-hover transitions. No JavaScript scroll listeners, and every animated element is fully visible when
-the animation does not run.
+scroll-driven depth (`src/styles/motion.css`) that answers the visitor's own scrolling — the
+brand's water lagging far below, its sunflowers leading near the surface, the piece still — plus
+quiet hover transitions. No JavaScript scroll listeners, and every animated element is fully
+visible when the animation does not run.
 
 ## Commands
 

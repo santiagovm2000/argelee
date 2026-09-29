@@ -9,13 +9,14 @@ import { T } from '../../../core/i18n/translation-keys.generated';
 import { IMAGE_SIZES } from '../../../core/images/image.constants';
 import { srcsetFor } from '../../../core/images/image.loader';
 import { photoImage } from '../../../core/images/photo';
+import { PriceSticker } from '../price-sticker/price-sticker';
 
-/** One piece on the shelf: the photo, its name, a note and the listed price. */
+/** One piece of the menu: the photo with its price label, its name and a note. */
 @Component({
   selector: 'arg-product-card',
-  imports: [NgOptimizedImage, RouterLink, TranslocoDirective],
+  imports: [NgOptimizedImage, RouterLink, TranslocoDirective, PriceSticker],
   templateUrl: './product-card.html',
-  host: { class: 'block w-card shrink-0' },
+  host: { class: 'block w-card shrink-0 md:w-auto' },
 })
 export class ProductCard {
   readonly product = input.required<Product>();

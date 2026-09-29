@@ -108,14 +108,19 @@ placeholder, so frame the piece generously and let the site do the rest.
 `bun run images` emits responsive AVIF plus one JPEG social card into `public/images/<category>/`
 and writes a typed manifest to `core/images/image-manifest.generated.ts`.
 
-`bun run favicon` outlines the "A" of the wordmark from the bundled Parisienne file and paints it in
-the wordmark wine with no background, straight from the tokens: `public/favicon.svg` (it follows the
-browser's colour scheme like the wordmark follows the site's), a transparent `favicon.ico`, and
-`apple-touch-icon.png` on a pale brand tile because iOS refuses transparency. Re-run it after
-changing the wordmark font or the tokens.
+`bun run favicon` draws the brand's "AG" monogram from `public/brand/monogram.svg` in the logo's
+Azul Cristal with no background, straight from the tokens: `public/favicon.svg` (it follows the
+browser's colour scheme like the logo follows the site's), a transparent `favicon.ico`, and
+`apple-touch-icon.png` in white on a blue tile because iOS refuses transparency. Re-run it after
+changing the monogram or the tokens.
 
-`bun run social-card` draws the brand card behind link previews of the home page: the wordmark
-outlined from the same file, in wine over the page surface with the ornament under it, at the Open
+The brand drawings in `public/brand/` were traced once from the brand book's artwork (PNG only) into
+plain SVG: one colour, `currentColor`, for the logo and the monogram; the kit's own yellow and
+orange for the sunflowers; one path per layer, uncoloured, for the water pattern. They are the
+source now: a new drawing is traced the same way, not redrawn by hand.
+
+`bun run social-card` draws the brand card behind link previews of the home page from the same
+drawings: the white logo on the Azul Cristal water with sunflowers down both edges, at the Open
 Graph size, into `assets-src/images/brand/wordmark.png`. It then runs `bun run images`, so the card
 gets its `-social.jpg` and its manifest entry, `IMAGES.brandWordmark`. Pieces keep their own photo.
 

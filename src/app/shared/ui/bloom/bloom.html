@@ -1,0 +1,12 @@
+<svg class="h-auto w-full overflow-visible" [attr.viewBox]="viewBox()">
+  @for (flower of flowers(); track $index) {
+    <use
+      [attr.href]="daisy"
+      [attr.x]="flower.x"
+      [attr.y]="flower.y"
+      [attr.width]="flower.size"
+      [attr.height]="flower.size"
+      [attr.transform]="flower.transform"
+    />
+  }
+</svg>

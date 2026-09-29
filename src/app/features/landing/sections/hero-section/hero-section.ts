@@ -11,16 +11,21 @@ import { LanguageService } from '../../../../core/i18n/language.service';
 import { T } from '../../../../core/i18n/translation-keys.generated';
 import { REDUCED_MOTION_MEDIA_QUERY } from '../../../../core/theme/theme.constants';
 import { Lead } from '../../../../shared/directives/lead';
+import { Bloom } from '../../../../shared/ui/bloom/bloom';
+import { Caustics } from '../../../../shared/ui/caustics/caustics';
+import { Seal } from '../../../../shared/ui/seal/seal';
 import { HERO_VIDEO, HERO_VIDEO_START_TIMEOUT_MS } from './hero.constants';
 
 /**
- * Full-bleed video with the headline over it. The poster is the LCP image and
- * the reduced-motion fallback; the video is only fetched once the page has
- * painted and the browser is idle, and never for a visitor saving data.
+ * The brand's cover: the Azul Cristal water with the logo resting large on it,
+ * the tagline, and a jelly turning in a round lid sealed with the brand's label.
+ * The poster is the LCP image and the reduced-motion fallback; the video is only
+ * fetched once the page has painted and the browser is idle, and never for a
+ * visitor saving data.
  */
 @Component({
   selector: 'arg-hero-section',
-  imports: [NgOptimizedImage, RouterLink, TranslocoDirective, Lead],
+  imports: [NgOptimizedImage, RouterLink, TranslocoDirective, Lead, Caustics, Bloom, Seal],
   templateUrl: './hero-section.html',
   host: { class: 'block' },
 })

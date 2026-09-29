@@ -32,14 +32,13 @@ describe('renderHeadersFile', () => {
     );
   });
 
-  it('writes one block per asset pattern, fonts with CORS for the PDF renderer', () => {
+  it('writes one block per asset pattern', () => {
     for (const [pattern, headers] of ASSET_RULES) {
       expect(file).toContain(`${pattern}\n`);
       for (const [name, value] of Object.entries(headers)) {
         expect(file).toContain(`  ${name}: ${value}`);
       }
     }
-    expect(file).toContain('/fonts/*\n  Cache-Control: public, max-age=86400');
-    expect(file).toContain('Access-Control-Allow-Origin: *');
+    expect(file).toContain('/brand/*\n  Cache-Control: public, max-age=86400');
   });
 });

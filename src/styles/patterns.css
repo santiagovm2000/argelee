@@ -15,29 +15,124 @@
 
 /* Structural classes a Tailwind utility cannot express in one token. */
 
-/* The shelf: the menu's pieces on one horizontal, snapping scroller. Native
-   scroll does the moving; the arrows only nudge it. The row starts where the
-   content column (and the rail under it) starts, so the first piece reads as
-   the beginning of the menu rather than the middle of it. */
+/* The script voice: section titles and the brand's few phrases said with
+   feeling. Great Vibes is lighter than the book's Bella Elegante, so a hair of
+   stroke in the text's own colour gives it the same body. */
+.script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  letter-spacing: 0;
+  -webkit-text-stroke: 0.014em currentColor;
+  paint-order: stroke fill;
+}
+
+/* Where the logo and the landing's top bar meet: the logo rests large over the
+   hero and rises into the bar (motion.css). Scale and drop size the resting
+   logo; the hero keeps --mark-room free under the bar for it. */
+:root {
+  --mark-scale: 2.1;
+  --mark-drop: 5rem;
+  --mark-room: 10rem;
+  --mark-travel: 45vh;
+}
+@media (min-width: 40rem) {
+  :root {
+    --mark-scale: 3.4;
+    --mark-drop: 8rem;
+    --mark-room: 14rem;
+  }
+}
+@media (min-width: 64rem) {
+  :root {
+    --mark-scale: 4.2;
+    --mark-drop: 9.5rem;
+    --mark-room: 17.5rem;
+  }
+}
+@media (min-width: 96rem) {
+  :root {
+    --mark-scale: 5;
+    --mark-drop: 11rem;
+    --mark-room: 20rem;
+  }
+}
+@media (max-height: 32rem) {
+  :root {
+    --mark-scale: 2;
+    --mark-drop: 4rem;
+    --mark-room: 8.75rem;
+  }
+}
+
+/* Until the hero splits into two columns, the jelly's lid takes whatever height
+   the text leaves on the first screen, so the whole hero shows on any phone or
+   tablet; it never shrinks below a readable size, nor grows past its own. */
+@media (max-width: 63.999rem) {
+  .hero-lid-area {
+    flex: 1 1 0;
+    min-height: 10rem;
+    container-type: size;
+    display: grid;
+    place-items: center;
+  }
+  .hero-lid {
+    width: min(100cqw, 100cqh);
+  }
+}
+/* A phone on its side is wide but short: the text and the lid stand side by
+   side, and the lid takes the height of the text column. */
+@media (min-width: 40rem) and (max-width: 63.999rem) and (max-height: 32rem) and (orientation: landscape) {
+  .hero-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    column-gap: 2rem;
+  }
+  .hero-lid-area {
+    min-height: 0;
+  }
+}
+/* On a short screen (an SE behind Safari's bars, a phone on its side) the
+   headline takes a smaller size and the lead, which cannot share the screen
+   with the lid, steps out of sight; screen readers still get it. */
+@media (max-height: 38rem) {
+  .hero-title {
+    font-size: var(--text-display-short);
+  }
+}
+@media (max-width: 63.999rem) and (max-height: 38rem) {
+  .hero-lead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* The shelf: below the md breakpoint the menu's pieces sit on one horizontal,
+   snapping scroller; native scroll does the moving and the arrows only nudge
+   it. The row starts where the content column (and the rail under it) starts.
+   From md up the same list is a grid (utilities in the template). */
 .shelf-stage {
   timeline-scope: --shelf;
 }
-.shelf {
-  --shelf-inset: calc(max(0px, (100% - var(--container-content)) / 2) + --spacing(6));
-  scroll-timeline: --shelf inline;
-  scroll-snap-type: x mandatory;
-  padding-inline: var(--shelf-inset);
-  scroll-padding-inline: var(--shelf-inset);
-  @variant sm {
-    --shelf-inset: calc(max(0px, (100% - var(--container-content)) / 2) + --spacing(10));
+@media (max-width: 47.999rem) {
+  .shelf {
+    --shelf-inset: --spacing(6);
+    scroll-timeline: --shelf inline;
+    scroll-snap-type: x mandatory;
+    padding-inline: var(--shelf-inset);
+    scroll-padding-inline: var(--shelf-inset);
+    scrollbar-width: none;
   }
-  scrollbar-width: none;
-}
-.shelf::-webkit-scrollbar {
-  display: none;
-}
-.shelf__card {
-  scroll-snap-align: start;
+  .shelf::-webkit-scrollbar {
+    display: none;
+  }
+  .shelf__card {
+    scroll-snap-align: start;
+  }
 }
 /* The rail under the shelf: a hairline with a short ink segment that travels
    along it as the shelf scrolls (motion.css). Container units size the travel. */
@@ -45,46 +140,23 @@
   container-type: inline-size;
 }
 
-/* The ornament: a rule, a dot, a rule. Centred under a title it is symmetric;
-   leading a left-aligned block (the hero, as in the draft) the first rule is
-   long and the second short, so the eye lands on the text. */
-.ornament {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-}
-.ornament::before,
-.ornament::after {
-  content: '';
-  width: 2.5rem;
-  height: 1px;
-  background: var(--color-line-tint);
-}
-.ornament--lead::before {
-  width: 4rem;
-}
-.ornament--lead::after {
-  width: 1.625rem;
-}
-.ornament > span {
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: var(--color-line-tint);
-}
-
-/* The two button shapes of the draft: ink for the one action that matters, a
-   hairline for the rest. Straight corners, small tracked capitals. */
+/* Buttons are poured, not cut: a full pill in Lato bold. Coral with ink on it
+   is the one action that matters; the outline borrows its colour from its own
+   text, so it sits on the water as well as on the page. */
 .button {
-  @apply inline-flex min-h-12 items-center justify-center rounded-control px-8 text-label font-medium uppercase transition-[background-color,color,border-color,translate] duration-settled disabled:opacity-40 disabled:hover:translate-y-0;
+  @apply inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full px-6 text-label font-bold transition-[background-color,color,border-color,translate] duration-settled disabled:opacity-40 disabled:hover:translate-y-0 sm:px-7;
 }
 .button--primary {
   @apply bg-accent text-accent-ink hover:-translate-y-0.5 hover:bg-accent-hover disabled:hover:bg-accent;
 }
-/* The quiet button borrows its border from its own text colour, so it sits on
-   the video as well as on the page; on hover it fills and inverts. */
 .button--secondary {
-  @apply border border-current/45 text-ink hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-ink;
+  @apply border-2 border-line-strong text-ink hover:-translate-y-0.5 hover:bg-surface-hover;
+}
+/* On a scene an outline sinks into the colour, so the quiet button becomes
+   the white pill of the brand's card, still a step below the coral one. */
+.water .button--secondary,
+.lagoon .button--secondary {
+  @apply border-transparent bg-surface-raised text-accent-ink hover:bg-surface-raised/85;
 }
 /* WhatsApp keeps its own green wherever it appears, so the entry point is recognised
    at a glance; the button with a label sits on the deeper shade that carries white
@@ -102,14 +174,11 @@
   min-height: calc(100svh - var(--spacing-header));
 }
 
-/* The top bar. Its resting style is the settled one — a frosted band, the mark
-   small, ink navigation — so a browser without scroll timelines and a visitor
-   with reduced motion get a readable header. On the landing, motion.css lets it
-   start transparent over the video with the mark large, and rise into place. */
+/* The top bar. Its resting style is the settled one — a white band, the logo
+   small and blue — so a browser without scroll timelines and a visitor with
+   reduced motion get a readable header. On the landing, motion.css lets it
+   start transparent over the water with the logo large and white, and rise. */
 .topbar {
-  --mark-drop: clamp(3rem, 9vh, 5.5rem);
-  --mark-scale: 1.45;
-  --mark-travel: 40vh;
   isolation: isolate;
 }
 /* The band is a layer behind the bar's content. Only its opacity ever animates,
@@ -123,18 +192,36 @@
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-line);
 }
-@media (min-width: 40rem) {
-  .topbar {
-    --mark-scale: 2.1;
-  }
-}
 .topbar__mark {
   display: inline-block;
   transform-origin: 0 50%;
   color: var(--color-wordmark);
 }
-.topbar__nav {
-  color: var(--color-ink-muted);
+/* The bar sits over the water at rest and over its own band once settled, so
+   its focus ring follows the text colour, which reads on both. */
+.topbar :focus-visible {
+  outline-color: currentColor;
+}
+
+/* The water pattern over a scene: two layers of the brand's caustics, drawn in
+   --caustic. Each overhangs the scene by more than any drift in motion.css
+   (measured in the same screen units), so no edge ever shows. */
+.caustics {
+  --overhang: 20svh;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+}
+.caustics__layer {
+  position: absolute;
+  top: calc(var(--overhang) * -1);
+  left: calc(var(--overhang) * -1);
+  width: calc(100% + var(--overhang) * 2);
+  max-width: none;
+  height: calc(100% + var(--overhang) * 2);
+  fill: var(--color-caustic);
 }
 
 /* Theme change: the new theme spreads from the toggle as a circle. ThemeService
@@ -169,14 +256,14 @@
   @apply min-h-20 resize-y leading-relaxed;
 }
 .field-label {
-  @apply mb-1.5 block text-caption text-ink-muted;
+  @apply mb-1.5 block text-caption font-bold text-ink-muted;
 }
 .field-hint {
   @apply mt-1.5 block text-caption text-ink-subtle;
 }
 /* A switch drawn from a checkbox's state: the track is the label, the thumb a pseudo-element. */
 .switch {
-  @apply relative inline-flex h-6 w-10 shrink-0 cursor-pointer items-center rounded-full border border-line-strong bg-surface-sunken transition-[background-color,border-color] duration-quick has-checked:border-accent has-checked:bg-accent has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-surface-raised;
+  @apply relative inline-flex h-6 w-10 shrink-0 cursor-pointer items-center rounded-full border border-line-strong bg-surface-sunken transition-[background-color,border-color] duration-quick has-checked:border-line-strong has-checked:bg-line-strong has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-surface-raised;
 }
 .switch::after {
   content: '';
@@ -186,21 +273,21 @@
   translate: 1rem 0;
 }
 
-/* The panel's quiet controls: a bordered pill for a short action, square for an icon. */
+/* The panel's quiet controls: a bordered pill for a short action, round for an icon. */
 .control {
-  @apply inline-flex min-h-9 items-center gap-2 rounded-control border border-line-tint px-3 text-label font-medium text-ink uppercase transition-[border-color,background-color,color] duration-quick hover:border-accent-text hover:bg-surface-hover disabled:opacity-40 disabled:hover:border-line-tint disabled:hover:bg-transparent;
+  @apply inline-flex min-h-9 items-center gap-2 rounded-full border border-line-tint px-3.5 text-eyebrow font-bold text-ink transition-[border-color,background-color,color] duration-quick hover:border-accent-text hover:bg-surface-hover disabled:opacity-40 disabled:hover:border-line-tint disabled:hover:bg-transparent;
 }
 .control--icon {
   @apply size-9 justify-center px-0;
 }
 .control--danger {
-  @apply hover:border-vino hover:text-vino;
+  @apply hover:border-critical hover:text-critical;
 }
 .control--alert {
-  @apply border-vino text-vino hover:border-vino;
+  @apply border-critical text-critical hover:border-critical;
 }
 .button--danger {
-  @apply bg-vino text-neutral-0 hover:-translate-y-0.5 hover:bg-vino/90 disabled:hover:bg-vino;
+  @apply bg-danger text-neutral-0 hover:-translate-y-0.5 hover:bg-danger/90 disabled:hover:bg-danger;
 }
 /* The panel's actions: the site's button, one size down. */
 .button--compact {

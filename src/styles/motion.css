@@ -1,13 +1,57 @@
 /* Scroll-driven motion. Pure CSS: it runs on the compositor, needs no scroll
    listener, and applies from the first paint of the prerendered HTML.
 
-   Restraint is the point. Nothing floats, breathes or cascades in on load; the
-   only motion is depth that answers the visitor's own scrolling. Every class
-   here is progressive enhancement: the un-animated state of each element is
-   its final, fully visible state, so a browser without animation-timeline
-   (Firefox, for now) and a visitor with reduced motion both get the same
-   static page. */
+   The idea is depth, as in the brand's own pattern: light through water. Over
+   a scene the water drifts far below, the sunflowers float near the surface,
+   and the piece itself stays still, because it is what the eye is meant to
+   rest on. Only translate, rotate, scale and opacity move, at most three
+   layers at once, and a far layer never lags more than a quarter of a screen.
 
+   Everything is gated twice — the browser must support scroll timelines and
+   the visitor must not have asked for less motion — and every class here is
+   progressive enhancement: the un-animated state of each element is its final,
+   fully visible state, so Firefox (until it ships timelines) and a visitor with
+   reduced motion both get the same finished, still page. */
+
+/* The hero, over the first screen of scroll. A positive depth lags behind the
+   page and reads as far away; a negative one leads and reads as near. */
+@keyframes depth {
+  to {
+    translate: 0 var(--depth);
+  }
+}
+@keyframes depth-float {
+  to {
+    translate: 0 var(--depth);
+    rotate: 8deg;
+  }
+}
+@keyframes seal-turn {
+  to {
+    rotate: 14deg;
+  }
+}
+
+/* A scene further down drifts across its own passage through the screen,
+   symmetric around its resting place so the still page is the centred one. */
+@keyframes drift {
+  from {
+    translate: calc(var(--drift) * -0.5) var(--drift);
+  }
+  to {
+    translate: calc(var(--drift) * 0.5) calc(var(--drift) * -1);
+  }
+}
+@keyframes rise {
+  from {
+    translate: 0 var(--rise);
+    rotate: -10deg;
+  }
+}
+
+/* The photo shows whole on a blurred wash of its own placeholder. The wash
+   slides behind it as the card crosses the viewport (it is scaled up enough
+   to cover the travel); the photo itself never moves, so no piece is cropped. */
 @keyframes window-parallax {
   from {
     translate: 0 -4%;
@@ -17,9 +61,20 @@
   }
 }
 
-/* Cards shrink and sink a little as they slide out of either end of the shelf
-   and recover as they come in, like plates on a counter; their photos fade with
-   them while the captions stay fully legible. */
+/* The middle column of the menu grid runs a little slower than its neighbours,
+   so the pieces stand at different depths as the menu passes. */
+@keyframes column-drift {
+  from {
+    translate: 0 2.5rem;
+  }
+  to {
+    translate: 0 -2.5rem;
+  }
+}
+
+/* On the phone shelf, cards shrink and sink a little as they slide out of
+   either end and recover as they come in, like plates on a counter; their
+   photos fade with them while the captions stay fully legible. */
 @keyframes shelf-enter {
   from {
     scale: 0.94;
@@ -50,48 +105,140 @@
   }
 }
 
-@supports (animation-timeline: scroll()) {
-  /* The photo shows whole on a blurred wash of its own placeholder. The wash
-     slides behind it as the card crosses the viewport (it is scaled up enough
-     to cover the travel); the photo itself never moves, so no piece is cropped. */
-  .parallax-window {
-    overflow: hidden;
+/* The top bar on the landing: transparent over the water at rest, the logo
+   large and white; over the first stretch of scroll the band fills in and the
+   logo rises and shrinks into it, turning brand blue. One element moves —
+   there is no second logo to cross-fade. `from` only: the `to` state is the
+   bar's own settled style in patterns.css. */
+@keyframes topbar-settle {
+  from {
+    opacity: 0;
   }
-  .parallax-window__backdrop {
-    animation: window-parallax linear both;
-    animation-timeline: view();
-    animation-range: cover 0% cover 100%;
-  }
-
-  .shelf__card {
-    animation:
-      shelf-enter linear both,
-      shelf-exit linear both;
-    animation-timeline: view(inline);
-    animation-range: entry, exit;
-  }
-  .shelf__card .parallax-window {
-    animation:
-      photo-enter linear both,
-      photo-exit linear both;
-    animation-timeline: view(inline);
-    animation-range: entry, exit;
-  }
-  .shelf-rail__thumb {
-    animation: rail-run linear both;
-    animation-timeline: --shelf;
-  }
-
-  /* Under the pointer the photo leans in a touch, well within its wash. */
-  .parallax-window__image {
-    transition: scale var(--duration-settled) var(--ease-out-quart);
-  }
-  .parallax-window:hover .parallax-window__image {
-    scale: 1.03;
+}
+@keyframes mark-rise {
+  from {
+    translate: 0 var(--mark-drop);
+    scale: var(--mark-scale);
+    color: var(--color-neutral-0);
   }
 }
 
-/* Opening a piece: its photo morphs from the shelf card into the product page,
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .depth-far,
+    .depth-mid,
+    .depth-near,
+    .depth-turn {
+      animation: depth linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100svh;
+    }
+    .depth-far {
+      --depth: 22svh;
+    }
+    .depth-mid {
+      --depth: 9svh;
+    }
+    .depth-near {
+      --depth: -12svh;
+      animation-name: depth-float;
+    }
+    .depth-turn {
+      animation-name: seal-turn;
+    }
+
+    .scene-timeline {
+      view-timeline: --scene block;
+    }
+    .drift-far,
+    .drift-mid,
+    .rise {
+      animation: drift linear both;
+      animation-timeline: --scene;
+      animation-range: cover;
+    }
+    .drift-far {
+      --drift: 9svh;
+    }
+    .drift-mid {
+      --drift: -5svh;
+    }
+    .rise {
+      --rise: 14svh;
+      animation-name: rise;
+      animation-range: entry 0% entry 100%;
+    }
+
+    .parallax-window {
+      overflow: clip;
+    }
+    .parallax-window__backdrop {
+      animation: window-parallax linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    /* Under the pointer the photo leans in a touch, well within its wash. */
+    .parallax-window__image {
+      transition: scale var(--duration-settled) var(--ease-out-quart);
+    }
+    .parallax-window:hover .parallax-window__image {
+      scale: 1.03;
+    }
+
+    @media (min-width: 64rem) {
+      .shelf__card:nth-child(3n + 2) {
+        view-timeline: --piece block;
+      }
+      .shelf__card:nth-child(3n + 2) > * {
+        animation: column-drift linear both;
+        animation-timeline: --piece;
+        animation-range: cover;
+      }
+    }
+
+    @media (max-width: 47.999rem) {
+      .shelf__card {
+        animation:
+          shelf-enter linear both,
+          shelf-exit linear both;
+        animation-timeline: view(inline);
+        animation-range: entry, exit;
+      }
+      .shelf__card .parallax-window {
+        animation:
+          photo-enter linear both,
+          photo-exit linear both;
+        animation-timeline: view(inline);
+        animation-range: entry, exit;
+      }
+      .shelf-rail__thumb {
+        animation: rail-run linear both;
+        animation-timeline: --shelf;
+      }
+    }
+
+    /* The landing reserves the room its resting logo needs; without the
+       animation the logo lives in the bar and the hero needs no room for it. */
+    .hero-mark-room {
+      height: calc(var(--mark-room) - var(--spacing-header));
+    }
+    :root:has(.hero-stage) .topbar::before,
+    :root:has(.hero-stage) .topbar__mark {
+      animation-timeline: scroll(root);
+      animation-range: 0 var(--mark-travel);
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+    :root:has(.hero-stage) .topbar::before {
+      animation-name: topbar-settle;
+    }
+    :root:has(.hero-stage) .topbar__mark {
+      animation-name: mark-rise;
+    }
+  }
+}
+
+/* Opening a piece: its photo morphs from the menu card into the product page,
    and back again, through the router's view transition. Both frames carry the
    piece id in data-piece and attr() turns it into the shared transition name,
    so the menu stays data — no per-product class anywhere. Around the photo the
@@ -126,76 +273,15 @@
   }
 }
 
-/* Reduced motion: a scroll timeline ignores animation-duration, so the global
-   reset in base.css cannot stop these. Remove the animations outright, and
-   leave the hero on its poster instead of the looping video. */
+/* Reduced motion: no page morph, and the hero rests on its poster instead of
+   the looping video. The scroll-driven rules above never apply at all. */
 @media (prefers-reduced-motion: reduce) {
-  .parallax-window__backdrop,
-  .parallax-window__image,
-  .shelf__card,
-  .shelf__card .parallax-window,
-  .shelf-rail__thumb,
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation: none !important;
   }
-  .parallax-window__image {
-    scale: 1;
-  }
   .hero-video {
     display: none;
-  }
-}
-
-/* The top bar on the landing: transparent over the video at rest, the mark
-   large and rose; over the first stretch of scroll the band frosts in, the mark
-   rises and shrinks into it and turns wine, the navigation turns ink. One
-   element moves — there is no second wordmark to cross-fade. `from` only: the
-   `to` state is the bar's own settled style in patterns.css. Nothing here paints:
-   the band fades by opacity, the mark moves by translate/scale. */
-@keyframes topbar-settle {
-  from {
-    opacity: 0;
-  }
-}
-@keyframes mark-rise {
-  from {
-    translate: 0 var(--mark-drop);
-    scale: var(--mark-scale);
-    color: var(--color-vino-soft);
-  }
-}
-@keyframes nav-light {
-  from {
-    color: var(--color-neutral-100);
-  }
-}
-
-@supports (animation-timeline: scroll()) {
-  :root:has(.hero-stage) .topbar::before,
-  :root:has(.hero-stage) .topbar__mark,
-  :root:has(.hero-stage) .topbar__nav {
-    animation-timeline: scroll();
-    animation-range: 0 var(--mark-travel);
-    animation-fill-mode: both;
-    animation-timing-function: linear;
-  }
-  :root:has(.hero-stage) .topbar::before {
-    animation-name: topbar-settle;
-  }
-  :root:has(.hero-stage) .topbar__mark {
-    animation-name: mark-rise;
-  }
-  :root:has(.hero-stage) .topbar__nav {
-    animation-name: nav-light;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .topbar::before,
-  .topbar__mark,
-  .topbar__nav {
-    animation: none !important;
   }
 }

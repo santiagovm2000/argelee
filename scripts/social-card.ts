@@ -3,77 +3,113 @@
  * `bun run social-card`; it draws the card and then runs `bun run images` so
  * the card gets its social JPEG and manifest entry (IMAGES.brandWordmark).
  *
- * The wordmark is outlined from the bundled Parisienne file, like the favicon,
- * and set in the wordmark wine over the page surface with the ornament under
- * it. No words besides the wordmark, so one card serves every language.
- * Pieces keep their own photo as the preview.
+ * The card is the brand's own cover, drawn from the vectors in public/brand:
+ * the Azul Cristal water with its pattern, sunflowers down both edges, and the
+ * white logo in the middle. No words besides the logo, so one card serves
+ * every language. Pieces keep their own photo as the preview.
  */
 import { mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
-import * as fontkit from 'fontkit';
 import sharp from 'sharp';
 import { OG_IMAGE_SIZE } from '../src/app/core/seo/seo.constants';
-import { SITE } from '../src/app/core/config/app.constants';
 import { tokenHex } from './color';
 
 const ROOT = resolve(import.meta.dir, '..');
-const FONT_FILE = join(ROOT, 'src', 'styles', 'fonts', 'parisienne-latin.woff2');
+const BRAND_DIR = join(ROOT, 'public', 'brand');
 const TOKENS_FILE = join(ROOT, 'src', 'styles', 'tokens.css');
 const OUT_FILE = join(ROOT, 'assets-src', 'images', 'brand', 'wordmark.png');
 
-// Token names without the --color- prefix.
-const PALETTE = { surface: 'brand-50', mark: 'vino', rule: 'brand-200', dot: 'brand-600' } as const;
+const PALETTE = { water: 'crystal-500', caustic: 'neutral-0', logo: 'neutral-0' } as const;
+const WATER_OPACITY = { light: 0.14, glint: 0.3 } as const;
 
-// Composition, in card pixels: the wordmark's width and its vertical centre,
-// then the ornament (rule, dot, rule) below it.
-const MARK_WIDTH = 720;
-const MARK_CENTRE_Y = 285;
-const ORNAMENT_Y = 462;
-const RULE_LENGTH = 56;
-const RULE_GAP = 14;
-const RULE_STROKE = 1.5;
-const DOT_RADIUS = 3;
+const LOGO_WIDTH = 760;
+const FLOWERS: readonly (readonly [x: number, y: number, size: number, turn: number])[] = [
+  [-60, -40, 190, 14],
+  [60, 120, 150, -18],
+  [-50, 250, 200, 26],
+  [70, 440, 160, -8],
+  [1050, -30, 180, -12],
+  [1110, 150, 150, 20],
+  [1020, 420, 210, -24],
+];
 
-const tokensCss = readFileSync(TOKENS_FILE, 'utf8');
-const colors = {
-  surface: tokenHex(tokensCss, PALETTE.surface),
-  mark: tokenHex(tokensCss, PALETTE.mark),
-  rule: tokenHex(tokensCss, PALETTE.rule),
-  dot: tokenHex(tokensCss, PALETTE.dot),
-};
+interface Drawing {
+  readonly width: number;
+  readonly height: number;
+  readonly inner: string;
+}
 
-const font = fontkit.openSync(FONT_FILE);
-if (!('layout' in font)) throw new Error('expected a single font, got a collection');
-const run = font.layout(SITE.wordmark);
-const { minX, minY, maxX, maxY } = run.bbox;
+/** The size and the drawing inside one of the brand's SVG files. */
+function drawing(file: string): Drawing {
+  const svg = readFileSync(join(BRAND_DIR, file), 'utf8');
+  const box = /viewBox="0 0 ([\d.]+) ([\d.]+)"/.exec(svg);
+  const inner = /<svg[^>]*>([\s\S]*)<\/svg>/.exec(svg)?.[1];
+  if (box === null || inner === undefined) throw new Error(`social-card: ${file} is not an SVG`);
+  return { width: Number(box[1]), height: Number(box[2]), inner: inner.trim() };
+}
 
-// Fit the shaped run to MARK_WIDTH, centre it, and flip font units (y up)
-// into SVG pixels (y down).
-const scale = MARK_WIDTH / (maxX - minX);
-const originX = (OG_IMAGE_SIZE.width - MARK_WIDTH) / 2 - minX * scale;
-const baselineY = MARK_CENTRE_Y + ((minY + maxY) / 2) * scale;
-
-let penX = 0;
-const glyphs = run.glyphs.map((glyph, index) => {
-  const position = run.positions[index];
-  const x = penX + (position?.xOffset ?? 0);
-  const y = position?.yOffset ?? 0;
-  penX += position?.xAdvance ?? glyph.advanceWidth;
+/** One layer of the water pattern by its id, scaled to cover the card. */
+function waterLayer(caustics: Drawing, id: 'light' | 'glint', fill: string): string {
+  const path = new RegExp(`<path[^>]*id="${id}"[^>]*/>`).exec(caustics.inner)?.[0] ?? '';
+  const scale = Math.max(
+    OG_IMAGE_SIZE.width / caustics.width,
+    OG_IMAGE_SIZE.height / caustics.height,
+  );
+  const x = (OG_IMAGE_SIZE.width - caustics.width * scale) / 2;
+  const y = (OG_IMAGE_SIZE.height - caustics.height * scale) / 2;
   return (
-    '<path transform="translate(' +
+    '<g fill="' +
+    fill +
+    '" opacity="' +
+    String(WATER_OPACITY[id]) +
+    '" transform="translate(' +
     x.toFixed(1) +
     ' ' +
     y.toFixed(1) +
-    ')" d="' +
-    glyph.path.toSVG() +
-    '"/>'
+    ') scale(' +
+    scale.toFixed(4) +
+    ')">' +
+    path.replace(/\sid="[^"]*"/, '') +
+    '</g>'
+  );
+}
+
+const tokensCss = readFileSync(TOKENS_FILE, 'utf8');
+const colors = {
+  water: tokenHex(tokensCss, PALETTE.water),
+  caustic: tokenHex(tokensCss, PALETTE.caustic),
+  logo: tokenHex(tokensCss, PALETTE.logo),
+};
+
+const caustics = drawing('caustics.svg');
+const daisy = drawing('daisy.svg');
+const logo = drawing('logo.svg');
+
+const flowers = FLOWERS.map(([x, y, size, turn]) => {
+  const scale = size / Math.max(daisy.width, daisy.height);
+  const centre = size / 2;
+  return (
+    '<g transform="rotate(' +
+    String(turn) +
+    ' ' +
+    String(x + centre) +
+    ' ' +
+    String(y + centre) +
+    ') translate(' +
+    String(x) +
+    ' ' +
+    String(y) +
+    ') scale(' +
+    scale.toFixed(4) +
+    ')">' +
+    daisy.inner +
+    '</g>'
   );
 });
 
-const centreX = OG_IMAGE_SIZE.width / 2;
-const leftRuleStart = centreX - RULE_GAP - RULE_LENGTH;
-const rightRuleStart = centreX + RULE_GAP;
-const px = (value: number): string => value.toFixed(1);
+const logoScale = LOGO_WIDTH / logo.width;
+const logoX = (OG_IMAGE_SIZE.width - LOGO_WIDTH) / 2;
+const logoY = (OG_IMAGE_SIZE.height - logo.height * logoScale) / 2;
 
 const svg = [
   '<svg xmlns="http://www.w3.org/2000/svg" width="' +
@@ -85,48 +121,26 @@ const svg = [
     ' ' +
     String(OG_IMAGE_SIZE.height) +
     '">',
-  '<rect width="100%" height="100%" fill="' + colors.surface + '"/>',
+  '<rect width="100%" height="100%" fill="' + colors.water + '"/>',
+  waterLayer(caustics, 'light', colors.caustic),
+  waterLayer(caustics, 'glint', colors.caustic),
+  ...flowers,
   '<g fill="' +
-    colors.mark +
+    colors.logo +
     '" transform="translate(' +
-    px(originX) +
+    logoX.toFixed(1) +
     ' ' +
-    px(baselineY) +
+    logoY.toFixed(1) +
     ') scale(' +
-    scale.toFixed(5) +
-    ' ' +
-    (-scale).toFixed(5) +
-    ')">',
-  ...glyphs,
-  '</g>',
-  '<g stroke="' +
-    colors.rule +
-    '" stroke-width="' +
-    String(RULE_STROKE) +
-    '" stroke-linecap="round">',
-  '<path d="M' + px(leftRuleStart) + ' ' + px(ORNAMENT_Y) + 'h' + String(RULE_LENGTH) + '"/>',
-  '<path d="M' + px(rightRuleStart) + ' ' + px(ORNAMENT_Y) + 'h' + String(RULE_LENGTH) + '"/>',
-  '</g>',
-  '<circle cx="' +
-    px(centreX) +
-    '" cy="' +
-    px(ORNAMENT_Y) +
-    '" r="' +
-    String(DOT_RADIUS) +
-    '" fill="' +
-    colors.dot +
-    '"/>',
+    logoScale.toFixed(4) +
+    ')">' +
+    logo.inner +
+    '</g>',
   '</svg>',
 ].join('\n');
 
 mkdirSync(dirname(OUT_FILE), { recursive: true });
 await sharp(Buffer.from(svg)).png().toFile(OUT_FILE);
 console.log(
-  'social-card: ' +
-    SITE.wordmark +
-    ' in ' +
-    colors.mark +
-    ' on ' +
-    colors.surface +
-    ' -> assets-src/images/brand/wordmark.png',
+  'social-card: the logo on ' + colors.water + ' water -> assets-src/images/brand/wordmark.png',
 );

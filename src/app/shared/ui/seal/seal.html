@@ -1,0 +1,27 @@
+<ng-container *transloco="let translate">
+  <svg class="h-auto w-full" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="100" class="fill-sticker" />
+    <path [attr.id]="topArc" d="M 33 100 A 67 67 0 0 1 167 100" fill="none" />
+    <path [attr.id]="bottomArc" d="M 22 100 A 78 78 0 0 0 178 100" fill="none" />
+    <text class="fill-sticker-ink font-bold" font-size="17" text-anchor="middle">
+      <textPath [attr.href]="'#' + topArc" startOffset="50%">
+        {{ translate(t.brand.seal.top) }}
+      </textPath>
+    </text>
+    <text class="fill-sticker-ink font-bold" font-size="17" text-anchor="middle">
+      <textPath [attr.href]="'#' + bottomArc" startOffset="50%">
+        {{ translate(t.brand.seal.bottom) }}
+      </textPath>
+    </text>
+    <svg
+      x="60"
+      y="70"
+      width="80"
+      height="62"
+      [attr.viewBox]="monogram.viewBox"
+      class="fill-sticker-ink"
+    >
+      <use [attr.href]="monogram.href" />
+    </svg>
+  </svg>
+</ng-container>

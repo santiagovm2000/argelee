@@ -7,6 +7,7 @@ import type { PublicCatalog } from '../projection';
 import {
   PDF_LARGE_PIECE_FROM,
   PDF_PIECES_PER_ROW,
+  type PdfArt,
   type PdfFontRole,
   PHONE_AREA_LENGTH,
   PHONE_COUNTRY_CODE,
@@ -15,13 +16,18 @@ import {
 } from './catalog-pdf.constants';
 import { CATALOG_PDF_STYLES } from './catalog-pdf.styles';
 
-// The printed price list, built from the published catalogue: a cover, the
-// pieces in bands that the browser breaks into as many pages as they need,
-// and the order conditions. Everything is a string, so the same function
-// serves the Worker and the local preview.
+// The printed price list, built from the published catalogue in the brand's
+// own dress: a cover like its business card, the pieces in bands that the
+// browser breaks into as many pages as they need, and the order conditions.
+// Everything is a string, so the same function serves the Worker and the
+// local preview.
 
 /** The locale entries the price list reads, structurally, so any locale file with them will do. */
 export interface PdfLocale {
+  readonly brand: {
+    readonly tagline: string;
+    readonly seal: { readonly top: string; readonly bottom: string };
+  };
   readonly catalog: { readonly customizer: { readonly from: string; readonly serves: string } };
   readonly landing: {
     readonly orders: {
@@ -49,6 +55,8 @@ export interface PdfAssets {
   readonly coverPhotoUrl: (key: string) => string;
   /** The drawing inside the group's glyph file, without its outer <svg>. */
   readonly iconMarkup: (group: OrderConditionGroupId) => string;
+  /** One of the brand's drawings, as its whole SVG file. */
+  readonly artSvg: (art: PdfArt) => string;
 }
 
 export interface PdfInput {
@@ -74,6 +82,11 @@ export interface PdfBand {
   readonly showSize: boolean;
   readonly pieces: readonly PdfPiece[];
 }
+
+const ART_PREFIX = 'art-';
+const CAUSTIC_LAYERS = ['light', 'glint'] as const;
+const DAISY_COUNT = { cover: 7, order: 3 } as const;
+const WATER_FIT = ' preserveAspectRatio="xMidYMid slice"';
 
 function interpolate(template: string, params: Readonly<Record<string, string | number>>): string {
   return template.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, name: string) =>
@@ -163,21 +176,77 @@ export function catalogBands(
   return bands;
 }
 
-function priceMarkup(piece: PdfPiece, locale: PdfLocale, language: SupportedLanguage): string {
-  const amount = `<span class="amount"><small>$</small>${priceDigits(piece.product.price, language)}</span>`;
-  return `<span class="price"><span class="from">${escape(locale.catalog.customizer.from)}</span>${amount}</span>`;
+/** The view box and the drawing inside an SVG file, or null when the file is not an SVG. */
+function svgParts(svg: string): { viewBox: string; inner: string } | null {
+  const match = /<svg([^>]*)>([\s\S]*)<\/svg>/.exec(svg);
+  const viewBox = /viewBox="([^"]+)"/.exec(match?.[1] ?? '')?.[1];
+  const inner = match?.[2];
+  return viewBox === undefined || inner === undefined ? null : { viewBox, inner: inner.trim() };
+}
+
+/** The brand drawings as symbols in one hidden sprite, so each is embedded once and drawn anywhere. */
+function artSprite(assets: PdfAssets): string {
+  const symbol = (id: string, viewBox: string, inner: string, fit = ''): string =>
+    `<symbol id="${ART_PREFIX}${id}" viewBox="${viewBox}"${fit}>${inner}</symbol>`;
+  const symbols: string[] = [];
+  for (const art of ['logo', 'monogram', 'daisy'] as const) {
+    const parts = svgParts(assets.artSvg(art));
+    if (parts !== null) symbols.push(symbol(art, parts.viewBox, parts.inner));
+  }
+  const caustics = svgParts(assets.artSvg('caustics'));
+  if (caustics !== null) {
+    for (const layer of CAUSTIC_LAYERS) {
+      const path = new RegExp(`<path[^>]*id="${layer}"[^>]*/>`).exec(caustics.inner)?.[0];
+      if (path !== undefined) {
+        const drawing = path.replace(/\sid="[^"]*"/, '');
+        symbols.push(symbol(`caustics-${layer}`, caustics.viewBox, drawing, WATER_FIT));
+      }
+    }
+  }
+  return `<svg class="sprite" aria-hidden="true"><defs>${symbols.join('')}</defs></svg>`;
+}
+
+/** Draws a sprite symbol at the size its class gives it. */
+function art(id: string, className: string): string {
+  return `<svg class="${className}" aria-hidden="true"><use href="#${ART_PREFIX}${id}"/></svg>`;
+}
+
+/** The brand's water behind a block: its lighter shapes and its bright channels. */
+function waterMarkup(): string {
+  return `<div class="water">${CAUSTIC_LAYERS.map((layer) => art(`caustics-${layer}`, `water-${layer}`)).join('')}</div>`;
+}
+
+function daisies(count: number, className: string): string {
+  return `<div class="${className}">${Array.from({ length: count }, () => art('daisy', 'daisy')).join('')}</div>`;
+}
+
+/** The round label the brand seals its cups with, words set around its edge. */
+function sealMarkup(locale: PdfLocale): string {
+  return `<svg class="seal" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="100" class="seal-disc"/>
+      <path id="seal-top" d="M 33 100 A 67 67 0 0 1 167 100" fill="none"/>
+      <path id="seal-bottom" d="M 22 100 A 78 78 0 0 0 178 100" fill="none"/>
+      <text class="seal-text" text-anchor="middle"><textPath href="#seal-top" startOffset="50%">${escape(locale.brand.seal.top)}</textPath></text>
+      <text class="seal-text" text-anchor="middle"><textPath href="#seal-bottom" startOffset="50%">${escape(locale.brand.seal.bottom)}</textPath></text>
+      <svg x="60" y="70" width="80" height="62" class="seal-mark"><use href="#${ART_PREFIX}monogram"/></svg>
+    </svg>`;
+}
+
+/** The price as one of the brand's round labels. */
+function stickerMarkup(piece: PdfPiece, locale: PdfLocale, language: SupportedLanguage): string {
+  const unit = piece.wide ? `<span class="each">${escape(locale.pdf.perUnit)}</span>` : '';
+  return `<span class="sticker"><span class="from">${escape(locale.catalog.customizer.from)}</span><span class="amount"><small>$</small>${priceDigits(piece.product.price, language)}</span>${unit}</span>`;
 }
 
 function pieceMarkup(piece: PdfPiece, band: PdfBand, input: PdfInput): string {
   const { locale, language, assets } = input;
-  const photo = `<div class="photo"><img src="${escape(assets.photoUrl(piece.product.photo.key))}" alt=""></div>`;
+  const photo = `<div class="photo-wrap"><div class="photo"><img src="${escape(assets.photoUrl(piece.product.photo.key))}" alt=""></div>${stickerMarkup(piece, locale, language)}</div>`;
   const description = `<p class="desc">${escape(piece.text.description)}</p>`;
   if (piece.wide) {
     return `<article class="piece piece--wide">
         ${photo}
         <div class="piece-text">
           <h3>${escape(piece.text.name)}</h3>
-          <div class="price-block">${priceMarkup(piece, locale, language)}<span class="price-unit">${escape(locale.pdf.perUnit)}</span></div>
           ${description}
         </div>
       </article>`;
@@ -189,7 +258,7 @@ function pieceMarkup(piece: PdfPiece, band: PdfBand, input: PdfInput): string {
       : '';
   return `<article class="piece">
         ${photo}
-        <div class="piece-head"><h3>${escape(piece.text.name)}</h3>${priceMarkup(piece, locale, language)}</div>
+        <h3>${escape(piece.text.name)}</h3>
         ${size}
         ${description}
       </article>`;
@@ -205,15 +274,30 @@ function bandMarkup(band: PdfBand, input: PdfInput): string {
         .map((row) => `<div class="row">${cards(row)}</div>`)
         .join('\n');
   return `<div class="group">
-      <div class="group-head"><h2>${escape(band.title)}</h2>${volume}</div>
+      <div class="group-head">${art('daisy', 'group-daisy')}<h2>${escape(band.title)}</h2>${volume}</div>
       ${body}
     </div>`;
 }
 
-/** The pieces as a table: the browser repeats its head (wordmark, top margin) and its foot (bottom margin) on every page. */
+/**
+ * The slim brand line at the top of every inner page: the logo and how to order.
+ * The logo is drawn in place rather than from the sprite, because Chrome does
+ * not repaint a <use> inside a table head it repeats on the following pages.
+ */
+function pageHeadMarkup(input: PdfInput): string {
+  const { locale, assets, whatsappNumber } = input;
+  const logo = svgParts(assets.artSvg('logo'));
+  const mark =
+    logo === null
+      ? ''
+      : `<svg class="page-logo" viewBox="${logo.viewBox}" aria-hidden="true">${logo.inner}</svg>`;
+  return `<div class="page-head">${mark}<span class="page-order">${escape(locale.pdf.order.title)}<strong>${escape(displayPhone(whatsappNumber))}</strong></span></div>`;
+}
+
+/** The pieces as a table: the browser repeats its head (the brand line) and its foot (the bottom margin) on every page. */
 function sheetMarkup(bands: readonly PdfBand[], input: PdfInput): string {
   return `<table class="sheet">
-    <thead><tr><td><div class="wordmark">${escape(input.brand)}</div></td></tr></thead>
+    <thead><tr><td>${pageHeadMarkup(input)}</td></tr></thead>
     <tfoot><tr><td></td></tr></tfoot>
     <tbody><tr><td>
     ${bands.map((band) => bandMarkup(band, input)).join('\n')}
@@ -222,49 +306,50 @@ function sheetMarkup(bands: readonly PdfBand[], input: PdfInput): string {
 }
 
 function coverMarkup(input: PdfInput): string {
-  const { locale, brand, assets, catalog } = input;
+  const { locale, assets, catalog } = input;
   const first = catalog.products[0];
-  const frame =
+  const lid =
     first === undefined
       ? ''
-      : `<div class="cover-frame"><div class="cover-photo"><img src="${escape(assets.coverPhotoUrl(first.photo.key))}" alt=""></div></div>`;
+      : `<div class="cover-lid"><div class="lid"><img src="${escape(assets.coverPhotoUrl(first.photo.key))}" alt=""></div>${sealMarkup(locale)}</div>`;
   return `<section class="cover">
-    <svg class="cover-bg" viewBox="0 0 210 297" preserveAspectRatio="none" aria-hidden="true">
-      <defs><linearGradient id="sweep" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#3B5876"/><stop offset="1" stop-color="#4E6E90"/></linearGradient></defs>
-      <circle cx="222" cy="12" r="82" fill="#EAF1F8"/>
-      <path d="M0,206 C70,196 125,162 210,140 L210,297 L0,297 Z" fill="#B9CFE7"/>
-      <path d="M0,214 C70,204 125,171 210,148 L210,297 L0,297 Z" fill="url(#sweep)"/>
-    </svg>
-    <header class="cover-brand"><div class="wordmark">${escape(brand)}</div><div class="cover-sub">${escape(locale.pdf.cover.sub)}</div></header>
-    ${frame}
-    <h1 class="cover-title">${escape(locale.pdf.cover.title)}</h1>
-    <p class="cover-lead">${escape(locale.pdf.cover.lead)}</p>
-    <span class="cover-tag">${escape(locale.pdf.cover.tag)}</span>
+    ${waterMarkup()}
+    ${daisies(DAISY_COUNT.cover, 'cover-daisies')}
+    <header class="cover-brand">${art('logo', 'cover-logo')}<p class="cover-tagline">${escape(locale.brand.tagline)}</p></header>
+    ${lid}
+    <footer class="cover-foot">
+      <div><h1 class="cover-title">${escape(locale.pdf.cover.title)}</h1><p class="cover-sub">${escape(locale.pdf.cover.sub)}</p></div>
+      <span class="cover-tag">${escape(locale.pdf.cover.tag)}</span>
+    </footer>
   </section>`;
 }
 
 function conditionsMarkup(input: PdfInput): string {
-  const { locale, brand, assets, whatsappNumber } = input;
+  const { locale, assets, whatsappNumber } = input;
   const groups = ORDER_CONDITION_GROUPS.map((group) => {
     const notes = group.noteKeys
       .map((key) => key.split('.').at(-1) ?? '')
       .map((note) => `<li>${escape(locale.landing.orders.notes[note] ?? '')}</li>`)
       .join('');
     return `<section class="condition-group">
-        <h3 class="condition-title"><svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true">${assets.iconMarkup(group.id)}</svg><span>${escape(locale.landing.orders.groups[group.id])}</span></h3>
+        <h3 class="condition-title"><span class="condition-badge"><svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true">${assets.iconMarkup(group.id)}</svg></span><span>${escape(locale.landing.orders.groups[group.id])}</span></h3>
         <ul class="condition-list">${notes}</ul>
       </section>`;
   }).join('\n');
   return `<section class="page-conditions">
-    <header class="brand"><div class="wordmark">${escape(brand)}</div></header>
-    <div class="group">
-      <div class="group-head"><h2>${escape(locale.landing.orders.title)}</h2></div>
-      <div class="conditions">${groups}</div>
+    ${pageHeadMarkup(input)}
+    <h2 class="conditions-title">${escape(locale.landing.orders.title)}</h2>
+    <div class="conditions">${groups}</div>
+    <div class="order">
+      ${waterMarkup()}
+      ${daisies(DAISY_COUNT.order, 'order-daisies')}
+      ${art('monogram', 'order-mark')}
+      <div class="order-text">
+        <h2>${escape(locale.pdf.order.title)}</h2>
+        <div class="number">${escape(displayPhone(whatsappNumber))}</div>
+        <p>${escape(locale.pdf.order.lead)}</p>
+      </div>
     </div>
-    <div class="order-wrap"><div class="order">
-      <div class="order-head"><h2>${escape(locale.pdf.order.title)}</h2><div class="number">${escape(displayPhone(whatsappNumber))}</div></div>
-      <p>${escape(locale.pdf.order.lead)}</p>
-    </div></div>
   </section>`;
 }
 
@@ -272,9 +357,10 @@ function conditionsMarkup(input: PdfInput): string {
 export function renderCatalogHtml(input: PdfInput): string {
   const { locale, language, assets, brand } = input;
   const bands = catalogBands(input.catalog, locale, language);
-  const fonts = `@font-face{font-family:'Italiana';font-weight:400;src:url('${escape(assets.fontUrl('display'))}') format('woff2')}
-@font-face{font-family:'Karla';font-weight:300 600;src:url('${escape(assets.fontUrl('body'))}') format('woff2')}
-@font-face{font-family:'Parisienne';font-weight:400;src:url('${escape(assets.fontUrl('script'))}') format('woff2')}`;
+  const fonts = `@font-face{font-family:'Lato';font-weight:400;src:url('${escape(assets.fontUrl('regular'))}') format('woff2')}
+@font-face{font-family:'Lato';font-weight:700;src:url('${escape(assets.fontUrl('bold'))}') format('woff2')}
+@font-face{font-family:'Lato';font-weight:900;src:url('${escape(assets.fontUrl('black'))}') format('woff2')}
+@font-face{font-family:'Great Vibes';font-weight:400;src:url('${escape(assets.fontUrl('script'))}') format('woff2')}`;
   return `<!doctype html>
 <html lang="${language}">
 <head>
@@ -286,6 +372,7 @@ ${CATALOG_PDF_STYLES}
 </style>
 </head>
 <body>
+${artSprite(assets)}
 ${coverMarkup(input)}
 ${sheetMarkup(bands, input)}
 ${conditionsMarkup(input)}

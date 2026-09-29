@@ -1,21 +1,22 @@
 <ng-container *transloco="let translate">
   <section
     [id]="sections.catalog"
-    class="shelf-stage scroll-mt-anchor bg-surface-tint pt-8 pb-12 lg:pt-10 lg:pb-14"
+    class="shelf-stage relative z-10 -mt-sheet scroll-mt-anchor rounded-t-sheet bg-surface-tint pt-16 pb-16 lg:pt-24 lg:pb-32"
   >
-    <div class="mx-auto max-w-content px-6 text-center sm:px-10">
-      <h2 class="font-display text-headline text-ink">
+    <div
+      class="mx-auto flex max-w-content flex-col gap-3 px-6 sm:px-10 md:flex-row md:items-end md:justify-between md:gap-10"
+    >
+      <h2 class="script text-script text-ink">
         {{ translate(t.catalog.section.title) }}
       </h2>
-      <div class="ornament mx-auto mt-4 w-fit" aria-hidden="true"><span></span></div>
-      <p class="mx-auto mt-3 max-w-[48ch] text-body-sm text-ink-muted">
+      <p class="max-w-[42ch] text-body text-ink-muted md:pb-4">
         {{ translate(t.catalog.section.subtitle) }}
       </p>
     </div>
 
     <div
       #shelf
-      class="shelf mt-6 flex gap-shelf overflow-x-auto pt-3 pb-4"
+      class="shelf mt-8 flex gap-shelf overflow-x-auto pt-4 pb-6 md:mx-auto md:mt-14 md:grid md:max-w-content md:grid-cols-2 md:gap-x-8 md:gap-y-12 md:overflow-visible md:px-10 md:pb-0 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-16"
       role="list"
       [attr.aria-label]="translate(t.a11y.pieces)"
     >
@@ -32,14 +33,14 @@
       }
     </div>
 
-    <div class="mx-auto mt-5 flex max-w-content items-center gap-6 px-6 sm:px-10">
-      <div class="shelf-rail relative h-0.5 flex-1 bg-line-tint/60" aria-hidden="true">
-        <span class="shelf-rail__thumb absolute inset-y-0 left-0 w-12 bg-ink"></span>
+    <div class="mx-auto mt-4 flex max-w-content items-center gap-6 px-6 sm:px-10 md:hidden">
+      <div class="shelf-rail relative h-1 flex-1 rounded-full bg-line-tint" aria-hidden="true">
+        <span class="shelf-rail__thumb absolute inset-y-0 left-0 w-12 rounded-full bg-ink"></span>
       </div>
       <div class="flex items-center gap-2.5">
         <button
           type="button"
-          class="grid size-10 place-items-center rounded-full border border-line-tint text-ink transition-colors duration-settled hover:border-accent-text hover:bg-surface-hover"
+          class="grid size-11 place-items-center rounded-full border-2 border-line-strong text-ink transition-colors duration-settled hover:bg-surface-hover"
           [attr.aria-label]="translate(t.a11y.previousPiece)"
           (click)="nudge(-1)"
         >
@@ -48,7 +49,7 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="1.5"
+            stroke-width="2"
             aria-hidden="true"
           >
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7" />
@@ -56,7 +57,7 @@
         </button>
         <button
           type="button"
-          class="grid size-10 place-items-center rounded-full border border-line-tint text-ink transition-colors duration-settled hover:border-accent-text hover:bg-surface-hover"
+          class="grid size-11 place-items-center rounded-full border-2 border-line-strong text-ink transition-colors duration-settled hover:bg-surface-hover"
           [attr.aria-label]="translate(t.a11y.nextPiece)"
           (click)="nudge(1)"
         >
@@ -65,7 +66,7 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="1.5"
+            stroke-width="2"
             aria-hidden="true"
           >
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />

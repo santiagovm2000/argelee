@@ -20,7 +20,7 @@ export const IMAGES = {
     width: 1200,
     height: 630,
     widths: [420, 640, 960],
-    placeholder: 'data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAABQAwCdASoUAAsAPu1iqU2ppaQiMAgBMB2JZwDKACHft1A6AAD+8cTYyUXzLeDNS5ohoAAA',
+    placeholder: 'data:image/webp;base64,UklGRswAAABXRUJQVlA4IMAAAABQBQCdASoUAAsAPu1iqU2ppaOiMAgBMB2JbACdMoRwFfR5AB+s3WxgYZujzvHHVug/6wAA/KS1MYfCYJKO4/gAcSaAqTAh0xic9nZFHmZIGkKTOHEtZazq6clterLwvsCJQ8l1fco6hiQY0VAtFGaahLBK/3p72Ycm70XJuWsCaADiqGKpdH2cbb5JH4/6Xow7Ubv6znkfvS//mA/q2/s2mvv/+UM2aoXr0f5mwOl+z86rqv4z1vfzgAR5aFawAAA=',
   },
   heroPoster: {
     path: 'images/hero/poster',

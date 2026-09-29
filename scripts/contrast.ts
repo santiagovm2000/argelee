@@ -59,6 +59,17 @@ const scales = collectDeclarations(tokensCss, '@theme {');
 const lightVars = collectDeclarations(baseCss, ':root {');
 const darkVars = collectDeclarations(baseCss, '.arg-dark {');
 
+/** A scene's roles as they apply in a theme: the theme, then the scene, then its dark override. */
+function sceneVars(
+  scene: string,
+  themeVars: Map<string, string>,
+  dark: boolean,
+): Map<string, string> {
+  const merged = new Map([...themeVars, ...collectDeclarations(baseCss, `.${scene} {`)]);
+  if (!dark) return merged;
+  return new Map([...merged, ...collectDeclarations(baseCss, `.arg-dark .${scene} {`)]);
+}
+
 function resolveColor(name: string, themeVars: Map<string, string>): Rgb {
   let value = themeVars.get(name) ?? scales.get(name);
   for (let hops = 0; value?.startsWith('var(') && hops < 10; hops++) {
@@ -73,40 +84,83 @@ function resolveColor(name: string, themeVars: Map<string, string>): Rgb {
 
 type Check = readonly [foreground: string, background: string, minimum: number, label: string];
 
-const CHECKS: readonly Check[] = [
+const PAGE_CHECKS: readonly Check[] = [
   ['--ink', '--surface', 4.5, 'body text on page'],
   ['--ink-muted', '--surface', 4.5, 'secondary text on page'],
   ['--ink-subtle', '--surface', 3.0, 'subtle/large text on page'],
   ['--ink', '--surface-raised', 4.5, 'body text on raised card'],
+  ['--ink-muted', '--surface-raised', 4.5, 'secondary text on raised card'],
   ['--ink', '--surface-sunken', 4.5, 'body text on sunken area'],
   ['--accent-ink', '--accent', 4.5, 'label on primary button'],
+  ['--accent-ink', '--accent-hover', 4.5, 'label on hovered primary button'],
   ['--accent-text', '--surface', 4.5, 'brand-coloured text/link on page'],
+  ['--accent-text', '--surface-raised', 4.5, 'brand-coloured text on a card'],
   ['--focus-ring', '--surface', 3.0, 'focus ring on page'],
   ['--line-strong', '--surface', 3.0, 'interactive boundary on page'],
   ['--ink', '--surface-tint', 4.5, 'body text on tinted section'],
   ['--ink-muted', '--surface-tint', 4.5, 'secondary text on tinted section'],
   ['--accent-text', '--surface-tint', 4.5, 'brand-coloured text on tinted section'],
   ['--line-strong', '--surface-tint', 3.0, 'interactive boundary on tinted section'],
-  ['--wordmark', '--surface', 3.0, 'wordmark (large text) on page'],
+  ['--focus-ring', '--surface-tint', 3.0, 'focus ring on tinted section'],
+  ['--wordmark', '--surface', 3.0, 'logo (large graphic) on page'],
   ['--ink', '--surface-selected', 4.5, 'label on a selected chip'],
   ['--ink', '--surface-hover', 4.5, 'label on a hovered control'],
   ['--accent-text', '--surface-raised', 3.0, 'selected chip border on a panel'],
+  ['--sticker-ink', '--sticker', 4.5, 'price on its round sticker'],
+  ['--critical', '--surface', 4.5, 'error text on page'],
+  ['--critical', '--surface-raised', 4.5, 'error text on a panel'],
   ['--color-neutral-0', '--color-whatsapp-deep', 4.5, 'label on the WhatsApp button'],
 ];
 
+const SCENE_CHECKS: readonly Check[] = [
+  ['--ink', '--surface', 4.5, 'text on the scene'],
+  ['--ink-muted', '--surface', 4.5, 'secondary text on the scene'],
+  ['--accent-text', '--surface', 4.5, 'link on the scene'],
+  ['--focus-ring', '--surface', 3.0, 'focus ring on the scene'],
+  ['--line-strong', '--surface', 3.0, 'outlined button on the scene'],
+  ['--wordmark', '--surface', 3.0, 'logo (large graphic) on the scene'],
+  ['--ink', '--surface-hover', 4.5, 'label on a hovered control on the scene'],
+  ['--accent-ink', '--accent', 4.5, 'label on the primary button'],
+  ['--accent-ink', '--surface-raised', 4.5, 'label on the white button on the scene'],
+];
+
+const SCENES = ['water', 'lagoon'] as const;
+
 let failures = 0;
-for (const [themeName, themeVars] of [
-  ['light', lightVars],
-  ['dark', darkVars],
-] as const) {
-  console.log(`\n  ${themeName}`);
-  for (const [fg, bg, minimum, label] of CHECKS) {
-    const ratio = contrastRatio(resolveColor(fg, themeVars), resolveColor(bg, themeVars));
+
+function run(title: string, vars: Map<string, string>, checks: readonly Check[]): void {
+  console.log(`\n  ${title}`);
+  for (const [fg, bg, minimum, label] of checks) {
+    const ratio = contrastRatio(resolveColor(fg, vars), resolveColor(bg, vars));
     const passed = ratio >= minimum;
     if (!passed) failures++;
     console.log(
       `    ${passed ? 'PASS' : 'FAIL'}  ${ratio.toFixed(2)}:1  (min ${minimum.toFixed(1)})  ${label}`,
     );
+  }
+}
+
+/** The water pattern is drawn over text, so it must only ever push away from the text colour. */
+function checkCaustic(title: string, vars: Map<string, string>): void {
+  const ink = resolveColor('--ink', vars);
+  const field = contrastRatio(ink, resolveColor('--surface', vars));
+  const pattern = contrastRatio(ink, resolveColor('--caustic', vars));
+  const passed = pattern >= field;
+  if (!passed) failures++;
+  console.log(
+    `    ${passed ? 'PASS' : 'FAIL'}  ${pattern.toFixed(2)}:1 >= ${field.toFixed(2)}:1  water pattern only raises contrast (${title})`,
+  );
+}
+
+for (const [themeName, themeVars, dark] of [
+  ['light', lightVars, false],
+  ['dark', darkVars, true],
+] as const) {
+  run(themeName, themeVars, PAGE_CHECKS);
+  for (const scene of SCENES) {
+    const vars = sceneVars(scene, themeVars, dark);
+    run(`${themeName} · ${scene}`, vars, SCENE_CHECKS);
+    checkCaustic(`${themeName} · ${scene}`, vars);
   }
 }
 

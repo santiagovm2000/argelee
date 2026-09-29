@@ -124,10 +124,16 @@ size.
 ## The PDF
 
 `src/app/core/catalog/pdf/catalog-pdf.ts` renders the whole price list as one A4 HTML document
-from the public projection and the site's own locale: cover with the first published piece, pieces
-grouped by how many people they serve (largest first, the unit piece last as a wide block), a page
-of order conditions from `ORDER_CONDITION_GROUPS`, the WhatsApp line. Fonts come from
-`public/fonts/`, photos from the site, glyphs from `public/icons/orders/`. The browser does the
+from the public projection and the site's own locale, dressed like the site: a cover laid out like
+the brand's business card (the Azul Cristal water, sunflowers down the edge, the white logo, the
+first published piece in a round lid with the brand's seal), pieces grouped by how many people they
+serve (largest first, the unit piece last as a wide block) with a round price label on each photo
+and the logo and WhatsApp number heading every page, then a page of order conditions from
+`ORDER_CONDITION_GROUPS` that closes on the order box. The fonts travel inside the document (the
+admin Worker bundles `src/styles/fonts/` and inlines them), so a PDF never depends on what the live
+site serves; photos come from the site, glyphs from `public/icons/orders/`, and the brand drawings from `public/brand/`, embedded
+once as symbols. The logo in the page heads is drawn in place instead: Chrome does not repaint a
+`<use>` inside a table head it repeats on the following pages. The browser does the
 paginating: a card or a row of cards never splits across pages and a band heading never ends one,
 so any number of pieces fits; names and descriptions are clamped to a few lines on the card
 (`PDF_NAME_LINES`, `PDF_DESCRIPTION_LINES`), the site shows them whole.

@@ -43,7 +43,7 @@ export class CatalogSection {
   });
 
   constructor() {
-    // Back from a piece, centre its card so the returning photo has somewhere to land.
+    // Back from a piece, bring its card into view so the returning photo has somewhere to land.
     afterNextRender(() => {
       const id = this.catalog.focus();
       if (id === null) return;
@@ -54,7 +54,7 @@ export class CatalogSection {
     });
   }
 
-  /** Moves the shelf one card in either direction; scroll snapping settles it on a piece. */
+  /** Moves the phone shelf one card in either direction; scroll snapping settles it on a piece. */
   protected nudge(direction: -1 | 1): void {
     if (!this.isBrowser) return;
     const shelf = this.shelf().nativeElement;

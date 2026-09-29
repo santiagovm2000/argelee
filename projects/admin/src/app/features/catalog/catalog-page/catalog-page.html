@@ -90,7 +90,7 @@
               (keydown.arrowUp)="move(row, -1)"
               (keydown.arrowDown)="move(row, 1)"
             >
-              <span class="text-body font-medium text-ink">{{ row.position }}</span>
+              <span class="text-body font-bold text-ink">{{ row.position }}</span>
               <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <circle cx="9" cy="6" r="1.4" />
                 <circle cx="15" cy="6" r="1.4" />
@@ -116,7 +116,7 @@
                 />
               } @else {
                 <span
-                  class="absolute inset-0 grid place-items-center px-1 text-center text-eyebrow text-ink-subtle uppercase"
+                  class="absolute inset-0 grid place-items-center px-1 text-center text-eyebrow text-ink-subtle"
                 >
                   {{ translate(t.catalog.noPhoto) }}
                 </span>
@@ -131,7 +131,7 @@
                 >
                   {{ row.name }}
                 </a>
-                <span class="text-body font-medium text-accent-text">{{ row.price }}</span>
+                <span class="text-body font-bold text-accent-text">{{ row.price }}</span>
               </div>
               <p class="mt-1 text-caption text-ink-muted">{{ row.note }}</p>
               <p class="mt-1 text-caption text-ink-subtle">{{ row.serves }}</p>
@@ -218,8 +218,8 @@
           class="flex min-w-0 flex-1 items-start gap-2 text-body-sm"
           [class.text-ink]="bar().tone === 'neutral'"
           [class.text-ink-muted]="bar().tone === 'ok'"
-          [class.text-vino]="bar().tone === 'warn' || bar().tone === 'error'"
-          [class.font-medium]="bar().tone === 'warn' || bar().tone === 'error'"
+          [class.text-critical]="bar().tone === 'warn' || bar().tone === 'error'"
+          [class.font-bold]="bar().tone === 'warn' || bar().tone === 'error'"
           role="status"
           aria-live="polite"
         >

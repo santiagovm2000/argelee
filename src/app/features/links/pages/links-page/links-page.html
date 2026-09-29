@@ -1,60 +1,71 @@
 <ng-container *transloco="let translate">
   <section
-    class="link-stage mx-auto flex w-full max-w-sm flex-col items-center justify-center px-6 py-12 text-center"
+    class="water link-stage relative isolate flex flex-col items-center justify-center overflow-clip bg-surface px-6 py-14 text-center text-ink"
   >
-    <arg-wordmark size="display" class="text-wordmark" />
-    <div class="ornament mt-5 w-fit" aria-hidden="true"><span></span></div>
-    <p class="mt-4 text-body-sm text-ink-muted">{{ translate(t.links.tagline) }}</p>
+    <arg-caustics />
+    <arg-bloom
+      arrangement="trio"
+      class="pointer-events-none absolute -top-10 -right-16 w-44 sm:w-56"
+    />
+    <arg-bloom
+      arrangement="pair"
+      class="pointer-events-none absolute -bottom-8 -left-14 w-40 sm:w-52"
+    />
 
-    <nav class="mt-10 flex w-full flex-col gap-3" [attr.aria-label]="translate(t.links.title)">
-      <a
-        [href]="order.chatUrl()"
-        argLead="links"
-        target="_blank"
-        rel="noopener"
-        class="button button--whatsapp button--tall w-full gap-3"
-      >
-        <svg class="size-5 shrink-0" aria-hidden="true">
-          <use [attr.href]="icons.whatsapp" />
-        </svg>
-        {{ translate(t.links.whatsapp) }}
-      </a>
-      <a [routerLink]="language.homeUrl()" class="button button--primary button--tall w-full gap-3">
-        <svg
-          class="size-5 shrink-0"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          aria-hidden="true"
+    <div class="relative flex w-full max-w-sm flex-col items-center">
+      <arg-wordmark class="w-64 text-wordmark sm:w-72" />
+      <p class="mt-4 text-body-lg font-bold">{{ translate(t.brand.tagline) }}</p>
+
+      <nav class="mt-10 flex w-full flex-col gap-3" [attr.aria-label]="translate(t.links.title)">
+        <a
+          [href]="order.chatUrl()"
+          argLead="links"
+          target="_blank"
+          rel="noopener"
+          class="button button--whatsapp button--tall w-full"
         >
-          <circle cx="12" cy="12" r="9" />
-          <path stroke-linecap="round" d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
-        </svg>
-        {{ translate(t.links.website) }}
-      </a>
-      <a
-        [href]="site.catalogPdf"
-        target="_blank"
-        rel="noopener"
-        class="button button--secondary button--tall w-full gap-3"
-      >
-        <svg
-          class="size-5 shrink-0"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          aria-hidden="true"
+          <svg class="size-5 shrink-0" aria-hidden="true">
+            <use [attr.href]="icons.whatsapp" />
+          </svg>
+          {{ translate(t.links.whatsapp) }}
+        </a>
+        <a [routerLink]="language.homeUrl()" class="button button--primary button--tall w-full">
+          <svg
+            class="size-5 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path stroke-linecap="round" d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+          </svg>
+          {{ translate(t.links.website) }}
+        </a>
+        <a
+          [href]="site.catalogPdf"
+          target="_blank"
+          rel="noopener"
+          class="button button--secondary button--tall w-full"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8l-5-5Zm0 0v5h5M9 13h6M9 17h6"
-          />
-        </svg>
-        {{ translate(t.links.catalog) }}
-      </a>
-    </nav>
+          <svg
+            class="size-5 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8l-5-5Zm0 0v5h5M9 13h6M9 17h6"
+            />
+          </svg>
+          {{ translate(t.links.catalog) }}
+        </a>
+      </nav>
+    </div>
   </section>
 </ng-container>

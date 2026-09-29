@@ -16,6 +16,7 @@
   "a11y": {
     "skipToContent": "Saltar al contenido",
     "mainNavigation": "Navegación principal",
+    "footerNavigation": "Enlaces del pie de página",
     "changeLanguage": "Cambiar idioma",
     "switchToDarkTheme": "Activar tema oscuro",
     "switchToLightTheme": "Activar tema claro",
@@ -33,17 +34,41 @@
       "en": "English"
     }
   },
+  "brand": {
+    "tagline": "Eleva el nivel de tus celebraciones",
+    "seal": {
+      "top": "Hecho con amor",
+      "bottom": "Para endulzar tu día"
+    }
+  },
   "navigation": {
     "catalog": "Catálogo",
     "orders": "Encargos"
   },
   "landing": {
     "hero": {
-      "eyebrow": "Gelatinas por encargo",
-      "headline": "Delicadeza en cada capa",
-      "body": "Moldeadas a mano y decoradas con fruta natural. Cada pieza se prepara para la fecha de tu celebración: bodas, bautizos, cumpleaños y mesas de postres.",
+      "headline": "Gelatinas que elevan el nivel de tus celebraciones",
+      "body": "Artísticas, moldeadas a mano y decoradas con fruta natural. Cada pieza se prepara para la fecha de tu celebración: bodas, bautizos, cumpleaños y mesas de postres.",
       "primaryAction": "Ver catálogo",
       "secondaryAction": "Cotizar"
+    },
+    "promise": {
+      "title": "El arte que decora tu mesa y conquista tu paladar",
+      "lead": "Diseños transparentes, sabores inolvidables y la seguridad que tu evento merece.",
+      "values": {
+        "punctuality": {
+          "title": "Puntualidad",
+          "body": "Entregamos a la hora acordada y exactamente lo que pactamos contigo."
+        },
+        "organization": {
+          "title": "Organización",
+          "body": "Un proceso claro y ordenado, del primer mensaje hasta la entrega."
+        },
+        "quality": {
+          "title": "Calidad",
+          "body": "Ingredientes de primera y técnica precisa: textura firme y un sabor exquisito."
+        }
+      }
     },
     "orders": {
       "title": "Antes de encargar",
@@ -73,6 +98,8 @@
       "subtitle": "Cada pieza se elabora por encargo, con fruta fresca seleccionada. Elige la tuya y encárgala por WhatsApp."
     },
     "card": {
+      "from": "Desde",
+      "each": "c/u",
       "price": "Desde {{price}}",
       "unitPrice": "Desde {{price}} por unidad",
       "customize": "Ver y encargar"
@@ -124,7 +151,9 @@
     }
   },
   "footer": {
-    "tagline": "Hecho a mano, por encargo."
+    "tagline": "Hecho a mano, por encargo.",
+    "location": "Caracas, Venezuela",
+    "pdf": "Catálogo en PDF"
   },
   "errors": {
     "notFound": {
@@ -135,14 +164,13 @@
   },
   "links": {
     "title": "Enlaces",
-    "tagline": "Gelatinas artesanales con fruta fresca para tus eventos más especiales.",
     "whatsapp": "Escribir por WhatsApp",
     "website": "Página web",
     "catalog": "Catálogo"
   },
   "pdf": {
     "cover": {
-      "sub": "Gelatinas artesanales",
+      "sub": "Gelatinas artísticas por encargo",
       "title": "Catálogo",
       "lead": "Gelatinas artesanales con fruta fresca para tus eventos más especiales.",
       "tag": "Carta de precios"

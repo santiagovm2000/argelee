@@ -21,68 +21,141 @@
   --color-accent-soft: var(--accent-soft);
   --color-focus-ring: var(--focus-ring);
   --color-wordmark: var(--wordmark);
+  --color-sticker: var(--sticker);
+  --color-sticker-ink: var(--sticker-ink);
+  --color-caustic: var(--caustic);
+  --color-critical: var(--critical);
 }
 
-/* Roles, not colours. The page sits on a barely-blue white; panels and cards are
-   pure white; --surface-tint is the pale blue that holds the menu. The primary
-   call to action is ink, not blue: blue is for labels, links and rules.
-   --surface-selected is the fill of a chosen chip and --surface-hover the fill
-   of any quiet control under the pointer: pale on light, a clear step up from
-   the panel on dark. --line is a hairline, --line-tint the decorative blue rule and border, and
-   --line-strong the boundary of a control that has no text to identify it.
-   `bun run contrast` enforces every pairing in both themes. */
+/* Roles, not colours. The page is white, the way the brand's paper is; the
+   pale aqua --surface-tint holds the menu. The one call to action is Naranja
+   Coral with ink on it; Azul Cristal is for links, labels and the logo.
+   --sticker is the Amarillo Mango of the round price labels. --line is a
+   hairline, --line-tint the decorative aqua border, and --line-strong the
+   boundary of a control that has no text to identify it. --caustic is the
+   colour the water pattern is drawn in over a scene: it always moves away
+   from the text colour, so the pattern can only raise contrast.
+   `bun run contrast` enforces every pairing in both themes and every scene. */
 :root {
-  --surface: var(--color-brand-50);
+  --surface: var(--color-neutral-0);
   --surface-raised: var(--color-neutral-0);
-  --surface-sunken: var(--color-neutral-100);
-  --surface-tint: var(--color-brand-100);
-  --surface-selected: var(--color-brand-100);
-  --surface-hover: var(--color-brand-100);
+  --surface-sunken: var(--color-neutral-50);
+  --surface-tint: var(--color-turquoise-50);
+  --surface-selected: var(--color-turquoise-100);
+  --surface-hover: var(--color-turquoise-50);
   --ink: var(--color-neutral-900);
-  --ink-muted: var(--color-neutral-500);
+  --ink-muted: var(--color-neutral-600);
   --ink-subtle: var(--color-neutral-500);
   --ink-inverse: var(--color-neutral-0);
   --line: var(--color-neutral-200);
-  --line-tint: var(--color-brand-200);
-  --line-strong: var(--color-brand-600);
-  --accent: var(--color-neutral-900);
-  --accent-hover: var(--color-neutral-800);
-  --accent-ink: var(--color-neutral-0);
-  --accent-text: var(--color-brand-700);
-  --accent-soft: var(--color-brand-100);
-  --focus-ring: var(--color-brand-600);
-  --wordmark: var(--color-vino);
+  --line-tint: var(--color-turquoise-200);
+  --line-strong: var(--color-crystal-600);
+  --accent: var(--color-coral-400);
+  --accent-hover: var(--color-coral-300);
+  --accent-ink: var(--color-neutral-950);
+  --accent-text: var(--color-crystal-700);
+  --accent-soft: var(--color-turquoise-50);
+  --focus-ring: var(--color-crystal-600);
+  --wordmark: var(--color-crystal-500);
+  --sticker: var(--color-mango-300);
+  --sticker-ink: var(--color-neutral-950);
+  --caustic: var(--color-neutral-0);
+  --critical: var(--color-danger);
 
   color-scheme: light;
 }
 
 .arg-dark {
   --surface: var(--color-neutral-950);
-  --surface-raised: var(--color-neutral-900);
-  --surface-sunken: var(--color-brand-950);
-  --surface-tint: var(--color-brand-950);
-  --surface-selected: var(--color-brand-800);
-  --surface-hover: var(--color-brand-900);
-  --ink: var(--color-neutral-100);
-  --ink-muted: var(--color-neutral-400);
-  --ink-subtle: var(--color-neutral-500);
+  --surface-raised: var(--color-neutral-800);
+  --surface-sunken: var(--color-neutral-950);
+  --surface-tint: var(--color-neutral-900);
+  --surface-selected: var(--color-turquoise-900);
+  --surface-hover: var(--color-neutral-800);
+  --ink: var(--color-neutral-50);
+  --ink-muted: var(--color-neutral-300);
+  --ink-subtle: var(--color-neutral-400);
   --ink-inverse: var(--color-neutral-950);
   --line: var(--color-neutral-800);
-  --line-tint: var(--color-brand-400);
-  --line-strong: var(--color-brand-400);
-  --accent: var(--color-neutral-100);
-  --accent-hover: var(--color-neutral-0);
+  --line-tint: var(--color-turquoise-800);
+  --line-strong: var(--color-turquoise-400);
+  --accent: var(--color-coral-400);
+  --accent-hover: var(--color-coral-300);
   --accent-ink: var(--color-neutral-950);
-  --accent-text: var(--color-brand-200);
-  --accent-soft: var(--color-brand-950);
-  --focus-ring: var(--color-brand-300);
-  --wordmark: var(--color-vino-soft);
+  --accent-text: var(--color-turquoise-300);
+  --accent-soft: var(--color-turquoise-950);
+  --focus-ring: var(--color-turquoise-300);
+  --wordmark: var(--color-turquoise-400);
+  --sticker: var(--color-mango-300);
+  --sticker-ink: var(--color-neutral-950);
+  --caustic: var(--color-neutral-950);
+  --critical: var(--color-danger-soft);
 
   color-scheme: dark;
 }
 
+/* The brand's two waters. A scene redefines the same roles, so everything
+   inside it keeps writing text-ink or bg-surface and simply reads right.
+   .water is the Azul Cristal field of the hero, the footer and the link hub,
+   with the white logo of the brand's own cover; ink on it is the deep navy of
+   the brand's posts. .lagoon is the Turquesa Vital band. By night both deepen
+   and the text turns white. Declared after the themes so a scene wins. */
+.water {
+  --surface: var(--color-crystal-500);
+  --surface-raised: var(--color-neutral-0);
+  --surface-hover: var(--color-crystal-400);
+  --ink: var(--color-neutral-950);
+  --ink-muted: var(--color-neutral-950);
+  --line-tint: var(--color-crystal-300);
+  --line-strong: var(--color-neutral-950);
+  --accent-text: var(--color-neutral-950);
+  --focus-ring: var(--color-neutral-950);
+  --wordmark: var(--color-neutral-0);
+  --caustic: var(--color-neutral-0);
+}
+
+.lagoon {
+  --surface: var(--color-turquoise-400);
+  --surface-raised: var(--color-neutral-0);
+  --surface-hover: var(--color-turquoise-300);
+  --ink: var(--color-neutral-950);
+  --ink-muted: var(--color-neutral-800);
+  --line-tint: var(--color-turquoise-200);
+  --line-strong: var(--color-neutral-950);
+  --accent-text: var(--color-neutral-950);
+  --focus-ring: var(--color-neutral-950);
+  --wordmark: var(--color-neutral-950);
+  --caustic: var(--color-neutral-0);
+}
+
+.arg-dark .water {
+  --surface: var(--color-crystal-800);
+  --surface-hover: var(--color-crystal-700);
+  --ink: var(--color-neutral-0);
+  --ink-muted: var(--color-crystal-100);
+  --line-tint: var(--color-crystal-600);
+  --line-strong: var(--color-neutral-0);
+  --accent-text: var(--color-mango-300);
+  --focus-ring: var(--color-mango-300);
+  --wordmark: var(--color-neutral-0);
+  --caustic: var(--color-neutral-950);
+}
+
+.arg-dark .lagoon {
+  --surface: var(--color-turquoise-900);
+  --surface-hover: var(--color-turquoise-800);
+  --ink: var(--color-neutral-0);
+  --ink-muted: var(--color-turquoise-100);
+  --line-tint: var(--color-turquoise-700);
+  --line-strong: var(--color-neutral-0);
+  --accent-text: var(--color-mango-300);
+  --focus-ring: var(--color-mango-300);
+  --wordmark: var(--color-neutral-0);
+  --caustic: var(--color-neutral-950);
+}
+
 @layer base {
-  /* The scrollbar belongs to the palette: a thin azul thumb on no track. The
+  /* The scrollbar belongs to the palette: a thin aqua thumb on no track. The
      standard properties are what Chromium honours now, so no ::-webkit rules. */
   html {
     -webkit-text-size-adjust: 100%;
@@ -104,7 +177,7 @@
     font-family: var(--font-body);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
-    font-weight: 300;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -114,7 +187,7 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 900;
     text-wrap: balance;
   }
 
@@ -140,7 +213,7 @@
   :focus-visible {
     outline: 2px solid var(--color-focus-ring);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0.5rem;
   }
 
   img,

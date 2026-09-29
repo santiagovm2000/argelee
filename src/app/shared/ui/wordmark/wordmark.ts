@@ -1,14 +1,14 @@
-import { Component, input } from '@angular/core';
+import { Component } from '@angular/core';
 import { SITE } from '../../../core/config/app.constants';
+import { BRAND_ART } from '../brand/brand-art';
 
-export type WordmarkSize = 'compact' | 'display';
-
+/** The ArGeles logo, drawn in the current text colour at the width its host is given. */
 @Component({
   selector: 'arg-wordmark',
   templateUrl: './wordmark.html',
-  host: { class: 'inline-block' },
+  host: { class: 'block' },
 })
 export class Wordmark {
-  readonly size = input<WordmarkSize>('compact');
-  protected readonly wordmark = SITE.wordmark;
+  protected readonly name = SITE.wordmark;
+  protected readonly art = BRAND_ART.logo;
 }

@@ -1,6 +1,8 @@
-<span
-  class="font-script text-current"
-  [class.text-script-sm]="size() === 'compact'"
-  [class.text-script]="size() === 'display'"
-  >{{ wordmark }}</span
+<svg
+  class="h-auto w-full fill-current"
+  [attr.viewBox]="art.viewBox"
+  role="img"
+  [attr.aria-label]="name"
 >
+  <use [attr.href]="art.href" />
+</svg>

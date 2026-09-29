@@ -54,8 +54,6 @@ const DAILY = 'public, max-age=86400, stale-while-revalidate=604800';
 const cached = (cacheControl: string): Readonly<Record<string, string>> => ({
   'Cache-Control': cacheControl,
 });
-// The PDF renderer loads the fonts from a page with no origin, and fonts are CORS-checked.
-const CORS_ANY_ORIGIN = { 'Access-Control-Allow-Origin': '*' } as const;
 export const ASSET_RULES: readonly (readonly [
   pattern: string,
   headers: Readonly<Record<string, string>>,
@@ -63,10 +61,10 @@ export const ASSET_RULES: readonly (readonly [
   ['/*.js', cached(IMMUTABLE)],
   ['/*.css', cached(IMMUTABLE)],
   ['/media/*', cached(IMMUTABLE)],
-  ['/fonts/*', { ...cached(DAILY), ...CORS_ANY_ORIGIN }],
   ['/images/*', cached(DAILY)],
   ['/video/*', cached(DAILY)],
   ['/icons/*', cached(DAILY)],
+  ['/brand/*', cached(DAILY)],
 ];
 
 function applyHeaders(response: Response, headers: Readonly<Record<string, string>>): Response {

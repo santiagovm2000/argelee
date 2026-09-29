@@ -1,0 +1,18 @@
+<svg
+  class="caustics__layer opacity-14"
+  [class.depth-far]="motion() === 'depth'"
+  [class.drift-far]="motion() === 'drift'"
+  [attr.viewBox]="light.viewBox"
+  preserveAspectRatio="xMidYMid slice"
+>
+  <use [attr.href]="light.href" />
+</svg>
+<svg
+  class="caustics__layer opacity-30"
+  [class.depth-mid]="motion() === 'depth'"
+  [class.drift-mid]="motion() === 'drift'"
+  [attr.viewBox]="glint.viewBox"
+  preserveAspectRatio="xMidYMid slice"
+>
+  <use [attr.href]="glint.href" />
+</svg>

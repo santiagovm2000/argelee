@@ -18,6 +18,7 @@ export const SITE = {
   whatsappNumber: '584241860627',
   // The published price list, relative so it follows the base href.
   catalogPdf: 'ArGeles-catalogo.pdf',
+  address: { locality: 'Caracas', country: 'VE' },
 } as const;
 
 export const WHATSAPP_BASE_URL = 'https://wa.me/';

@@ -1,36 +1,36 @@
 /**
- * Favicon from the wordmark. Run with `bun run favicon` after changing the
- * wordmark font or the brand colours.
+ * Favicon from the brand's monogram. Run with `bun run favicon` after changing
+ * the monogram drawing or the brand colours.
  *
- * Outlines the "A" of ArGeles straight from the bundled Parisienne file, so
- * the icon never depends on a font loading, and paints it in the wordmark's
- * wine with no background: on the tab it reads like the logo itself. The SVG
- * follows the browser's colour scheme the way the wordmark follows the
- * site's; the ICO is transparent too. Only the iOS touch icon gets a pale
- * brand tile, because iOS refuses transparency there.
+ * Draws the "AG" monogram straight from public/brand/monogram.svg, so the icon
+ * never depends on anything loading, and paints it in the logo's Azul Cristal
+ * with no background: on the tab it reads like the logo itself. The SVG follows
+ * the browser's colour scheme the way the logo follows the site's; the ICO is
+ * transparent too. Only the iOS touch icon gets a tile, the brand's blue with
+ * the monogram in white, because iOS refuses transparency there.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import * as fontkit from 'fontkit';
 import sharp from 'sharp';
 import { tokenHex } from './color';
 
 const ROOT = resolve(import.meta.dir, '..');
-const FONT_FILE = join(ROOT, 'src', 'styles', 'fonts', 'parisienne-latin.woff2');
+const ART_FILE = join(ROOT, 'public', 'brand', 'monogram.svg');
 const TOKENS_FILE = join(ROOT, 'src', 'styles', 'tokens.css');
 const OUT_DIR = join(ROOT, 'public');
 
-const LETTER = 'A';
 const TILE = 64;
 const INSET = 2;
+const TILE_INSET = 12;
 const ICO_SIZES = [16, 32, 48] as const;
 const TOUCH_ICON_SIZE = 180;
 
-// Token names without the --color- prefix: the wordmark's colour per scheme,
-// and the tile behind the touch icon.
+// Token names without the --color- prefix: the monogram's colour per scheme,
+// and the tile and mark of the touch icon.
 const PALETTE = {
-  mark: { light: 'vino', dark: 'vino-soft' },
-  tile: 'brand-100',
+  mark: { light: 'crystal-500', dark: 'turquoise-400' },
+  tile: 'crystal-500',
+  tileMark: 'neutral-0',
 } as const;
 
 const ICO_HEADER_BYTES = 6;
@@ -46,35 +46,31 @@ const colors = {
     dark: tokenHex(tokensCss, PALETTE.mark.dark),
   },
   tile: tokenHex(tokensCss, PALETTE.tile),
+  tileMark: tokenHex(tokensCss, PALETTE.tileMark),
 };
 
-const font = fontkit.openSync(FONT_FILE);
-if (!('glyphForCodePoint' in font)) throw new Error('expected a single font, got a collection');
-const glyph = font.glyphForCodePoint(LETTER.codePointAt(0) ?? 0);
-const { minX, minY, maxX, maxY } = glyph.bbox;
+const art = readFileSync(ART_FILE, 'utf8');
+const viewBox = /viewBox="([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+)"/.exec(art);
+const drawn = /\sd="([^"]+)"/.exec(art)?.[1];
+if (viewBox === null || drawn === undefined)
+  throw new Error('favicon: monogram.svg has no drawing');
+const outline: string = drawn;
+const [artWidth, artHeight] = [Number(viewBox[3]), Number(viewBox[4])];
 
-// Fit the glyph's box inside the tile, keeping its proportions, and flip the
-// font's y-up coordinates into SVG's y-down.
-const box = TILE - INSET * 2;
-const scale = Math.min(box / (maxX - minX), box / (maxY - minY));
-const offsetX = (TILE - (maxX - minX) * scale) / 2 - minX * scale;
-const offsetY = (TILE - (maxY - minY) * scale) / 2 + maxY * scale;
-const transform =
-  'translate(' +
-  offsetX.toFixed(3) +
-  ' ' +
-  offsetY.toFixed(3) +
-  ') scale(' +
-  scale.toFixed(5) +
-  ' ' +
-  (-scale).toFixed(5) +
-  ')';
-const outline = glyph.path.toSVG();
+/** The transform that fits the monogram, centred, inside the tile less an inset. */
+function fit(inset: number): string {
+  const box = TILE - inset * 2;
+  const scale = Math.min(box / artWidth, box / artHeight);
+  const x = (TILE - artWidth * scale) / 2;
+  const y = (TILE - artHeight * scale) / 2;
+  return 'translate(' + x.toFixed(3) + ' ' + y.toFixed(3) + ') scale(' + scale.toFixed(5) + ')';
+}
 
 function svg(options: { tile: boolean; themed: boolean }): string {
   const dark = options.themed
     ? ' @media (prefers-color-scheme: dark) { .mark { fill: ' + colors.mark.dark + '; } }'
     : '';
+  const fill = options.tile ? colors.tileMark : colors.mark.light;
   const tile = options.tile
     ? '<rect fill="' +
       colors.tile +
@@ -90,9 +86,13 @@ function svg(options: { tile: boolean; themed: boolean }): string {
       ' ' +
       String(TILE) +
       '">',
-    '<style>.mark { fill: ' + colors.mark.light + '; }' + dark + '</style>',
+    '<style>.mark { fill: ' + fill + '; }' + dark + '</style>',
     tile,
-    '<path class="mark" transform="' + transform + '" d="' + outline + '"/>',
+    '<path class="mark" fill-rule="evenodd" transform="' +
+      fit(options.tile ? TILE_INSET : INSET) +
+      '" d="' +
+      outline +
+      '"/>',
     '</svg>',
   ]
     .filter((line) => line !== '')
@@ -138,9 +138,7 @@ writeFileSync(
 );
 
 console.log(
-  'favicon: ' +
-    LETTER +
-    ' in ' +
+  'favicon: the AG monogram in ' +
     colors.mark.light +
     ' -> favicon.svg, favicon.ico (' +
     ICO_SIZES.join('/') +
