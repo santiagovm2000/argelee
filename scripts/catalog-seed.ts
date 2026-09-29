@@ -25,7 +25,14 @@ import {
   type StoredProduct,
 } from '../src/app/core/catalog/catalog.document';
 import type { ProductPhoto } from '../src/app/core/catalog/catalog.model';
-import { KV_BINDING, R2_BUCKET, runWrangler, storageTarget } from './lib/wrangler';
+import {
+  isAuthFailure,
+  KV_BINDING,
+  loginHint,
+  R2_BUCKET,
+  runWrangler,
+  storageTarget,
+} from './lib/wrangler';
 
 const ROOT = resolve(import.meta.dir, '..');
 const SEED_DIR = join(ROOT, 'assets-src', 'catalog', 'seed');
@@ -67,12 +74,17 @@ async function describePhoto(file: string): Promise<{ photo: ProductPhoto; path:
   };
 }
 
+/** Whether the target already holds a catalogue; a failed read aborts instead of counting as absent. */
 function existingDocument(): boolean {
   const result = runWrangler(
     ['kv', 'key', 'get', CATALOG_KV_KEYS.document, '--binding', KV_BINDING],
     target,
   );
-  return result.ok && result.stdout.includes('{');
+  if (!result.ok) {
+    const hint = isAuthFailure(result) ? ` Cloudflare rejected the login; ${loginHint()}.` : '';
+    throw new Error(`could not check for an existing catalogue.${hint}\n${result.stderr}`);
+  }
+  return result.stdout.includes('{');
 }
 
 function putKey(key: string, value: string | { path: string }): void {

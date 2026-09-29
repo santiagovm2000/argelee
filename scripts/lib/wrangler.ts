@@ -9,6 +9,8 @@ export const R2_BUCKET = 'argelees-media';
 
 export type StorageTarget = 'local' | 'remote';
 
+const AUTH_FAILURE_PATTERN = / - 40[13]: |Authentication error|CLOUDFLARE_API_TOKEN|Not logged in/;
+
 export interface WranglerResult {
   readonly ok: boolean;
   readonly stdout: string;
@@ -36,6 +38,18 @@ export function runWrangler(args: readonly string[], target: StorageTarget): Wra
     stdout: result.stdout.toString(),
     stderr: result.stderr.toString(),
   };
+}
+
+/** True when Cloudflare refused wrangler's credentials: an expired or missing login, not a missing value. */
+export function isAuthFailure(result: WranglerResult): boolean {
+  return !result.ok && AUTH_FAILURE_PATTERN.test(result.stderr);
+}
+
+/** What to fix after an auth failure: the API token when one is set (CI), otherwise the OAuth login. */
+export function loginHint(): string {
+  return process.env['CLOUDFLARE_API_TOKEN'] === undefined
+    ? 'run `bun x wrangler login`'
+    : 'check that CLOUDFLARE_API_TOKEN is valid and can read Workers KV';
 }
 
 /** Wrangler prints a banner before the value; the value is the JSON, so start there. */

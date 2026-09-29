@@ -15,8 +15,10 @@ import { CATALOG_KV_KEYS } from '../src/app/core/catalog/catalog.constants';
 import { parseCatalogDocument } from '../src/app/core/catalog/catalog.document';
 import { toPublicCatalog } from '../src/app/core/catalog/projection';
 import {
+  isAuthFailure,
   jsonFromWranglerOutput,
   KV_BINDING,
+  loginHint,
   runWrangler,
   type StorageTarget,
 } from './lib/wrangler';
@@ -40,11 +42,19 @@ const result = runWrangler(
   ['kv', 'key', 'get', CATALOG_KV_KEYS.document, '--binding', KV_BINDING],
   target,
 );
-if (!result.ok || !result.stdout.includes('{')) {
+if (!result.ok) {
   console.error(
-    `catalog:pull — could not read the ${target} catalogue from KV. Seed it first with \`bun run catalog:seed --${target}\`.`,
+    isAuthFailure(result)
+      ? `catalog:pull — Cloudflare rejected the wrangler login. Retry; if it fails again, ${loginHint()}.`
+      : `catalog:pull — wrangler could not read the ${target} catalogue from KV.`,
   );
   console.error(result.stderr.trim());
+  process.exit(1);
+}
+if (!result.stdout.includes('{')) {
+  console.error(
+    `catalog:pull — there is no ${target} catalogue in KV yet. Seed it with \`bun run catalog:seed --${target}\`.`,
+  );
   process.exit(1);
 }
 
