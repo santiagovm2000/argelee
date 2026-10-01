@@ -17,7 +17,11 @@ The site is Spanish only and lives at the root. Path segments are English on pur
 The structural words (`catalog`, `links`, the `#catalog` and `#orders` anchors) are English because
 that is what the code, the Worker and the sitemap all build URLs from; a Spanish segment would have
 to be translated in every one of them. The owner wants no Spanish structural segment in the address
-bar, and no redirects from old paths: a path that changes simply changes.
+bar, and no redirects from old paths: a path that changes simply changes. The addresses earlier
+versions had (`/catalogo`, `/enlaces`, the `/en` edition, pieces by their old slug, the PDF's old
+name) answer **410 Gone** with the not-found page, so search engines drop them for good instead of
+retrying (`workers/site/retired-paths.ts`); a path that is retired joins that list, it is never
+redirected.
 
 `localizedUrl()`, `pathSegments()` and `productSegments()` in `core/config/routes.ts` are the only
 places URL shape is decided — they are unit-tested because the canonical depends on them being
@@ -85,7 +89,7 @@ a missing asset would never reach the Worker.
 | `sitemap.xml` | the site Worker, `workers/site/sitemap.ts`   | fixed pages plus every published piece in KV, always current           |
 | `robots.txt`  | generated into `dist/` by `bun run finalize` | points at the sitemap, or disallows everything on a preview deployment |
 | `llms.txt`    | generated into `dist/` by `bun run finalize` | orientation for AI crawlers                                            |
-| `404.html`    | copy of the CSR shell, by `bun run finalize` | served with a 404 status by the Worker for every unknown path          |
+| `404.html`    | copy of the CSR shell, by `bun run finalize` | served by the Worker: 404 for an unknown path, 410 for a retired one   |
 
 `bun run finalize` runs inside `bun run build`. The sitemap is not a build artefact any more: it is
 answered live from the catalogue, so a piece published from the panel is listed within a minute.
@@ -96,7 +100,8 @@ answered live from the catalogue, so a piece published from the panel is listed 
   `.github/workflows/deploy.yml`. Every canonical, `og:image` and sitemap URL derives from it. It
   defaults to `http://localhost:4200`, so a build without it is not publishable.
 - **URLs carry no trailing slash.** `wrangler.jsonc` sets `html_handling: drop-trailing-slash`, so
-  the served URL always equals the canonical one. Unknown paths get `404.html` with a real 404.
+  the served URL always equals the canonical one. Unknown paths get `404.html` with a real 404;
+  retired ones get it with 410.
 - **One hostname.** `www.argelees.com` and plain `http://` redirect (301) to
   `https://argelees.com` through Cloudflare zone rules, and the Worker has no `workers.dev` URL, so
   there is a single indexable copy of the site. The panel lives on `admin.argelees.com`, behind a

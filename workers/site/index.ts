@@ -20,12 +20,14 @@ import { kvCatalogStore, r2ObjectStore } from '../shared/cloudflare-stores';
 import { handleCatalogApi } from './catalog-api';
 import { handlePhoto } from './photos';
 import { productShellMeta } from './product-shell';
+import { isRetiredPath } from './retired-paths';
 import { renderProductShell } from './shell-render';
 import { renderSitemap } from './sitemap';
 
 // The public site's Worker. Static assets answer first and for free; this runs
 // only for what is not a file: the catalogue API, uploaded photos, the sitemap,
-// the pages of pieces published since the last build, and the 404 page.
+// the pages of pieces published since the last build, and the 404 page, which
+// the addresses of earlier versions get with 410 Gone instead.
 
 /** A photo is immutable by key, so each data centre keeps it after the first read from R2. */
 async function servePhoto(
@@ -68,11 +70,14 @@ async function asset(env: SiteEnv, url: URL, path: string): Promise<Response> {
   return env.ASSETS.fetch(new Request(new URL(path, url.origin)));
 }
 
-async function notFound(env: SiteEnv, url: URL): Promise<Response> {
+/** The not-found page, with 404 for an unknown path or 410 for one that existed once and never will again. */
+async function notFound(
+  env: SiteEnv,
+  url: URL,
+  status: number = HTTP_STATUS.notFound,
+): Promise<Response> {
   const page = await asset(env, url, NOT_FOUND_ASSET_PATH);
-  return withSecurityHeaders(
-    new Response(page.body, { status: HTTP_STATUS.notFound, headers: page.headers }),
-  );
+  return withSecurityHeaders(new Response(page.body, { status, headers: page.headers }));
 }
 
 export default {
@@ -88,6 +93,7 @@ export default {
       return servePhoto(request, url.pathname.slice(1), env, ctx);
     }
     if (url.pathname === CATALOG_PDF_PUBLIC_PATH) return servePdf(request, env);
+    if (isRetiredPath(url.pathname)) return notFound(env, url, HTTP_STATUS.gone);
 
     const document = await catalog.document();
     const published = document === null ? null : toPublicCatalog(document);

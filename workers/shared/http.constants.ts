@@ -11,6 +11,7 @@ export const HTTP_STATUS = {
   forbidden: 403,
   notFound: 404,
   methodNotAllowed: 405,
+  gone: 410,
   preconditionFailed: 412,
   unprocessable: 422,
   payloadTooLarge: 413,
