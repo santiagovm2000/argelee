@@ -15,7 +15,6 @@ export const LEAD_EVENT = 'generate_lead';
 // Which button opened WhatsApp, so the reports can tell the hero from the widget.
 export const LEAD_SOURCES = {
   hero: 'hero',
-  orders: 'orders',
   widget: 'widget',
   links: 'links',
   product: 'product',

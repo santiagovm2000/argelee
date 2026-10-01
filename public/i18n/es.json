@@ -75,7 +75,6 @@
     },
     "orders": {
       "title": "Antes de encargar",
-      "action": "Escribir por WhatsApp",
       "groups": {
         "piece": "Tu pieza",
         "payment": "Reserva y pago",
