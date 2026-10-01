@@ -18,7 +18,7 @@ describe('productShellMeta', () => {
     expect(meta?.language).toBe('es');
     expect(meta?.title).toContain(first.text.es.name);
     expect(meta?.canonical).toBe(`${ORIGIN}/catalog/${first.id}`);
-    expect(meta?.image).toContain(first.photo.key);
+    expect(meta?.image).toContain(first.photos[0].key);
     expect(meta?.image).toContain('format=jpeg');
   });
 

@@ -1,4 +1,3 @@
-import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, effect, inject, input, linkedSignal, untracked } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -19,8 +18,6 @@ import { localizedText } from '../../../../core/catalog/localized-text';
 import { OrderService } from '../../../../core/catalog/order.service';
 import { defaultQuantity, formatPrice, listedPrice, quote } from '../../../../core/catalog/pricing';
 import { productSegments, SECTION_IDS } from '../../../../core/config/routes';
-import { IMAGE_SIZES } from '../../../../core/images/image.constants';
-import { srcsetFor } from '../../../../core/images/image.loader';
 import { photoImage } from '../../../../core/images/photo';
 import { LanguageService } from '../../../../core/i18n/language.service';
 import { T } from '../../../../core/i18n/translation-keys.generated';
@@ -29,6 +26,7 @@ import { Lead } from '../../../../shared/directives/lead';
 import { ChoiceList, type ChoiceOption } from '../../../../shared/ui/choice-list/choice-list';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { choiceIconUrl } from '../../../../shared/ui/icons/icons';
+import { PhotoGallery } from '../../../../shared/ui/photo-gallery/photo-gallery';
 import { QuantityInput } from '../../../../shared/ui/quantity-input/quantity-input';
 
 const QUANTITY_FIELD_NAME = 'quantity';
@@ -38,15 +36,7 @@ const NO_TEXT: ProductText = { name: '', note: '', description: '' };
 
 @Component({
   selector: 'arg-product-page',
-  imports: [
-    NgOptimizedImage,
-    RouterLink,
-    TranslocoDirective,
-    ChoiceList,
-    EmptyState,
-    QuantityInput,
-    Lead,
-  ],
+  imports: [RouterLink, TranslocoDirective, ChoiceList, EmptyState, PhotoGallery, QuantityInput, Lead],
   templateUrl: './product-page.html',
 })
 export class ProductPage {
@@ -60,7 +50,6 @@ export class ProductPage {
 
   protected readonly t = T;
   protected readonly sections = SECTION_IDS;
-  protected readonly sizes = IMAGE_SIZES.product;
   protected readonly quantityName = QUANTITY_FIELD_NAME;
 
   protected readonly product = computed(() => this.catalog.find(this.id()));
@@ -68,15 +57,6 @@ export class ProductPage {
     const product = this.product();
     return product === null ? NO_TEXT : localizedText(product.text, this.language.current());
   });
-  protected readonly image = computed(() => {
-    const product = this.product();
-    return product === null ? null : photoImage(product.photo);
-  });
-  protected readonly srcset = computed(() => {
-    const image = this.image();
-    return image === null ? '' : srcsetFor(image);
-  });
-
   // Resets to what the piece opens at whenever the piece changes: one whole piece, or the usual number of units.
   protected readonly quantity = linkedSignal<Product | null, number>({
     source: this.product,
@@ -157,7 +137,7 @@ export class ProductPage {
       descriptionKey: T.meta.product.description,
       params: { name, description },
       segments: productSegments(product.id),
-      image: photoImage(product.photo).social,
+      image: photoImage(product.photos[0]).social,
       product: { name, description, lowPrice: listedPrice(product), currency: CURRENCY_CODE },
     });
   }

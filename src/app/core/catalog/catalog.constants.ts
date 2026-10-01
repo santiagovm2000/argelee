@@ -55,5 +55,9 @@ export const CATALOG_PDF_KEY = 'catalog/ArGeles-catalogo.pdf';
 // replaced photo is a new key and the old one can be cached forever.
 export const PHOTO_KEY_PREFIX = 'photos/';
 
+// A piece shows a small gallery, its cover first. The cap keeps the document,
+// and the snapshot the site is built with, small.
+export const MAX_PHOTOS_PER_PIECE = 8;
+
 // A piece's id is a UUID minted by the panel; it is also the piece's URL segment.
 export const PRODUCT_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;

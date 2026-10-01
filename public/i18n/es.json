@@ -26,7 +26,10 @@
     "nextPiece": "Pieza siguiente",
     "pieces": "Piezas de la carta",
     "fewerUnits": "Una unidad menos",
-    "moreUnits": "Una unidad más"
+    "moreUnits": "Una unidad más",
+    "gallery": "Fotos de {{name}}",
+    "galleryPhoto": "{{name}}, foto {{position}} de {{count}}",
+    "showPhoto": "Ver la foto {{position}} de {{count}}"
   },
   "common": {
     "language": {

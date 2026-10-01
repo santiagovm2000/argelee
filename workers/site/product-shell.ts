@@ -54,7 +54,7 @@ export function productShellMeta(
     title: interpolate(locale.meta.product.title, { name: text.name }),
     description: interpolate(locale.meta.product.description, { description: text.description }),
     canonical: absolute(localizedUrl(language, pageSegments)),
-    image: absolute(photoSocialUrl(product.photo.key, transforms)),
+    image: absolute(photoSocialUrl(product.photos[0].key, transforms)),
   };
 }
 

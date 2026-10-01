@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { PRICE_STEP } from '@core/catalog/catalog.constants';
+import { MAX_PHOTOS_PER_PIECE, PRICE_STEP } from '@core/catalog/catalog.constants';
 import {
   newCatalogVersion,
   parseCatalogDocument,
   validateCatalogDocument,
 } from '@core/catalog/catalog.document';
-import { CATALOG_FIXTURE, fixtureJson } from '../../fixtures/catalog.fixture';
+import { CATALOG_FIXTURE, FIXTURE_PLACEHOLDER, fixtureJson } from '../../fixtures/catalog.fixture';
 
 const UUID_SHAPE = /^[0-9a-f-]{36}$/;
 
@@ -14,6 +14,13 @@ const firstProduct = (json: ReturnType<typeof fixtureJson>): Record<string, unkn
   if (product === undefined) throw new Error('fixture has no products');
   return product;
 };
+
+const photoJson = (name: string): Record<string, unknown> => ({
+  key: `photos/${name}.jpg`,
+  width: 1200,
+  height: 900,
+  placeholder: FIXTURE_PLACEHOLDER,
+});
 
 const errorOf = (input: unknown): string => {
   const result = validateCatalogDocument(input);
@@ -83,16 +90,56 @@ describe('validateCatalogDocument', () => {
 
   it('rejects a published piece without a photo', () => {
     const json = fixtureJson();
-    firstProduct(json)['photo'] = null;
-    expect(errorOf(json)).toContain('a published piece needs a photo');
+    firstProduct(json)['photos'] = [];
+    expect(errorOf(json)).toBe('document.products[0].photos: a published piece needs a photo');
   });
 
   it('accepts an unpublished piece without a photo', () => {
     const json = fixtureJson();
     const product = firstProduct(json);
-    product['photo'] = null;
+    product['photos'] = [];
     product['published'] = false;
     expect(validateCatalogDocument(json).ok).toBe(true);
+  });
+
+  it('keeps a gallery in the order it was given, the cover first', () => {
+    const json = fixtureJson();
+    const photos = [photoJson('cover'), photoJson('side'), photoJson('slice')];
+    firstProduct(json)['photos'] = photos;
+    expect(parseCatalogDocument(json).products[0]?.photos).toEqual(photos);
+  });
+
+  it('rejects the same photo twice and a gallery over the cap', () => {
+    const repeated = fixtureJson();
+    firstProduct(repeated)['photos'] = [photoJson('cover'), photoJson('cover')];
+    expect(errorOf(repeated)).toContain('photos: photo "photos/cover.jpg" appears more than once');
+
+    const crowded = fixtureJson();
+    firstProduct(crowded)['photos'] = Array.from({ length: MAX_PHOTOS_PER_PIECE + 1 }, (_, index) =>
+      photoJson(`view-${index}`),
+    );
+    expect(errorOf(crowded)).toContain(`must hold at most ${MAX_PHOTOS_PER_PIECE} photos`);
+  });
+
+  it('reads a document saved with a single photo as a gallery of one', () => {
+    const json = fixtureJson();
+    const [published, hidden] = json.products;
+    if (published === undefined || hidden === undefined) throw new Error('need two products');
+    delete published['photos'];
+    published['photo'] = photoJson('legacy');
+    delete hidden['photos'];
+    hidden['photo'] = null;
+    hidden['published'] = false;
+
+    const [first, second] = parseCatalogDocument(json).products;
+    expect(first?.photos).toEqual([photoJson('legacy')]);
+    expect(second?.photos).toEqual([]);
+  });
+
+  it('requires the photos when neither shape is there', () => {
+    const json = fixtureJson();
+    delete firstProduct(json)['photos'];
+    expect(errorOf(json)).toBe('document.products[0].photos: must be an array');
   });
 
   it('requires the default language and refuses an unknown one', () => {

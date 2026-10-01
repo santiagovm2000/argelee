@@ -5,7 +5,7 @@ import {
   expectLocalizedText,
   expectNullable,
   expectChoices,
-  expectPhoto,
+  expectGallery,
   expectPrice,
   expectRecord,
   expectProductId,
@@ -28,11 +28,12 @@ export interface PublicCatalog {
 
 /** A published piece with a photo becomes a product; anything else is not for visitors. */
 export function toPublicProduct(stored: StoredProduct): Product | null {
-  if (!stored.published || stored.photo === null) return null;
+  const [cover, ...rest] = stored.photos;
+  if (!stored.published || cover === undefined) return null;
   return {
     id: stored.id,
     text: stored.text,
-    photo: stored.photo,
+    photos: [cover, ...rest],
     price: stored.pricing.price,
     serves: stored.serves,
     flavours: stored.flavours,
@@ -54,7 +55,7 @@ function expectProduct(value: unknown, path: string): Product {
   return {
     id: expectProductId(record, 'id', path),
     text: expectLocalizedText(record['text'], `${path}.text`),
-    photo: expectPhoto(record['photo'], `${path}.photo`),
+    photos: expectGallery(record['photos'], `${path}.photos`),
     price: expectPrice(record, 'price', path),
     serves: expectNullable(record, 'serves', path, expectServes),
     flavours: expectNullable(record, 'flavours', path, (list, at) =>

@@ -1,42 +1,112 @@
 <ng-container *transloco="let translate">
-  <a
-    [routerLink]="link()"
-    (click)="chosen.emit(product().id)"
-    class="group relative block rounded-card bg-surface-raised p-3 pb-6 transition-shadow duration-settled outline-none hover:shadow-overlay focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-4 focus-visible:ring-offset-surface-tint"
+  <article
+    class="group relative rounded-card bg-surface-raised p-3 pb-6 transition-shadow duration-settled hover:shadow-overlay has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-focus-ring has-[a:focus-visible]:ring-offset-4 has-[a:focus-visible]:ring-offset-surface-tint"
   >
     <div
       [attr.data-piece]="piece()"
-      class="parallax-window relative aspect-square overflow-hidden rounded-photo bg-surface-tint"
+      class="parallax-window relative z-10 aspect-square overflow-hidden rounded-photo bg-surface-tint"
     >
-      <svg
-        class="parallax-window__backdrop absolute inset-0 size-full scale-125"
-        aria-hidden="true"
-      >
-        <image
-          [attr.href]="image().placeholder"
-          width="100%"
-          height="100%"
-          preserveAspectRatio="xMidYMid slice"
-        />
-      </svg>
-      <img
-        [ngSrc]="image().path"
-        fill
-        [ngSrcset]="srcset()"
-        [placeholder]="image().placeholder"
-        [sizes]="sizes"
-        class="parallax-window__image object-contain"
-        [alt]="text().name"
-      />
+      <div #strip="photoStrip" [argPhotoStrip]="keys()" class="gallery flex size-full">
+        @for (slide of slides(); track slide.image.path) {
+          <a
+            [routerLink]="link()"
+            (click)="choose()"
+            tabindex="-1"
+            aria-hidden="true"
+            class="gallery__slide relative block size-full shrink-0 overflow-hidden"
+          >
+            <svg
+              class="parallax-window__backdrop absolute inset-0 size-full scale-125"
+              aria-hidden="true"
+            >
+              <image
+                [attr.href]="slide.image.placeholder"
+                width="100%"
+                height="100%"
+                preserveAspectRatio="xMidYMid slice"
+              />
+            </svg>
+            <img
+              [ngSrc]="slide.image.path"
+              fill
+              [ngSrcset]="slide.srcset"
+              [placeholder]="slide.image.placeholder"
+              [sizes]="sizes"
+              class="parallax-window__image object-contain"
+              alt=""
+            />
+          </a>
+        }
+      </div>
+
+      @if (strip.count() > 1) {
+        <button
+          type="button"
+          tabindex="-1"
+          aria-hidden="true"
+          class="card-arrow left-2"
+          (click)="strip.step(-1)"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          tabindex="-1"
+          aria-hidden="true"
+          class="card-arrow right-2"
+          (click)="strip.step(1)"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+        <span
+          class="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center"
+          aria-hidden="true"
+        >
+          <span class="flex items-center gap-1.5 rounded-full bg-surface-raised/85 px-2 py-1.5">
+            @for (slide of slides(); track slide.image.path; let index = $index) {
+              <span
+                class="h-1.5 w-1.5 rounded-full bg-ink-subtle transition-[width,background-color] duration-quick data-current:w-4 data-current:bg-accent-text"
+                [attr.data-current]="index === strip.current() ? '' : null"
+              ></span>
+            }
+          </span>
+        </span>
+      }
     </div>
     <arg-price-sticker
-      class="absolute -top-2 -right-2 -rotate-8"
+      class="pointer-events-none absolute -top-2 -right-2 z-20 -rotate-8"
       [price]="price()"
       [byUnit]="byUnit()"
     />
 
     <div class="px-2.5 pt-5">
-      <h3 class="text-title text-ink">{{ text().name }}</h3>
+      <h3 class="text-title text-ink">
+        <a
+          [routerLink]="link()"
+          (click)="choose()"
+          class="after:absolute after:inset-0 after:rounded-card focus-visible:outline-none"
+        >
+          {{ text().name }}
+        </a>
+      </h3>
       <p class="mt-1.5 text-body-sm text-ink-muted">{{ text().note }}</p>
       <p
         class="mt-4 text-body-sm font-bold text-accent-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors duration-quick group-hover:decoration-current"
@@ -44,5 +114,5 @@
         {{ translate(t.catalog.card.customize) }}
       </p>
     </div>
-  </a>
+  </article>
 </ng-container>

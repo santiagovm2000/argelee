@@ -45,8 +45,8 @@ const PLACEHOLDER_QUALITY = 40;
 const PHOTO_CONTENT_TYPE = 'image/jpeg';
 const USAGE = 'usage: bun run catalog:seed --local | --remote [--force]';
 
-/** A seed product is a stored product whose photo is still a file name. */
-type SeedProduct = Omit<StoredProduct, 'photo'> & { readonly photoFile: string };
+/** A seed product is a stored product whose photos are still file names, the cover first. */
+type SeedProduct = Omit<StoredProduct, 'photos'> & { readonly photoFiles: readonly string[] };
 
 const target = storageTarget(process.argv, USAGE);
 const force = process.argv.includes('--force');
@@ -115,10 +115,14 @@ if (target === 'remote' && !force && existingDocument()) {
 
 const uploads: { key: string; path: string }[] = [];
 const products: StoredProduct[] = [];
-for (const { photoFile, ...product } of seed.products) {
-  const { photo, path } = await describePhoto(photoFile);
-  uploads.push({ key: photo.key, path });
-  products.push({ ...product, photo });
+for (const { photoFiles, ...product } of seed.products) {
+  const photos: ProductPhoto[] = [];
+  for (const file of photoFiles) {
+    const { photo, path } = await describePhoto(file);
+    uploads.push({ key: photo.key, path });
+    photos.push(photo);
+  }
+  products.push({ ...product, photos });
 }
 
 const document: CatalogDocument = parseCatalogDocument({

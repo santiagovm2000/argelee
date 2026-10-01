@@ -81,7 +81,7 @@ export const T = {
     missing: 'product.missing',
     sections: {
       text: 'product.sections.text',
-      photo: 'product.sections.photo',
+      photos: 'product.sections.photos',
       size: 'product.sections.size',
       flavours: 'product.sections.flavours',
       fruits: 'product.sections.fruits',
@@ -125,12 +125,21 @@ export const T = {
       effective: 'product.pricing.effective',
     },
     photo: {
-      upload: 'product.photo.upload',
-      replace: 'product.photo.replace',
+      add: 'product.photo.add',
+      addFirst: 'product.photo.addFirst',
+      firstIsCover: 'product.photo.firstIsCover',
       uploading: 'product.photo.uploading',
       failed: 'product.photo.failed',
+      overCap: 'product.photo.overCap',
+      full: 'product.photo.full',
       hint: 'product.photo.hint',
-      empty: 'product.photo.empty',
+      cover: 'product.photo.cover',
+      makeCover: 'product.photo.makeCover',
+      isCover: 'product.photo.isCover',
+      remove: 'product.photo.remove',
+      confirmRemoveTitle: 'product.photo.confirmRemoveTitle',
+      confirmRemoveBody: 'product.photo.confirmRemoveBody',
+      confirmRemove: 'product.photo.confirmRemove',
     },
     errors: {
       title: 'product.errors.title',
@@ -139,6 +148,7 @@ export const T = {
   },
   a11y: {
     photoOf: 'a11y.photoOf',
+    photoAt: 'a11y.photoAt',
     pieces: 'a11y.pieces',
     switchToDarkTheme: 'a11y.switchToDarkTheme',
     switchToLightTheme: 'a11y.switchToLightTheme',
@@ -150,4 +160,4 @@ export const T = {
 } as const;
 
 /** Every valid translation key, as a union of literal strings. */
-export type TranslationKey = 'app.title' | 'app.skipToContent' | 'nav.catalog' | 'nav.site' | 'nav.logout' | 'nav.menu' | 'nav.darkTheme' | 'login.title' | 'login.user' | 'login.password' | 'login.submit' | 'login.submitting' | 'login.failed' | 'login.tooMany' | 'login.offline' | 'login.tagline' | 'login.lead' | 'login.site' | 'catalog.title' | 'catalog.count' | 'catalog.new' | 'catalog.loading' | 'catalog.empty' | 'catalog.edit' | 'catalog.delete' | 'catalog.confirmDeleteTitle' | 'catalog.confirmDeleteBody' | 'catalog.published' | 'catalog.hidden' | 'catalog.noPhoto' | 'catalog.perUnit' | 'catalog.serves' | 'catalog.search' | 'catalog.noMatches' | 'catalog.reorder' | 'save.dirty' | 'save.action' | 'save.saving' | 'save.conflict' | 'save.reload' | 'save.invalid' | 'save.offline' | 'save.discard' | 'pdf.current' | 'pdf.stale' | 'pdf.staleAfterSave' | 'pdf.missing' | 'pdf.generate' | 'pdf.generating' | 'pdf.failed' | 'pdf.open' | 'product.newTitle' | 'product.editTitle' | 'product.back' | 'product.save' | 'product.saving' | 'product.missing' | 'product.sections.text' | 'product.sections.photo' | 'product.sections.size' | 'product.sections.flavours' | 'product.sections.fruits' | 'product.sections.pricing' | 'product.sections.visibility' | 'product.fields.spanish' | 'product.fields.name' | 'product.fields.note' | 'product.fields.noteHint' | 'product.fields.description' | 'product.fields.descriptionHint' | 'product.fields.published' | 'product.fields.publishedHint' | 'product.size.whole' | 'product.size.unit' | 'product.size.from' | 'product.size.to' | 'product.options.enabledFlavours' | 'product.options.enabledFruits' | 'product.options.offered' | 'product.pricing.mode' | 'product.pricing.fixed' | 'product.pricing.calculated' | 'product.pricing.cost' | 'product.pricing.marginKind' | 'product.pricing.percent' | 'product.pricing.amount' | 'product.pricing.marginValue' | 'product.pricing.price' | 'product.pricing.choice' | 'product.pricing.exact' | 'product.pricing.rounded' | 'product.pricing.effective' | 'product.photo.upload' | 'product.photo.replace' | 'product.photo.uploading' | 'product.photo.failed' | 'product.photo.hint' | 'product.photo.empty' | 'product.errors.title' | 'product.errors.required' | 'a11y.photoOf' | 'a11y.pieces' | 'a11y.switchToDarkTheme' | 'a11y.switchToLightTheme' | 'a11y.search' | 'dialog.cancel';
+export type TranslationKey = 'app.title' | 'app.skipToContent' | 'nav.catalog' | 'nav.site' | 'nav.logout' | 'nav.menu' | 'nav.darkTheme' | 'login.title' | 'login.user' | 'login.password' | 'login.submit' | 'login.submitting' | 'login.failed' | 'login.tooMany' | 'login.offline' | 'login.tagline' | 'login.lead' | 'login.site' | 'catalog.title' | 'catalog.count' | 'catalog.new' | 'catalog.loading' | 'catalog.empty' | 'catalog.edit' | 'catalog.delete' | 'catalog.confirmDeleteTitle' | 'catalog.confirmDeleteBody' | 'catalog.published' | 'catalog.hidden' | 'catalog.noPhoto' | 'catalog.perUnit' | 'catalog.serves' | 'catalog.search' | 'catalog.noMatches' | 'catalog.reorder' | 'save.dirty' | 'save.action' | 'save.saving' | 'save.conflict' | 'save.reload' | 'save.invalid' | 'save.offline' | 'save.discard' | 'pdf.current' | 'pdf.stale' | 'pdf.staleAfterSave' | 'pdf.missing' | 'pdf.generate' | 'pdf.generating' | 'pdf.failed' | 'pdf.open' | 'product.newTitle' | 'product.editTitle' | 'product.back' | 'product.save' | 'product.saving' | 'product.missing' | 'product.sections.text' | 'product.sections.photos' | 'product.sections.size' | 'product.sections.flavours' | 'product.sections.fruits' | 'product.sections.pricing' | 'product.sections.visibility' | 'product.fields.spanish' | 'product.fields.name' | 'product.fields.note' | 'product.fields.noteHint' | 'product.fields.description' | 'product.fields.descriptionHint' | 'product.fields.published' | 'product.fields.publishedHint' | 'product.size.whole' | 'product.size.unit' | 'product.size.from' | 'product.size.to' | 'product.options.enabledFlavours' | 'product.options.enabledFruits' | 'product.options.offered' | 'product.pricing.mode' | 'product.pricing.fixed' | 'product.pricing.calculated' | 'product.pricing.cost' | 'product.pricing.marginKind' | 'product.pricing.percent' | 'product.pricing.amount' | 'product.pricing.marginValue' | 'product.pricing.price' | 'product.pricing.choice' | 'product.pricing.exact' | 'product.pricing.rounded' | 'product.pricing.effective' | 'product.photo.add' | 'product.photo.addFirst' | 'product.photo.firstIsCover' | 'product.photo.uploading' | 'product.photo.failed' | 'product.photo.overCap' | 'product.photo.full' | 'product.photo.hint' | 'product.photo.cover' | 'product.photo.makeCover' | 'product.photo.isCover' | 'product.photo.remove' | 'product.photo.confirmRemoveTitle' | 'product.photo.confirmRemoveBody' | 'product.photo.confirmRemove' | 'product.errors.title' | 'product.errors.required' | 'a11y.photoOf' | 'a11y.photoAt' | 'a11y.pieces' | 'a11y.switchToDarkTheme' | 'a11y.switchToLightTheme' | 'a11y.search' | 'dialog.cancel';

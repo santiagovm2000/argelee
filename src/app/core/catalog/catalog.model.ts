@@ -29,11 +29,15 @@ export interface ProductPhoto {
   readonly placeholder: string;
 }
 
+/** A published piece's photos in gallery order: never empty, the cover first. */
+export type ProductPhotos = readonly [cover: ProductPhoto, ...rest: ProductPhoto[]];
+
 export interface Product {
   /** A UUID, also the piece's URL segment. */
   readonly id: ProductId;
   readonly text: LocalizedText;
-  readonly photo: ProductPhoto;
+  /** The cover is what the menu, the link previews and the PDF show. */
+  readonly photos: ProductPhotos;
   /** The listed price: of the whole piece, or of one unit for a piece sold by the unit. */
   readonly price: number;
   /** The people a piece serves, or null for a piece sold by the unit, which is ordered by quantity. */

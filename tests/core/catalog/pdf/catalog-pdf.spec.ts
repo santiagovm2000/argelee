@@ -66,7 +66,7 @@ describe('renderCatalogHtml', () => {
   it('prints every piece with its name, price and photo', () => {
     for (const product of PUBLIC_CATALOG_FIXTURE.products) {
       expect(html).toContain(product.text.es.name);
-      expect(html).toContain(`https://argelees.com/${product.photo.key}`);
+      expect(html).toContain(`https://argelees.com/${product.photos[0].key}`);
     }
     expect(html).toContain('<small>$</small>60');
     expect(html).toContain('<small>$</small>3,50');

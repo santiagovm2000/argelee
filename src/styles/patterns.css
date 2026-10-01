@@ -134,6 +134,35 @@
     scroll-snap-align: start;
   }
 }
+/* A piece's photos, on its page and on its menu card: a native strip inside
+   the frame that snaps one photo at a time, so a phone swipes it, a trackpad
+   or the arrow keys glide it, and thumbnails or arrows only ask it to scroll.
+   A sideways swipe at either end stays in the strip instead of paging the
+   browser back; on the phone shelf it carries on to the next piece instead. */
+.gallery {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+.gallery__slide {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+@media (max-width: 47.999rem) {
+  .shelf .gallery {
+    overscroll-behavior-x: auto;
+  }
+}
+/* The arrows over a menu card's photos are for a mouse, which cannot swipe,
+   and show only while it is over the card; a touch screen swipes instead. */
+.card-arrow {
+  @apply absolute top-1/2 hidden size-9 -translate-y-1/2 place-items-center rounded-full bg-surface-raised/90 text-ink opacity-0 shadow-raised transition-[opacity,background-color] duration-quick group-hover:opacity-100 hover:bg-surface-raised pointer-fine:grid;
+}
+
 /* The rail under the shelf: a hairline with a short ink segment that travels
    along it as the shelf scrolls (motion.css). Container units size the travel. */
 .shelf-rail {

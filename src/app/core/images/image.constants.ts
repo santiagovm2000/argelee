@@ -16,4 +16,5 @@ export const IMAGE_SIZES = {
   hero: '(min-width: 1024px) 30rem, 80vw',
   card: '(max-width: 767px) 15rem, (max-width: 1023px) 45vw, 20rem',
   product: '(max-width: 1023px) 92vw, 32rem',
+  thumbnail: '4rem',
 } as const;

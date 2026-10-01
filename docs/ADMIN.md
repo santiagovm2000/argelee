@@ -44,7 +44,8 @@ StoredProduct {
   id          UUID, generated when the piece is created, never shown, never edited
   published   hidden pieces stay in the panel but leave the site, the sitemap and the PDF
   text.es     { name, note, description }
-  photo       { key, width, height, placeholder } | null   (a piece without photo cannot be published)
+  photos      [{ key, width, height, placeholder }, ...]   gallery order, the first is the cover;
+              at most MAX_PHOTOS_PER_PIECE (8), none twice; a piece without one cannot be published
   pricing     { mode: 'fixed', price }
             | { mode: 'calculated', cost, margin: { kind: 'percent' | 'amount', value }, price }
   serves      [from, to] | null   (null = sold by the unit)
@@ -55,7 +56,12 @@ StoredProduct {
 `parseCatalogDocument()` validates an unknown value field by field and names what is wrong
 (`document.products[2].serves.to: must be at least 8`); the admin Worker runs it on every PUT and
 answers 422 with the list. `projection.ts` turns the document into what the site may see:
-published pieces only, `pricing` collapsed to `price`. Cost and margin never leave the admin Worker.
+published pieces only, `pricing` collapsed to `price`, `photos` never empty (`ProductPhotos`, the
+cover first). Cost and margin never leave the admin Worker.
+
+A document saved before pieces had galleries carries a single `photo` (or `null`) instead of
+`photos`. The reader takes it as a gallery of one, so the Workers and `catalog:pull` keep working
+on it, and the next save from the panel writes `photos`. Nothing has to be migrated by hand.
 
 The site's `CatalogService` starts from `catalog.snapshot.generated.ts` (git-ignored, written by
 `bun run catalog:pull` before every build and start) and, once the app is stable in the browser,
@@ -72,8 +78,12 @@ can be cached forever.
 1. **List.** Order by drag (or arrow keys on the handle), a switch per piece for published/hidden,
    pencil to edit, bin to delete, search by name. Reorder, visibility and deletion are edits of the
    list and need **Guardar cambios**.
-2. **Piece.** Photo, visibility, price, texts, size and the flavour and fruit groups, saved in one
-   go with **Guardar pieza**. The price is either typed (fixed) or calculated from the total
+2. **Piece.** Photos, visibility, price, texts, size and the flavour and fruit groups, saved in one
+   go with **Guardar pieza**. The photos are a grid with the cover first and large: **Añadir
+   fotos** takes several at once (or a drop from the computer), the star in a photo's top-right
+   corner makes it the cover (it moves to the front), and the bin in the other corner removes it
+   after asking. The cover is what the menu card opens on, what link previews show and what the
+   PDF prints. The price is either typed (fixed) or calculated from the total
    manufacturing cost plus a margin, as a percentage or a fixed amount. Everything moves together:
    the final price follows either the exact figure (cost plus margin on the half-dollar grid) or
    the rounded one (nearest step in `SALE_PRICE_STEPS`: 0,50 below 10, 5 from 10 up), chosen with
@@ -111,23 +121,26 @@ CSP blocks, and the page then renders unstyled. Keep the two in step.
 
 ## Photos
 
-The panel resizes the picture in the browser (longest side 2560px, JPEG), computes its SHA-256,
+The panel resizes each picture in the browser (longest side 2560px, JPEG), computes its SHA-256,
 reads its dimensions, draws a 20px WebP placeholder as a `data:` URL, and uploads it to
-`PUT /api/photos/<sha>.jpg`. The site serves it from R2 at `/photos/<sha>.jpg` and, where
+`PUT /api/photos/<sha>.jpg`, one after another, adding each to the piece as soon as it is stored.
+The list itself only changes through `core/catalog/gallery.ts` (`withPhotos`, `withoutPhoto`,
+`withCover`), which keeps it under the cap and free of repeats. The site serves it from R2 at `/photos/<sha>.jpg` and, where
 `SITE_IMAGE_TRANSFORMS=true`, builds its `srcset` and social card through
 `/cdn-cgi/image/...` (Cloudflare Images transformations, enabled per zone in the dashboard).
 Locally, and on any deployment without transformations, the original file is served as is.
 
-Deleting a piece does not delete its photo; the bucket keeps orphans, which cost nothing at this
-size.
+Deleting a piece or removing a photo does not delete the file; the bucket keeps orphans, which
+cost nothing at this size.
 
 ## The PDF
 
 `src/app/core/catalog/pdf/catalog-pdf.ts` renders the whole price list as one A4 HTML document
 from the public projection and the site's own locale, dressed like the site: a cover laid out like
 the brand's business card (the Azul Cristal water, sunflowers down the edge, the white logo, the
-first published piece in a round lid with the brand's seal), pieces grouped by how many people they
-serve (largest first, the unit piece last as a wide block) with a round price label on each photo
+cover of the first published piece in a round lid with the brand's seal), pieces grouped by how
+many people they serve (largest first, the unit piece last as a wide block) with a round price
+label on each cover photo
 and the logo and WhatsApp number heading every page, then a page of order conditions from
 `ORDER_CONDITION_GROUPS` that closes on the order box. The fonts travel inside the document (the
 admin Worker bundles `src/styles/fonts/` and inlines them), so a PDF never depends on what the live
@@ -206,6 +219,7 @@ and panel (4300), each proxying `/api`, `/photos` and the PDF to its Worker.
 | What                                   | Where                                                                      |
 | -------------------------------------- | -------------------------------------------------------------------------- |
 | Document shape, validation, projection | `src/app/core/catalog/{catalog.document,catalog.validation,projection}.ts` |
+| A piece's photo list                   | `src/app/core/catalog/gallery.ts`, cap in `catalog.constants.ts`           |
 | Price calculator                       | `src/app/core/catalog/costing.ts`, steps in `catalog.constants.ts`         |
 | PDF template and styles                | `src/app/core/catalog/pdf/`                                                |
 | Site Worker                            | `workers/site/`, config `wrangler.jsonc`                                   |

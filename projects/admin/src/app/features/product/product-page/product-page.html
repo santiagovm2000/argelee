@@ -28,51 +28,157 @@
         <div class="flex flex-col gap-12">
           <fieldset>
             <legend class="text-eyebrow font-bold text-accent-text">
-              {{ translate(t.product.sections.photo) }}
+              {{ translate(t.product.sections.photos) }}
             </legend>
-            <div
-              class="relative mt-4 aspect-square overflow-hidden rounded-card border border-line-tint bg-surface-tint"
-            >
-              @if (model().photo; as photo) {
-                <img
-                  [ngSrc]="photo.key"
-                  fill
-                  [placeholder]="photo.placeholder"
-                  sizes="(max-width: 1024px) 92vw, 36vw"
-                  class="object-contain"
-                  [alt]="translate(t.a11y.photoOf, { name: model().es.name })"
-                />
-              } @else {
-                <span class="absolute inset-0 grid place-items-center text-body-sm text-ink-subtle">
-                  {{ translate(t.product.photo.empty) }}
-                </span>
+            <ul class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3" role="list">
+              @for (photo of model().photos; track photo.key; let index = $index, first = $first) {
+                <li
+                  class="relative aspect-square overflow-hidden rounded-card border border-line-tint bg-surface-tint first:col-span-2 sm:first:row-span-2"
+                >
+                  <img
+                    [ngSrc]="photo.key"
+                    fill
+                    [placeholder]="photo.placeholder"
+                    sizes="(max-width: 640px) 92vw, 22rem"
+                    [class.object-contain]="first"
+                    [class.object-cover]="!first"
+                    [alt]="
+                      translate(t.a11y.photoAt, { name: model().es.name, position: index + 1 })
+                    "
+                  />
+                  <button
+                    #removeButton
+                    type="button"
+                    class="absolute top-2 left-2 grid size-9 place-items-center rounded-full bg-surface-raised text-ink shadow-raised transition-colors duration-quick hover:text-critical"
+                    [attr.aria-label]="translate(t.product.photo.remove, { position: index + 1 })"
+                    [title]="translate(t.product.photo.remove, { position: index + 1 })"
+                    (click)="removePhoto(photo, index)"
+                  >
+                    <svg
+                      class="size-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M4 7h16M10 11v6m4-6v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    #coverButton
+                    type="button"
+                    class="absolute top-2 right-2 inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-full bg-surface-raised text-ink shadow-raised transition-colors duration-quick hover:bg-sticker hover:text-sticker-ink aria-pressed:bg-sticker aria-pressed:pr-3.5 aria-pressed:pl-2.5 aria-pressed:text-sticker-ink"
+                    [attr.aria-pressed]="first"
+                    [attr.aria-label]="
+                      translate(t.product.photo.makeCover, { position: index + 1 })
+                    "
+                    [title]="
+                      translate(first ? t.product.photo.isCover : t.product.photo.makeCover, {
+                        position: index + 1,
+                      })
+                    "
+                    (click)="makeCover(photo)"
+                  >
+                    <svg
+                      class="size-4"
+                      viewBox="0 0 24 24"
+                      [attr.fill]="first ? 'currentColor' : 'none'"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linejoin="round"
+                        d="m12 3.5 2.6 5.3 5.9.86-4.27 4.15 1 5.87L12 16.9l-5.23 2.78 1-5.87L3.5 9.66l5.9-.86L12 3.5Z"
+                      />
+                    </svg>
+                    @if (first) {
+                      <span class="text-eyebrow font-bold">{{
+                        translate(t.product.photo.cover)
+                      }}</span>
+                    }
+                  </button>
+                </li>
               }
-            </div>
-            <label
-              class="button button--secondary button--compact mt-4 w-full cursor-pointer"
-              [class.opacity-60]="uploading()"
-            >
-              <input
-                type="file"
-                class="sr-only"
-                [accept]="acceptedPhotoTypes"
-                [disabled]="uploading()"
-                (change)="pickPhoto($event)"
-              />
-              {{
-                translate(
-                  uploading()
-                    ? t.product.photo.uploading
-                    : model().photo
-                      ? t.product.photo.replace
-                      : t.product.photo.upload
-                )
-              }}
-            </label>
-            <span class="field-hint">{{ translate(t.product.photo.hint) }}</span>
-            @if (uploadFailed()) {
+              @if (room() > 0) {
+                <li class="aspect-square first:col-span-2 sm:first:row-span-2">
+                  <label
+                    class="flex size-full flex-col items-center justify-center gap-2 rounded-card border-2 border-dashed border-line-tint bg-surface-tint px-3 text-center text-caption font-bold text-accent-text transition-colors duration-quick hover:border-accent-text has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-surface has-disabled:opacity-60"
+                    [class.border-accent-text]="dragging()"
+                    [class.bg-surface-selected]="dragging()"
+                    (dragover)="dragOver($event)"
+                    (dragleave)="dragging.set(false)"
+                    (drop)="dropPhotos($event)"
+                  >
+                    <input
+                      #addInput
+                      type="file"
+                      class="sr-only"
+                      multiple
+                      [accept]="acceptedPhotoTypes"
+                      [disabled]="uploading() !== null"
+                      (change)="pickPhotos($event)"
+                    />
+                    <svg
+                      class="pointer-events-none size-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      aria-hidden="true"
+                    >
+                      <path stroke-linecap="round" d="M12 6v12M6 12h12" />
+                    </svg>
+                    <span class="pointer-events-none" aria-live="polite">
+                      @if (uploading(); as progress) {
+                        {{
+                          translate(t.product.photo.uploading, {
+                            current: progress.current,
+                            total: progress.total,
+                          })
+                        }}
+                      } @else {
+                        {{
+                          translate(
+                            model().photos.length === 0
+                              ? t.product.photo.addFirst
+                              : t.product.photo.add
+                          )
+                        }}
+                      }
+                    </span>
+                    @if (model().photos.length === 0 && uploading() === null) {
+                      <span class="pointer-events-none font-normal text-ink-muted">
+                        {{ translate(t.product.photo.firstIsCover) }}
+                      </span>
+                    }
+                  </label>
+                </li>
+              }
+            </ul>
+            <span class="field-hint">{{
+              translate(t.product.photo.hint, { max: maxPhotos })
+            }}</span>
+            @if (room() === 0) {
+              <p class="mt-2 text-body-sm text-ink-muted">
+                {{ translate(t.product.photo.full, { max: maxPhotos }) }}
+              </p>
+            }
+            @if (uploadProblem(); as problem) {
               <p class="mt-2 text-body-sm text-critical" role="alert">
-                {{ translate(t.product.photo.failed) }}
+                {{
+                  translate(
+                    problem === 'failed' ? t.product.photo.failed : t.product.photo.overCap,
+                    {
+                      max: maxPhotos,
+                    }
+                  )
+                }}
               </p>
             }
           </fieldset>
@@ -360,7 +466,7 @@
           <button
             type="submit"
             class="button button--primary button--compact w-full sm:ml-auto sm:w-auto"
-            [disabled]="saving() || uploading()"
+            [disabled]="saving() || uploading() !== null"
           >
             <svg
               class="size-4"

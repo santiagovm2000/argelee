@@ -12,19 +12,19 @@ export const FIXTURE_PLACEHOLDER = 'data:image/webp;base64,UklGRgA=';
 export const FIXTURE_VERSION = '2026-09-21T12:00:00.000Z.fixture0';
 
 interface SeedProduct {
-  readonly photoFile: string;
+  readonly photoFiles: readonly string[];
   readonly [field: string]: unknown;
 }
 
-function withPhoto({ photoFile, ...product }: SeedProduct): Record<string, unknown> {
+function withPhotos({ photoFiles, ...product }: SeedProduct): Record<string, unknown> {
   return {
     ...product,
-    photo: {
-      key: `${PHOTO_KEY_PREFIX}${photoFile}`,
+    photos: photoFiles.map((file) => ({
+      key: `${PHOTO_KEY_PREFIX}${file}`,
       width: FIXTURE_PHOTO_WIDTH,
       height: FIXTURE_PHOTO_HEIGHT,
       placeholder: FIXTURE_PLACEHOLDER,
-    },
+    })),
   };
 }
 
@@ -32,7 +32,7 @@ function withPhoto({ photoFile, ...product }: SeedProduct): Record<string, unkno
 export const CATALOG_FIXTURE: CatalogDocument = parseCatalogDocument({
   version: FIXTURE_VERSION,
   updatedAt: '2026-09-21T12:00:00.000Z',
-  products: (seed.products as readonly SeedProduct[]).map(withPhoto),
+  products: (seed.products as readonly SeedProduct[]).map(withPhotos),
 });
 
 /** Plain JSON of the fixture, to be bent out of shape by validation tests. */

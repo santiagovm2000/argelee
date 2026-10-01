@@ -1,12 +1,26 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  effect,
+  type ElementRef,
+  inject,
+  Injector,
+  input,
+  signal,
+  untracked,
+  viewChild,
+  viewChildren,
+} from '@angular/core';
 import { form, FormField, min, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { PRICE_STEP } from '@core/catalog/catalog.constants';
+import { MAX_PHOTOS_PER_PIECE, PRICE_STEP } from '@core/catalog/catalog.constants';
 import { type MarginKind, validateCatalogDocument } from '@core/catalog/catalog.document';
-import type { FlavourId, FruitId } from '@core/catalog/catalog.model';
+import type { FlavourId, FruitId, ProductPhoto } from '@core/catalog/catalog.model';
 import { effectiveMargin, marginFor, suggestedPrice } from '@core/catalog/costing';
+import { photoRoom, withCover, withoutPhoto, withPhotos } from '@core/catalog/gallery';
 import { formatPrice } from '@core/catalog/pricing';
 import { DEFAULT_LANGUAGE } from '@core/i18n/i18n.constants';
 import { AdminCatalogService } from '../../../core/catalog/admin-catalog.service';
@@ -21,11 +35,23 @@ import {
 } from '../../../core/catalog/product-draft';
 import { ACCEPTED_PHOTO_TYPES } from '../../../core/config/admin.constants';
 import { T } from '../../../core/i18n/translation-keys.generated';
+import { ConfirmService } from '../../../core/ui/confirm.service';
 import { AmountInput } from '../../../shared/ui/amount-input/amount-input';
 import { OptionGroupEditor } from '../option-group-editor/option-group-editor';
 
 /** Which of the two figures the final price follows while cost and margin change. */
 type PriceChoice = 'exact' | 'suggested';
+
+/** How far a batch of photos has got: the one on its way, out of how many. */
+interface UploadProgress {
+  readonly current: number;
+  readonly total: number;
+}
+
+/** Why some of the photos picked did not make it into the gallery. */
+type UploadProblem = 'failed' | 'full';
+
+const ACCEPTED_TYPES: readonly string[] = ACCEPTED_PHOTO_TYPES.split(',');
 
 /** One piece, edited whole: texts, photo, size, choices, price and visibility, saved in one go. */
 @Component({
@@ -45,14 +71,20 @@ export class ProductPage {
   readonly id = input<string>();
 
   private readonly catalog = inject(AdminCatalogService);
-  private readonly photos = inject(PhotoUploadService);
+  private readonly uploads = inject(PhotoUploadService);
+  private readonly confirm = inject(ConfirmService);
   private readonly router = inject(Router);
   private readonly transloco = inject(TranslocoService);
+  private readonly injector = inject(Injector);
+  private readonly coverButtons = viewChildren<ElementRef<HTMLButtonElement>>('coverButton');
+  private readonly removeButtons = viewChildren<ElementRef<HTMLButtonElement>>('removeButton');
+  private readonly addInput = viewChild<ElementRef<HTMLInputElement>>('addInput');
 
   protected readonly t = T;
   protected readonly flavourChoices = FLAVOUR_CHOICES;
   protected readonly fruitChoices = FRUIT_CHOICES;
   protected readonly acceptedPhotoTypes = ACCEPTED_PHOTO_TYPES;
+  protected readonly maxPhotos = MAX_PHOTOS_PER_PIECE;
 
   protected readonly model = signal<ProductDraft>(emptyDraft());
   protected readonly f = form(this.model, (path) => {
@@ -69,8 +101,10 @@ export class ProductPage {
   protected readonly isNew = computed(() => this.id() === undefined);
   protected readonly missing = signal(false);
   protected readonly saving = signal(false);
-  protected readonly uploading = signal(false);
-  protected readonly uploadFailed = signal(false);
+  protected readonly uploading = signal<UploadProgress | null>(null);
+  protected readonly uploadProblem = signal<UploadProblem | null>(null);
+  protected readonly dragging = signal(false);
+  protected readonly room = computed(() => photoRoom(this.model().photos));
   protected readonly errors = signal<readonly string[]>([]);
 
   protected readonly priceStep = PRICE_STEP;
@@ -161,21 +195,51 @@ export class ProductPage {
     this.model.update((draft) => ({ ...draft, [field]: value }));
   }
 
-  protected async pickPhoto(event: Event): Promise<void> {
+  protected pickPhotos(event: Event): void {
     if (!(event.target instanceof HTMLInputElement)) return;
-    const file = event.target.files?.[0];
-    if (file === undefined) return;
-    this.uploading.set(true);
-    this.uploadFailed.set(false);
-    try {
-      const photo = await this.photos.upload(await this.photos.prepare(file));
-      this.model.update((draft) => ({ ...draft, photo }));
-    } catch {
-      this.uploadFailed.set(true);
-    } finally {
-      this.uploading.set(false);
-      event.target.value = '';
-    }
+    const files = [...(event.target.files ?? [])];
+    event.target.value = '';
+    void this.addPhotos(files);
+  }
+
+  /** Lets photos dragged from the computer land on the add tile. */
+  protected dragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.dragging.set(true);
+  }
+
+  protected dropPhotos(event: DragEvent): void {
+    event.preventDefault();
+    this.dragging.set(false);
+    void this.addPhotos([...(event.dataTransfer?.files ?? [])]);
+  }
+
+  /** The star: the photo moves to the front of the gallery, which makes it the cover. */
+  protected makeCover(photo: ProductPhoto): void {
+    this.model.update((draft) => ({ ...draft, photos: withCover(draft.photos, photo.key) }));
+    afterNextRender(() => this.coverButtons()[0]?.nativeElement.focus(), {
+      injector: this.injector,
+    });
+  }
+
+  /** Asks first, because a photo taken out has to be uploaded again to come back. */
+  protected async removePhoto(photo: ProductPhoto, index: number): Promise<void> {
+    const confirmed = await this.confirm.ask({
+      titleKey: T.product.photo.confirmRemoveTitle,
+      bodyKey: T.product.photo.confirmRemoveBody,
+      confirmKey: T.product.photo.confirmRemove,
+      danger: true,
+    });
+    if (!confirmed) return;
+    this.model.update((draft) => ({ ...draft, photos: withoutPhoto(draft.photos, photo.key) }));
+    afterNextRender(
+      () => {
+        const buttons = this.removeButtons();
+        const next = buttons[Math.min(index, buttons.length - 1)];
+        (next ?? this.addInput())?.nativeElement.focus();
+      },
+      { injector: this.injector },
+    );
   }
 
   protected async save(event: Event): Promise<void> {
@@ -219,6 +283,30 @@ export class ProductPage {
             ),
           ],
     );
+  }
+
+  /**
+   * Prepares and uploads the photos one after another, adding each to the
+   * gallery as soon as it is stored; whatever does not fit or fails is reported
+   * without losing the ones that made it.
+   */
+  private async addPhotos(files: readonly File[]): Promise<void> {
+    if (this.uploading() !== null) return;
+    const photos = files.filter((file) => ACCEPTED_TYPES.includes(file.type));
+    const picked = photos.slice(0, this.room());
+    this.uploadProblem.set(picked.length < photos.length ? 'full' : null);
+    let failed = false;
+    for (const [index, file] of picked.entries()) {
+      this.uploading.set({ current: index + 1, total: picked.length });
+      try {
+        const photo = await this.uploads.upload(await this.uploads.prepare(file));
+        this.model.update((draft) => ({ ...draft, photos: withPhotos(draft.photos, [photo]) }));
+      } catch {
+        failed = true;
+      }
+    }
+    this.uploading.set(null);
+    if (failed) this.uploadProblem.set('failed');
   }
 
   private populate(id: string | undefined): void {

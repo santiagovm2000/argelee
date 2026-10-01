@@ -7,6 +7,7 @@ import {
   expectNumber,
   expectChoices,
   expectPhoto,
+  expectPhotos,
   expectPrice,
   expectRecord,
   expectProductId,
@@ -46,8 +47,8 @@ export interface StoredProduct {
   /** A hidden piece stays in the panel but leaves the site, the sitemap and the PDF. */
   readonly published: boolean;
   readonly text: LocalizedText;
-  /** Null until a photo is uploaded; a piece cannot be published without one. */
-  readonly photo: ProductPhoto | null;
+  /** In gallery order, the cover first; empty until one is uploaded, and a piece cannot be published without one. */
+  readonly photos: readonly ProductPhoto[];
   readonly pricing: Pricing;
   readonly serves: PeopleRange | null;
   readonly flavours: readonly FlavourId[] | null;
@@ -64,6 +65,7 @@ export interface CatalogDocument {
 
 const VERSION_SUFFIX_LENGTH = 8;
 const MARGIN_KINDS: readonly MarginKind[] = ['percent', 'amount'];
+const LEGACY_PHOTO_FIELD = 'photo';
 
 /** A version that sorts by time and cannot collide within the same millisecond. */
 export function newCatalogVersion(now: Date = new Date()): string {
@@ -96,16 +98,32 @@ function expectPricing(value: unknown, path: string): Pricing {
   return fail(`${path}.mode`, 'must be "fixed" or "calculated"');
 }
 
+/**
+ * A document saved before a piece could hold several photos carries a single
+ * `photo` (or null). It reads as a gallery of one, and the next save from the
+ * panel writes `photos`, so the stored catalogue never needs a migration.
+ */
+function expectStoredPhotos(
+  record: Record<string, unknown>,
+  path: string,
+): readonly ProductPhoto[] {
+  if (record['photos'] === undefined && LEGACY_PHOTO_FIELD in record) {
+    const legacy = expectNullable(record, LEGACY_PHOTO_FIELD, path, expectPhoto);
+    return legacy === null ? [] : [legacy];
+  }
+  return expectPhotos(record['photos'], `${path}.photos`);
+}
+
 function expectStoredProduct(value: unknown, path: string): StoredProduct {
   const record = expectRecord(value, path);
   const published = expectBoolean(record, 'published', path);
-  const photo = expectNullable(record, 'photo', path, expectPhoto);
-  if (published && photo === null) fail(`${path}.photo`, 'a published piece needs a photo');
+  const photos = expectStoredPhotos(record, path);
+  if (published && photos.length === 0) fail(`${path}.photos`, 'a published piece needs a photo');
   return {
     id: expectProductId(record, 'id', path),
     published,
     text: expectLocalizedText(record['text'], `${path}.text`),
-    photo,
+    photos,
     pricing: expectPricing(record['pricing'], `${path}.pricing`),
     serves: expectNullable(record, 'serves', path, expectServes),
     flavours: expectNullable(record, 'flavours', path, (list, at) =>

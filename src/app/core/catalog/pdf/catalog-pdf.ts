@@ -240,7 +240,7 @@ function stickerMarkup(piece: PdfPiece, locale: PdfLocale, language: SupportedLa
 
 function pieceMarkup(piece: PdfPiece, band: PdfBand, input: PdfInput): string {
   const { locale, language, assets } = input;
-  const photo = `<div class="photo-wrap"><div class="photo"><img src="${escape(assets.photoUrl(piece.product.photo.key))}" alt=""></div>${stickerMarkup(piece, locale, language)}</div>`;
+  const photo = `<div class="photo-wrap"><div class="photo"><img src="${escape(assets.photoUrl(piece.product.photos[0].key))}" alt=""></div>${stickerMarkup(piece, locale, language)}</div>`;
   const description = `<p class="desc">${escape(piece.text.description)}</p>`;
   if (piece.wide) {
     return `<article class="piece piece--wide">
@@ -311,7 +311,7 @@ function coverMarkup(input: PdfInput): string {
   const lid =
     first === undefined
       ? ''
-      : `<div class="cover-lid"><div class="lid"><img src="${escape(assets.coverPhotoUrl(first.photo.key))}" alt=""></div>${sealMarkup(locale)}</div>`;
+      : `<div class="cover-lid"><div class="lid"><img src="${escape(assets.coverPhotoUrl(first.photos[0].key))}" alt=""></div>${sealMarkup(locale)}</div>`;
   return `<section class="cover">
     ${waterMarkup()}
     ${daisies(DAISY_COUNT.cover, 'cover-daisies')}

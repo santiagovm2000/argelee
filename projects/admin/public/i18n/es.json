@@ -71,7 +71,7 @@
     "missing": "Esta pieza ya no existe.",
     "sections": {
       "text": "Textos",
-      "photo": "Foto",
+      "photos": "Fotos",
       "size": "Tamaño",
       "flavours": "Sabores",
       "fruits": "Frutas",
@@ -115,12 +115,21 @@
       "effective": "Ganancia real: {{amount}}"
     },
     "photo": {
-      "upload": "Subir foto",
-      "replace": "Cambiar foto",
-      "uploading": "Subiendo la foto…",
-      "failed": "No se pudo subir la foto. Inténtalo de nuevo.",
-      "hint": "JPG o PNG. Se reduce sola a un tamaño razonable.",
-      "empty": "Todavía no hay foto"
+      "add": "Añadir fotos",
+      "addFirst": "Subir fotos",
+      "firstIsCover": "La primera será la portada",
+      "uploading": "Subiendo {{current}} de {{total}}…",
+      "failed": "Alguna foto no se pudo subir. Inténtalo de nuevo.",
+      "overCap": "Caben {{max}} fotos por pieza; las que sobraban no se subieron.",
+      "full": "Ya tiene {{max}} fotos, el máximo. Quita una para añadir otra.",
+      "hint": "La foto con la estrella es la portada: la que se ve en el menú y en el PDF. JPG o PNG, se reducen solas a un tamaño razonable.",
+      "cover": "Portada",
+      "makeCover": "Usar la foto {{position}} como portada",
+      "isCover": "Esta es la portada",
+      "remove": "Quitar la foto {{position}}",
+      "confirmRemoveTitle": "¿Quitar esta foto?",
+      "confirmRemoveBody": "Deja de verse en el sitio cuando guardes la pieza. Para recuperarla habrá que subirla de nuevo.",
+      "confirmRemove": "Quitar foto"
     },
     "errors": {
       "title": "Revisa esto antes de guardar:",
@@ -129,6 +138,7 @@
   },
   "a11y": {
     "photoOf": "Foto de {{name}}",
+    "photoAt": "{{name}}, foto {{position}}",
     "pieces": "Piezas del catálogo",
     "switchToDarkTheme": "Activar tema oscuro",
     "switchToLightTheme": "Activar tema claro",

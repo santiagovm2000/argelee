@@ -169,12 +169,15 @@
       animation-range: entry 0% entry 100%;
     }
 
+    /* The frame names its own passage through the screen, so the washes of
+       the photos in its strip, each in a slide of its own, all follow it. */
     .parallax-window {
       overflow: clip;
+      view-timeline: --window block;
     }
     .parallax-window__backdrop {
       animation: window-parallax linear both;
-      animation-timeline: view();
+      animation-timeline: --window;
       animation-range: cover 0% cover 100%;
     }
     /* Under the pointer the photo leans in a touch, well within its wash. */

@@ -105,7 +105,7 @@
               class="relative aspect-square overflow-hidden rounded-card border border-line-tint bg-surface-tint"
               [class.opacity-60]="!row.product.published"
             >
-              @if (row.product.photo; as photo) {
+              @if (row.product.photos[0]; as photo) {
                 <img
                   [ngSrc]="photo.key"
                   fill

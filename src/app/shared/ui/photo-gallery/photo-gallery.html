@@ -1,0 +1,86 @@
+<ng-container *transloco="let translate">
+  <div
+    [attr.data-piece]="piece()"
+    class="relative aspect-square overflow-hidden rounded-panel bg-surface-tint has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-4 has-focus-visible:ring-offset-surface"
+  >
+    <div
+      #strip="photoStrip"
+      [argPhotoStrip]="keys()"
+      class="gallery flex size-full focus-visible:outline-none"
+      [attr.tabindex]="count() > 1 ? 0 : null"
+      [attr.role]="count() > 1 ? 'region' : null"
+      [attr.aria-label]="count() > 1 ? translate(t.a11y.gallery, { name: name() }) : null"
+    >
+      @for (slide of slides(); track slide.image.path; let index = $index, first = $first) {
+        <div class="gallery__slide relative size-full shrink-0">
+          <svg class="absolute inset-0 size-full scale-125" aria-hidden="true">
+            <image
+              [attr.href]="slide.image.placeholder"
+              width="100%"
+              height="100%"
+              preserveAspectRatio="xMidYMid slice"
+            />
+          </svg>
+          @if (first) {
+            <img
+              [ngSrc]="slide.image.path"
+              fill
+              [ngSrcset]="slide.srcset"
+              priority
+              [placeholder]="slide.image.placeholder"
+              [sizes]="sizes"
+              class="object-contain"
+              [alt]="
+                count() > 1
+                  ? translate(t.a11y.galleryPhoto, { name: name(), position: 1, count: count() })
+                  : name()
+              "
+            />
+          } @else {
+            <img
+              [ngSrc]="slide.image.path"
+              fill
+              [ngSrcset]="slide.srcset"
+              [placeholder]="slide.image.placeholder"
+              [sizes]="sizes"
+              class="object-contain"
+              [alt]="
+                translate(t.a11y.galleryPhoto, {
+                  name: name(),
+                  position: index + 1,
+                  count: count(),
+                })
+              "
+            />
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (count() > 1) {
+    <ul class="mt-5 flex flex-wrap gap-3.5" role="list">
+      @for (slide of slides(); track slide.image.path; let index = $index) {
+        <li>
+          <button
+            type="button"
+            class="relative block size-14 overflow-hidden rounded-full bg-surface-tint ring-2 ring-transparent ring-offset-2 ring-offset-surface transition-shadow duration-quick hover:ring-line-tint focus-visible:outline-offset-6 aria-[current=true]:ring-accent-text md:size-16"
+            [attr.aria-current]="index === strip.current() ? 'true' : null"
+            [attr.aria-label]="translate(t.a11y.showPhoto, { position: index + 1, count: count() })"
+            (click)="strip.show(index)"
+          >
+            <img
+              [ngSrc]="slide.image.path"
+              fill
+              [ngSrcset]="slide.srcset"
+              [placeholder]="slide.image.placeholder"
+              [sizes]="thumbnailSizes"
+              class="object-cover"
+              alt=""
+            />
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</ng-container>

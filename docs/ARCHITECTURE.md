@@ -60,10 +60,11 @@ src/
       providers/core.providers.ts  the single provideCore() the app boots with
 
     shared/
-      ui/                        wordmark (the logo), product-card, price-sticker, caustics (the water),
-                                 bloom (sunflowers), seal, choice-list, empty-state — inputs in, outputs out;
-                                 brand/brand-art.ts names the brand drawings
-      directives/                lead.ts: `a[argLead]` counts a WhatsApp click as a lead
+      ui/                        wordmark (the logo), product-card, photo-gallery, price-sticker, caustics
+                                 (the water), bloom (sunflowers), seal, choice-list, empty-state — inputs in,
+                                 outputs out; brand/brand-art.ts names the brand drawings
+      directives/                lead.ts: `a[argLead]` counts a WhatsApp click as a lead;
+                                 photo-strip.ts: `[argPhotoStrip]`, the snapping photo strip of cards and pages
       pipes/  utils/
 
     layout/
@@ -133,6 +134,7 @@ core/catalog/
   catalog.model.ts       Product, OptionGroup, Selection: what the site's views consume
   catalog.constants.ts   currency, price steps, KV keys, API paths, photo and PDF keys
   costing.ts             suggestedPrice(), effectiveMargin(): the panel's calculator, pure
+  gallery.ts             withPhotos(), withoutPhoto(), withCover(): a piece's photo list, cover first, pure
   choices.ts             FLAVOUR_IDS / FRUIT_IDS: the fixed choice sets, typed from es.json
   localized-text.ts      the piece's texts in the requested language, falling back to Spanish
   selection.ts           defaultSelection(), toggleChoice(): pure, unit-tested

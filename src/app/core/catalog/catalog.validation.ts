@@ -1,11 +1,18 @@
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE, isSupportedLanguage } from '../i18n/i18n.constants';
 import {
   CENTS_PER_UNIT,
+  MAX_PHOTOS_PER_PIECE,
   PHOTO_KEY_PREFIX,
   PRICE_STEP,
   PRODUCT_ID_PATTERN,
 } from './catalog.constants';
-import type { LocalizedText, PeopleRange, ProductPhoto, ProductText } from './catalog.model';
+import type {
+  LocalizedText,
+  PeopleRange,
+  ProductPhoto,
+  ProductPhotos,
+  ProductText,
+} from './catalog.model';
 
 // Untrusted JSON (a KV document, an API response, a seed file) becomes typed
 // data only through these readers. They stop at the first problem and name
@@ -166,6 +173,28 @@ export function expectPhoto(value: unknown, path: string): ProductPhoto {
     height: expectNumber(record, 'height', path, { integer: true, min: 1 }),
     placeholder,
   };
+}
+
+/** A piece's photos in gallery order: no more than the cap, none twice. */
+export function expectPhotos(value: unknown, path: string): readonly ProductPhoto[] {
+  const photos = expectArray(value, path).map((photo, index) =>
+    expectPhoto(photo, `${path}[${index}]`),
+  );
+  if (photos.length > MAX_PHOTOS_PER_PIECE) {
+    fail(path, `must hold at most ${MAX_PHOTOS_PER_PIECE} photos`);
+  }
+  expectUnique(
+    photos.map((photo) => photo.key),
+    path,
+    'photo',
+  );
+  return photos;
+}
+
+/** The photos of a piece on show: at least one, so there is always a cover. */
+export function expectGallery(value: unknown, path: string): ProductPhotos {
+  const [cover, ...rest] = expectPhotos(value, path);
+  return cover === undefined ? fail(path, 'must hold at least one photo') : [cover, ...rest];
 }
 
 export function expectServes(value: unknown, path: string): PeopleRange {

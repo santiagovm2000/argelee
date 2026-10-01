@@ -3,7 +3,7 @@
     {
       "id": "0e5372e6-5a80-4193-af30-a75693943059",
       "published": true,
-      "photoFile": "fruit-crystal-layer.jpg",
+      "photoFiles": ["fruit-crystal-layer.jpg"],
       "text": {
         "es": {
           "name": "Encapsulada de frutas",
@@ -22,7 +22,7 @@
     {
       "id": "13efc5e5-be7b-4063-8841-40c955cf79c1",
       "published": true,
-      "photoFile": "strawberry-stripes.jpg",
+      "photoFiles": ["strawberry-stripes.jpg"],
       "text": {
         "es": {
           "name": "Napolitana de frutas",
@@ -49,7 +49,7 @@
     {
       "id": "d5b69b87-3228-4169-bba6-16202a037fbe",
       "published": true,
-      "photoFile": "cherry-tres-leches-ring.jpg",
+      "photoFiles": ["cherry-tres-leches-ring.jpg"],
       "text": {
         "es": {
           "name": "Corona tres leches",
@@ -76,7 +76,7 @@
     {
       "id": "7cbb5a22-5072-48b9-8893-25361a832b98",
       "published": true,
-      "photoFile": "two-tone-grape.jpg",
+      "photoFiles": ["two-tone-grape.jpg"],
       "text": {
         "es": {
           "name": "Bicolor coronada",
@@ -95,7 +95,7 @@
     {
       "id": "c0b263d3-983e-4539-8f33-5dfb99fc32d9",
       "published": true,
-      "photoFile": "strawberry-cubes.jpg",
+      "photoFiles": ["strawberry-cubes.jpg"],
       "text": {
         "es": {
           "name": "Mosaico de fruta fresca",
@@ -114,7 +114,7 @@
     {
       "id": "5544b1a0-a377-4ca3-8f3c-baa87d4ae97d",
       "published": true,
-      "photoFile": "cherry-condensed-milk.jpg",
+      "photoFiles": ["cherry-condensed-milk.jpg"],
       "text": {
         "es": {
           "name": "Cristal y crema",
@@ -141,7 +141,7 @@
     {
       "id": "4c111d24-3c35-4af6-ba75-662b5a3739a2",
       "published": true,
-      "photoFile": "strawberry-cup.jpg",
+      "photoFiles": ["strawberry-cup.jpg"],
       "text": {
         "es": {
           "name": "Porción individual",

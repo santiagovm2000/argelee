@@ -27,7 +27,8 @@ export interface ProductDraft {
   readonly marginKind: MarginKind;
   readonly marginValue: number;
   readonly price: number;
-  readonly photo: ProductPhoto | null;
+  /** In gallery order: the first is the cover. */
+  readonly photos: readonly ProductPhoto[];
 }
 
 const EMPTY_TEXT: ProductText = { name: '', note: '', description: '' };
@@ -64,7 +65,7 @@ export function emptyDraft(): ProductDraft {
     marginKind: 'percent',
     marginValue: DEFAULT_MARGIN_PERCENT,
     price: DEFAULT_PRICE,
-    photo: null,
+    photos: [],
   };
 }
 
@@ -84,7 +85,7 @@ export function toDraft(product: StoredProduct): ProductDraft {
     marginKind: pricing.mode === 'calculated' ? pricing.margin.kind : 'percent',
     marginValue: pricing.mode === 'calculated' ? pricing.margin.value : DEFAULT_MARGIN_PERCENT,
     price: pricing.price,
-    photo: product.photo,
+    photos: product.photos,
   };
 }
 
@@ -109,7 +110,7 @@ export function toStoredProduct(draft: ProductDraft): StoredProduct {
     id: draft.id,
     published: draft.published,
     text: { [DEFAULT_LANGUAGE]: trimmed(draft.es) },
-    photo: draft.photo,
+    photos: draft.photos,
     pricing: pricingOf(draft),
     serves: draft.byUnit ? null : [draft.servesFrom, draft.servesTo],
     flavours: choicesOf(draft.flavours),

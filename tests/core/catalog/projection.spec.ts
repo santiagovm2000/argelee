@@ -1,7 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import type { StoredProduct } from '@core/catalog/catalog.document';
+import type { ProductPhoto } from '@core/catalog/catalog.model';
 import { toPublicCatalog, toPublicProduct, validatePublicCatalog } from '@core/catalog/projection';
-import { CATALOG_FIXTURE, PUBLIC_CATALOG_FIXTURE } from '../../fixtures/catalog.fixture';
+import {
+  CATALOG_FIXTURE,
+  FIXTURE_PLACEHOLDER,
+  PUBLIC_CATALOG_FIXTURE,
+} from '../../fixtures/catalog.fixture';
+
+const photo = (name: string): ProductPhoto => ({
+  key: `photos/${name}.jpg`,
+  width: 1200,
+  height: 900,
+  placeholder: FIXTURE_PLACEHOLDER,
+});
 
 const stored = (): StoredProduct => {
   const product = CATALOG_FIXTURE.products[0];
@@ -27,7 +39,13 @@ describe('toPublicProduct', () => {
 
   it('hides an unpublished piece and a piece without a photo', () => {
     expect(toPublicProduct({ ...stored(), published: false })).toBeNull();
-    expect(toPublicProduct({ ...stored(), photo: null, published: false })).toBeNull();
+    expect(toPublicProduct({ ...stored(), photos: [], published: false })).toBeNull();
+    expect(toPublicProduct({ ...stored(), photos: [] })).toBeNull();
+  });
+
+  it('keeps every photo in gallery order, the cover first', () => {
+    const photos = [photo('cover'), photo('side'), photo('slice')];
+    expect(toPublicProduct({ ...stored(), photos })?.photos).toEqual(photos);
   });
 });
 
@@ -62,11 +80,13 @@ describe('validatePublicCatalog', () => {
     const { products } = PUBLIC_CATALOG_FIXTURE;
     expect(validatePublicCatalog({ products }).ok).toBe(false);
 
-    const withoutPhoto = products.map(({ photo, ...product }, index) =>
-      index === 0 ? product : { ...product, photo },
+    const withoutPhotos = products.map((product, index) =>
+      index === 0 ? { ...product, photos: [] } : product,
     );
-    const result = validatePublicCatalog({ version: 'v', products: withoutPhoto });
+    const result = validatePublicCatalog({ version: 'v', products: withoutPhotos });
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.errors[0]).toContain('catalog.products[0].photo');
+    if (!result.ok) {
+      expect(result.errors[0]).toBe('catalog.products[0].photos: must hold at least one photo');
+    }
   });
 });
