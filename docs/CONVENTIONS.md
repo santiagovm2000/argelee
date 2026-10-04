@@ -103,8 +103,8 @@ Never format a price in a template.
 ## Images
 
 Originals go in `assets-src/images/<category>/<name>.<ext>` and are never served. A photo needs
-no particular shape: the frames are square and show the photo whole over a blurred wash of its own
-placeholder, so frame the piece generously and let the site do the rest.
+no particular shape: the frames are square and show the photo whole on the menu's pale aqua, so
+frame the piece generously and let the site do the rest.
 `bun run images` emits responsive AVIF plus one JPEG social card into `public/images/<category>/`
 and writes a typed manifest to `core/images/image-manifest.generated.ts`.
 

@@ -49,18 +49,6 @@
   }
 }
 
-/* The photo shows whole on a blurred wash of its own placeholder. The wash
-   slides behind it as the card crosses the viewport (it is scaled up enough
-   to cover the travel); the photo itself never moves, so no piece is cropped. */
-@keyframes window-parallax {
-  from {
-    translate: 0 -4%;
-  }
-  to {
-    translate: 0 4%;
-  }
-}
-
 /* The middle column of the menu grid runs a little slower than its neighbours,
    so the pieces stand at different depths as the menu passes. */
 @keyframes column-drift {
@@ -169,22 +157,11 @@
       animation-range: entry 0% entry 100%;
     }
 
-    /* The frame names its own passage through the screen, so the washes of
-       the photos in its strip, each in a slide of its own, all follow it. */
-    .parallax-window {
-      overflow: clip;
-      view-timeline: --window block;
-    }
-    .parallax-window__backdrop {
-      animation: window-parallax linear both;
-      animation-timeline: --window;
-      animation-range: cover 0% cover 100%;
-    }
-    /* Under the pointer the photo leans in a touch, well within its wash. */
-    .parallax-window__image {
+    /* Under the pointer the photo on a menu card leans in a touch, inside its frame. */
+    .photo-window__image {
       transition: scale var(--duration-settled) var(--ease-out-quart);
     }
-    .parallax-window:hover .parallax-window__image {
+    .photo-window:hover .photo-window__image {
       scale: 1.03;
     }
 
@@ -207,7 +184,7 @@
         animation-timeline: view(inline);
         animation-range: entry, exit;
       }
-      .shelf__card .parallax-window {
+      .shelf__card .photo-window {
         animation:
           photo-enter linear both,
           photo-exit linear both;

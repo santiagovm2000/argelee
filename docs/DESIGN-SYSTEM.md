@@ -182,7 +182,9 @@ There is no component library. The few shapes the site needs are ours:
   scroller with snap points (`.shelf`); the arrows only nudge it, and a rail under it carries an
   ink segment that travels with the shelf's own scroll. From `md` the same list is a grid, two then
   three across, whose middle column drifts at its own depth (Motion). Frames never crop: each photo
-  is contained over a blurred wash of its own placeholder.
+  is contained in its frame, and what it leaves of the frame is the menu's own pale aqua
+  (`bg-surface-tint`), on the card and on the piece's page alike. Never a blur of the photo itself,
+  not even while it loads: the owner finds it distorts the piece.
 - **A piece's photos**: the cover first, then the rest, always in one frame that does not change
   size. The frame holds a native strip that snaps one photo at a time (`.gallery`, driven by the
   `[argPhotoStrip]` directive, which knows the photo in view from an observer and goes back to the
@@ -194,7 +196,9 @@ There is no component library. The few shapes the site needs are ours:
   the tab order and hidden from screen readers; the name is the card's one link. On the **product
   page** (`shared/ui/photo-gallery`) the strip is a focusable region the arrow keys move, and round
   thumbnails under it, the brand's circles again, ring the photo in view in Azul Cristal and bring
-  any other into it.
+  any other into it. Under a mouse the same two round arrows (`.photo-arrow`) appear over the frame
+  on hover and go round in the same circle; the thumbnails stay the control for keyboard and
+  screen reader, so the arrows are out of the tab order there too.
 - **Cards and panels**: white on the aqua menu, `rounded-card`, no border and no resting shadow;
   under the pointer a card takes `shadow-overlay` and its photo leans in. Every menu card is as
   tall as the tallest one (the shelf stretches them, the grid's rows are `auto-rows-fr`), and its
@@ -273,17 +277,17 @@ never a scroll listener. Every rule is gated twice, `@supports (animation-timeli
 state, so Firefox (until it ships timelines, planned for 159) and a visitor with reduced motion
 both get the same finished, still page.
 
-| Class                                           | What it does                                                                                                                                                               |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `.depth-far` / `.depth-mid` / `.depth-near`     | over the first screen of scroll (`scroll(root)`, `0 100svh`): the water lags, the sunflowers lead                                                                          |
-| `.depth-turn`                                   | the seal on the hero lid turns a little, like a lid being opened                                                                                                           |
-| `.scene-timeline` + `.drift-far` / `.drift-mid` | a scene further down (the lagoon, the footer) names its view timeline; its layers drift across it                                                                          |
-| `.rise`                                         | the footer's sunflowers rise into place as the footer enters                                                                                                               |
-| `.parallax-window` / `__backdrop`               | the blurred wash behind a photo slides as the card crosses the viewport, on a timeline the frame names so every photo in its strip follows it; the photo leans in on hover |
-| `.shelf__card` (≥ lg, middle column)            | the grid's middle column drifts ±2.5rem, on the card's own view timeline, so the pieces stand at depths                                                                    |
-| `.shelf__card` (< md)                           | on the phone shelf, cards sink and their photos fade as they slide out of either end                                                                                       |
-| `.topbar::before` / `.topbar__mark`             | the bar fills in and the logo rises into it                                                                                                                                |
-| `[data-piece]`                                  | the piece's photo morphs between its card and the product page through the router's view transition                                                                        |
+| Class                                           | What it does                                                                                            |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `.depth-far` / `.depth-mid` / `.depth-near`     | over the first screen of scroll (`scroll(root)`, `0 100svh`): the water lags, the sunflowers lead       |
+| `.depth-turn`                                   | the seal on the hero lid turns a little, like a lid being opened                                        |
+| `.scene-timeline` + `.drift-far` / `.drift-mid` | a scene further down (the lagoon, the footer) names its view timeline; its layers drift across it       |
+| `.rise`                                         | the footer's sunflowers rise into place as the footer enters                                            |
+| `.photo-window` / `__image`                     | under the pointer the photo on a menu card leans in a touch, inside its frame                           |
+| `.shelf__card` (≥ lg, middle column)            | the grid's middle column drifts ±2.5rem, on the card's own view timeline, so the pieces stand at depths |
+| `.shelf__card` (< md)                           | on the phone shelf, cards sink and their photos fade as they slide out of either end                    |
+| `.topbar::before` / `.topbar__mark`             | the bar fills in and the logo rises into it                                                             |
+| `[data-piece]`                                  | the piece's photo morphs between its card and the product page through the router's view transition     |
 
 Only `translate`, `rotate`, `scale` and `opacity` move. Never put a Tailwind `translate-*` or
 `scale-*` utility on an element a keyframe animates — they set the same property; animate a wrapper

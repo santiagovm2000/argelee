@@ -139,8 +139,9 @@
    or the arrow keys glide it, and thumbnails or arrows only ask it to scroll.
    A sideways swipe at either end stays in the strip instead of paging the
    browser back; on the phone shelf it carries on to the next piece instead.
-   It only ever moves sideways: a slide clips its own oversized wash, and the
-   strip refuses to scroll up or down whatever a slide holds. */
+   It only ever moves sideways: the strip refuses to scroll up or down
+   whatever a slide holds. A photo shows whole, never cropped, and what it
+   leaves of the frame is the frame's own pale aqua, the menu's colour. */
 .gallery {
   overflow-x: auto;
   overflow-y: hidden;
@@ -160,9 +161,10 @@
     overscroll-behavior-x: auto;
   }
 }
-/* The arrows over a menu card's photos are for a mouse, which cannot swipe,
-   and show only while it is over the card; a touch screen swipes instead. */
-.card-arrow {
+/* The arrows over a piece's photos, on its menu card and on its page, are for
+   a mouse, which cannot swipe, and show only while it is over the card or the
+   frame (the `group`); a touch screen swipes instead. */
+.photo-arrow {
   @apply absolute top-1/2 hidden size-9 -translate-y-1/2 place-items-center rounded-full bg-surface-raised/90 text-ink opacity-0 shadow-raised transition-[opacity,background-color] duration-quick group-hover:opacity-100 hover:bg-surface-raised pointer-fine:grid;
 }
 

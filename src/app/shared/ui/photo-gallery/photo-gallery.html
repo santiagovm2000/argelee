@@ -1,7 +1,7 @@
 <ng-container *transloco="let translate">
   <div
     [attr.data-piece]="piece()"
-    class="relative aspect-square overflow-hidden rounded-panel bg-surface-tint has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-4 has-focus-visible:ring-offset-surface"
+    class="group relative aspect-square overflow-hidden rounded-panel bg-surface-tint has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-4 has-focus-visible:ring-offset-surface"
   >
     <div
       #strip="photoStrip"
@@ -13,21 +13,12 @@
     >
       @for (slide of slides(); track slide.image.path; let index = $index, first = $first) {
         <div class="gallery__slide relative size-full shrink-0 overflow-hidden">
-          <svg class="absolute inset-0 size-full scale-125" aria-hidden="true">
-            <image
-              [attr.href]="slide.image.placeholder"
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-            />
-          </svg>
           @if (first) {
             <img
               [ngSrc]="slide.image.path"
               fill
               [ngSrcset]="slide.srcset"
               priority
-              [placeholder]="slide.image.placeholder"
               [sizes]="sizes"
               class="object-contain"
               [alt]="
@@ -41,7 +32,6 @@
               [ngSrc]="slide.image.path"
               fill
               [ngSrcset]="slide.srcset"
-              [placeholder]="slide.image.placeholder"
               [sizes]="sizes"
               class="object-contain"
               [alt]="
@@ -56,6 +46,45 @@
         </div>
       }
     </div>
+
+    @if (count() > 1) {
+      <button
+        type="button"
+        tabindex="-1"
+        aria-hidden="true"
+        class="photo-arrow left-3"
+        (click)="strip.step(-1)"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        tabindex="-1"
+        aria-hidden="true"
+        class="photo-arrow right-3"
+        (click)="strip.step(1)"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    }
   </div>
 
   @if (count() > 1) {

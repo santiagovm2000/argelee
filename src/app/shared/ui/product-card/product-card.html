@@ -4,7 +4,7 @@
   >
     <div
       [attr.data-piece]="piece()"
-      class="parallax-window relative z-10 aspect-square shrink-0 overflow-hidden rounded-photo bg-surface-tint"
+      class="photo-window relative z-10 aspect-square shrink-0 overflow-hidden rounded-photo bg-surface-tint"
     >
       <div #strip="photoStrip" [argPhotoStrip]="keys()" class="gallery flex size-full">
         @for (slide of slides(); track slide.image.path) {
@@ -15,24 +15,12 @@
             aria-hidden="true"
             class="gallery__slide relative block size-full shrink-0 overflow-hidden"
           >
-            <svg
-              class="parallax-window__backdrop absolute inset-0 size-full scale-125"
-              aria-hidden="true"
-            >
-              <image
-                [attr.href]="slide.image.placeholder"
-                width="100%"
-                height="100%"
-                preserveAspectRatio="xMidYMid slice"
-              />
-            </svg>
             <img
               [ngSrc]="slide.image.path"
               fill
               [ngSrcset]="slide.srcset"
-              [placeholder]="slide.image.placeholder"
               [sizes]="sizes"
-              class="parallax-window__image object-contain"
+              class="photo-window__image object-contain"
               alt=""
             />
           </a>
@@ -44,7 +32,7 @@
           type="button"
           tabindex="-1"
           aria-hidden="true"
-          class="card-arrow left-2"
+          class="photo-arrow left-2"
           (click)="strip.step(-1)"
         >
           <svg
@@ -62,7 +50,7 @@
           type="button"
           tabindex="-1"
           aria-hidden="true"
-          class="card-arrow right-2"
+          class="photo-arrow right-2"
           (click)="strip.step(1)"
         >
           <svg

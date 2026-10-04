@@ -11,8 +11,8 @@ import { PhotoStrip } from '../../directives/photo-strip';
 /**
  * A piece's photos in one frame: a strip that snaps from photo to photo under
  * a swipe, a trackpad or the arrow keys, with round thumbnails under it that
- * show which one is in view and bring any other into it. One photo is just
- * the frame.
+ * show which one is in view and bring any other into it, and, under a mouse,
+ * the menu card's arrows over the frame. One photo is just the frame.
  */
 @Component({
   selector: 'arg-photo-gallery',
