@@ -141,6 +141,10 @@
   --color-whatsapp-deep: oklch(0.52 0.14 152);
   --color-whatsapp-deep-hover: oklch(0.47 0.14 152);
 
+  /* Instagram's own magenta, for its button only; it carries white text at AA. */
+  --color-instagram: oklch(0.563 0.191 350.4);
+  --color-instagram-hover: oklch(0.505 0.175 350.3);
+
   /* The panel's error red, hue-separated from the brand; base.css picks one per theme. */
   --color-danger: oklch(0.55 0.2 27);
   --color-danger-soft: oklch(0.78 0.11 27);

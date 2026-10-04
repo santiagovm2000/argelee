@@ -16,8 +16,8 @@ import { Wordmark } from '../../../../shared/ui/wordmark/wordmark';
 
 /**
  * The link hub behind the QR code and the social bios: the brand's cover on one
- * phone screen, the logo and its tagline on the water, and three ways in:
- * WhatsApp, the site and the PDF price list.
+ * phone screen, the logo and its tagline on the water, and four ways in:
+ * WhatsApp, the site, the PDF price list and Instagram.
  */
 @Component({
   selector: 'arg-links-page',

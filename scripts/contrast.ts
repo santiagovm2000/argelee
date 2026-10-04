@@ -110,6 +110,8 @@ const PAGE_CHECKS: readonly Check[] = [
   ['--critical', '--surface', 4.5, 'error text on page'],
   ['--critical', '--surface-raised', 4.5, 'error text on a panel'],
   ['--color-neutral-0', '--color-whatsapp-deep', 4.5, 'label on the WhatsApp button'],
+  ['--color-neutral-0', '--color-instagram', 4.5, 'label on the Instagram button'],
+  ['--color-neutral-0', '--color-instagram-hover', 4.5, 'label on the Instagram button, hovered'],
 ];
 
 const SCENE_CHECKS: readonly Check[] = [

@@ -65,6 +65,17 @@
           </svg>
           {{ translate(t.links.catalog) }}
         </a>
+        <a
+          [href]="site.instagramUrl"
+          target="_blank"
+          rel="noopener"
+          class="button button--instagram button--tall w-full"
+        >
+          <svg class="size-5 shrink-0" aria-hidden="true">
+            <use [attr.href]="icons.instagram" />
+          </svg>
+          {{ translate(t.links.instagram) }}
+        </a>
       </nav>
     </div>
   </section>

@@ -45,11 +45,31 @@
       </div>
 
       <div
-        class="mt-14 flex flex-col gap-1 border-t-2 border-line-strong/20 pt-6 pl-16 text-caption font-bold sm:flex-row sm:justify-between sm:pl-0"
+        class="mt-14 flex flex-col-reverse gap-4 border-t-2 border-line-strong/20 pt-6 pl-16 sm:flex-row sm:items-center sm:justify-between sm:pl-0"
       >
-        <p>{{ translate(t.footer.tagline) }}</p>
-        <p>{{ translate(t.footer.location) }}</p>
-        <p>© {{ year }} {{ site.name }}</p>
+        <div class="flex flex-col gap-1 text-caption font-bold sm:flex-row sm:gap-4">
+          <p>© {{ year }} {{ site.name }}</p>
+          <p>{{ translate(t.footer.location) }}</p>
+        </div>
+        <ul class="-mx-1 flex items-center sm:pr-16 lg:pr-12 2xl:pr-0">
+          <li>
+            <a
+              [href]="site.instagramUrl"
+              target="_blank"
+              rel="noopener"
+              class="group grid size-11 place-items-center rounded-full"
+              [attr.aria-label]="translate(t.a11y.openInstagram)"
+            >
+              <span
+                class="grid size-9 place-items-center rounded-full bg-surface-raised text-accent-ink transition-[translate,background-color] duration-settled group-hover:-translate-y-0.5 group-hover:bg-surface-raised/85"
+              >
+                <svg class="size-4" aria-hidden="true">
+                  <use [attr.href]="icons.instagram" />
+                </svg>
+              </span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </footer>

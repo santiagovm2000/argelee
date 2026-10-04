@@ -16,6 +16,7 @@ export const SITE = {
   wordmark: 'ArGeles',
   twitterHandle: '@argeles',
   whatsappNumber: '584241860627',
+  instagramUrl: 'https://www.instagram.com/arg_eles',
   // The published price list, relative so it follows the base href.
   catalogPdf: 'ArGeles-catalogo.pdf',
   address: { locality: 'Caracas', country: 'VE' },

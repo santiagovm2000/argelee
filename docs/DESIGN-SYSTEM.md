@@ -150,7 +150,8 @@ There is no component library. The few shapes the site needs are ours:
 - **Buttons**: `.button .button--primary` (coral pill, ink label), `.button .button--secondary`
   (an outline in `line-strong` on the page; on a scene an outline sinks into the colour, so there
   it becomes the white pill of the brand's card, with an ink label) and `.button .button--whatsapp`
-  (WhatsApp green, only ever for WhatsApp), composed in `patterns.css`.
+  (WhatsApp green, only ever for WhatsApp) and `.button .button--instagram` (Instagram's magenta,
+  only ever for the link to the profile), composed in `patterns.css`.
 - **The script voice**: `.script` on a heading. Section titles ("Catálogo", "Antes de encargar")
   and the brand's key message; never body text, never a label, never part of a sentence.
 - **The water**: `shared/ui/caustics` — two layers of the traced pattern (its lighter shapes at 14 %,
@@ -163,11 +164,17 @@ There is no component library. The few shapes the site needs are ours:
 - **The price label**: `shared/ui/price-sticker` — "Desde", the amount, and "c/u" for a piece sold
   by the unit, on a mango circle tilted over the corner of the photo.
 - **The link hub** (`features/links`, at `/links`): the page behind the QR code and the social
-  bios, laid out like the brand's business card: the logo and tagline on the water, three
-  full-width buttons, WhatsApp, the site and the PDF price list. Its route trims the footer and the
+  bios, laid out like the brand's business card: the logo and tagline on the water, four
+  full-width buttons, WhatsApp, the site, the PDF price list and Instagram. Its route trims the footer and the
   floating button through `data.chrome` (see `core/config/page-chrome.ts`).
 - **The footer**: the brand's business card again — the water, the white logo and tagline, a column
-  of sunflowers rising at its edge, and plain links to the menu, the conditions and the PDF.
+  of sunflowers rising at its edge, and plain links to the menu, the conditions and the PDF. Its
+  bottom row has two ends: the copyright and the city at the left, and at the right the small
+  round icon links that say where else the brand is, for now Instagram alone, as the white disc a
+  quiet control becomes on a scene, with the glyph in ink (a 36px disc inside a 44px target).
+  WhatsApp is not among them: the floating button is there for that. Below `2xl` the icons step in
+  from the edge, because that button sits on that corner at the end of the page; on a phone the
+  row stacks, the icons above the two lines of text.
 - **Quantity**: `shared/ui/quantity-input`, a native number field between our own minus and plus
   buttons in one pill, for pieces sold by the unit.
 - **Chips**: `shared/ui/choice-list` — pills, each with the fruit sticker of its flavour or fruit in

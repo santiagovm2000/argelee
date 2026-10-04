@@ -10,7 +10,7 @@
     },
     "links": {
       "title": "ArGeles — Enlaces",
-      "description": "Escríbenos por WhatsApp, visita la página web o descarga el catálogo en PDF."
+      "description": "Escríbenos por WhatsApp, visita la página web, descarga el catálogo en PDF o síguenos en Instagram."
     }
   },
   "a11y": {
@@ -21,6 +21,7 @@
     "switchToDarkTheme": "Activar tema oscuro",
     "switchToLightTheme": "Activar tema claro",
     "openWhatsapp": "Escribir por WhatsApp",
+    "openInstagram": "Síguenos en Instagram",
     "priceUpdated": "Precio actualizado: desde {{total}}",
     "previousPiece": "Pieza anterior",
     "nextPiece": "Pieza siguiente",
@@ -153,7 +154,6 @@
     }
   },
   "footer": {
-    "tagline": "Hecho a mano, por encargo.",
     "location": "Caracas, Venezuela",
     "pdf": "Catálogo en PDF"
   },
@@ -166,9 +166,10 @@
   },
   "links": {
     "title": "Enlaces",
-    "whatsapp": "Escribir por WhatsApp",
+    "whatsapp": "WhatsApp",
     "website": "Página web",
-    "catalog": "Catálogo"
+    "catalog": "Catálogo",
+    "instagram": "Instagram"
   },
   "pdf": {
     "cover": {

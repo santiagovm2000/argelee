@@ -7,9 +7,13 @@ import { LanguageService } from '../../core/i18n/language.service';
 import { T } from '../../core/i18n/translation-keys.generated';
 import { Bloom } from '../../shared/ui/bloom/bloom';
 import { Caustics } from '../../shared/ui/caustics/caustics';
+import { ICON_URLS } from '../../shared/ui/icons/icons';
 import { Wordmark } from '../../shared/ui/wordmark/wordmark';
 
-/** The page's last word, laid out like the brand's business card: the water, the logo, the sunflowers. */
+/**
+ * The page's last word, laid out like the brand's business card: the water, the
+ * logo, the sunflowers, and where else to find the brand: Instagram.
+ */
 @Component({
   selector: 'arg-site-footer',
   imports: [RouterLink, TranslocoDirective, Wordmark, Caustics, Bloom],
@@ -18,6 +22,7 @@ import { Wordmark } from '../../shared/ui/wordmark/wordmark';
 export class SiteFooter {
   protected readonly t = T;
   protected readonly site = SITE;
+  protected readonly icons = ICON_URLS;
   protected readonly sections = SECTION_IDS;
   protected readonly language = inject(LanguageService);
   protected readonly year = new Date().getFullYear();

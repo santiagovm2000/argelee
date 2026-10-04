@@ -198,6 +198,10 @@
 .button--whatsapp {
   @apply bg-whatsapp-deep text-neutral-0 hover:-translate-y-0.5 hover:bg-whatsapp-deep-hover;
 }
+/* Instagram keeps its own magenta too, on the one button that leads to the profile. */
+.button--instagram {
+  @apply bg-instagram text-neutral-0 hover:-translate-y-0.5 hover:bg-instagram-hover;
+}
 /* A thumb-sized button for a screen that is nothing but buttons. */
 .button--tall {
   @apply min-h-14;

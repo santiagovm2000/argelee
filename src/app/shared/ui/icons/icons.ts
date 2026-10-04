@@ -10,6 +10,7 @@ const GLYPH_FRAGMENT = '#glyph';
 
 export const ICON_URLS = {
   whatsapp: `${ICONS_DIR}/whatsapp.svg${GLYPH_FRAGMENT}`,
+  instagram: `${ICONS_DIR}/instagram.svg${GLYPH_FRAGMENT}`,
 } as const;
 
 // The line glyphs that head the three groups of order conditions.
