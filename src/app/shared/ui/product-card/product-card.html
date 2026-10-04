@@ -1,10 +1,10 @@
 <ng-container *transloco="let translate">
   <article
-    class="group relative rounded-card bg-surface-raised p-3 pb-6 transition-shadow duration-settled hover:shadow-overlay has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-focus-ring has-[a:focus-visible]:ring-offset-4 has-[a:focus-visible]:ring-offset-surface-tint"
+    class="group relative flex h-full flex-col rounded-card bg-surface-raised p-3 pb-6 transition-shadow duration-settled hover:shadow-overlay has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-focus-ring has-[a:focus-visible]:ring-offset-4 has-[a:focus-visible]:ring-offset-surface-tint"
   >
     <div
       [attr.data-piece]="piece()"
-      class="parallax-window relative z-10 aspect-square overflow-hidden rounded-photo bg-surface-tint"
+      class="parallax-window relative z-10 aspect-square shrink-0 overflow-hidden rounded-photo bg-surface-tint"
     >
       <div #strip="photoStrip" [argPhotoStrip]="keys()" class="gallery flex size-full">
         @for (slide of slides(); track slide.image.path) {
@@ -97,7 +97,7 @@
       [byUnit]="byUnit()"
     />
 
-    <div class="px-2.5 pt-5">
+    <div class="flex flex-1 flex-col px-2.5 pt-5">
       <h3 class="text-title text-ink">
         <a
           [routerLink]="link()"
@@ -108,11 +108,32 @@
         </a>
       </h3>
       <p class="mt-1.5 text-body-sm text-ink-muted">{{ text().note }}</p>
-      <p
-        class="mt-4 text-body-sm font-bold text-accent-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors duration-quick group-hover:decoration-current"
-      >
-        {{ translate(t.catalog.card.customize) }}
-      </p>
+      <div class="mt-auto flex flex-col gap-3 pt-4">
+        @if (product().serves; as serves) {
+          <p class="flex items-center gap-1.5 text-caption font-bold text-ink-muted">
+            <svg
+              class="size-4 shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 7.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM3 19.5a6 6 0 0 1 12 0M15.5 4.5a3 3 0 0 1 0 6M17.2 13.9A6 6 0 0 1 21 19.5"
+              />
+            </svg>
+            {{ translate(t.catalog.customizer.serves, { from: serves[0], to: serves[1] }) }}
+          </p>
+        }
+        <p
+          class="text-body-sm font-bold text-accent-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors duration-quick group-hover:decoration-current"
+        >
+          {{ translate(t.catalog.card.customize) }}
+        </p>
+      </div>
     </div>
   </article>
 </ng-container>

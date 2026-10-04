@@ -196,7 +196,12 @@ There is no component library. The few shapes the site needs are ours:
   thumbnails under it, the brand's circles again, ring the photo in view in Azul Cristal and bring
   any other into it.
 - **Cards and panels**: white on the aqua menu, `rounded-card`, no border and no resting shadow;
-  under the pointer a card takes `shadow-overlay` and its photo leans in.
+  under the pointer a card takes `shadow-overlay` and its photo leans in. Every menu card is as
+  tall as the tallest one (the shelf stretches them, the grid's rows are `auto-rows-fr`), and its
+  foot sits at the bottom so it lines up across cards: a whole piece states its size there in one
+  quiet line, a small people glyph and "Para 8 a 10 personas" in `text-caption` bold
+  `text-ink-muted`, over "Ver y encargar"; a piece sold by the unit has no size line, its price
+  label already says "c/u".
 - **Hover, two families, both themes.** A filled button (primary, WhatsApp) lifts 2px and shifts
   its fill to its `*-hover` token. A quiet control (outline button, chip, arrow, nav link) takes the
   `surface-hover` fill. Inside the top bar controls tint themselves with `current/10`. No control is
