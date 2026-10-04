@@ -138,9 +138,12 @@
    the frame that snaps one photo at a time, so a phone swipes it, a trackpad
    or the arrow keys glide it, and thumbnails or arrows only ask it to scroll.
    A sideways swipe at either end stays in the strip instead of paging the
-   browser back; on the phone shelf it carries on to the next piece instead. */
+   browser back; on the phone shelf it carries on to the next piece instead.
+   It only ever moves sideways: a slide clips its own oversized wash, and the
+   strip refuses to scroll up or down whatever a slide holds. */
 .gallery {
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
   scrollbar-width: none;

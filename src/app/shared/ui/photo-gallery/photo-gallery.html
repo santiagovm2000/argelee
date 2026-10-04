@@ -12,7 +12,7 @@
       [attr.aria-label]="count() > 1 ? translate(t.a11y.gallery, { name: name() }) : null"
     >
       @for (slide of slides(); track slide.image.path; let index = $index, first = $first) {
-        <div class="gallery__slide relative size-full shrink-0">
+        <div class="gallery__slide relative size-full shrink-0 overflow-hidden">
           <svg class="absolute inset-0 size-full scale-125" aria-hidden="true">
             <image
               [attr.href]="slide.image.placeholder"
