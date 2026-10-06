@@ -23,6 +23,7 @@ interface Row {
   readonly price: string;
   readonly serves: string;
   readonly editLink: readonly string[];
+  readonly postLink: readonly string[];
 }
 
 interface SaveError {
@@ -94,6 +95,7 @@ export class CatalogPage {
                 to: product.serves[1],
               }),
         editLink: ['/', ADMIN_ROUTES.product, product.id],
+        postLink: ['/', ADMIN_ROUTES.post, product.id],
       };
     }),
   );

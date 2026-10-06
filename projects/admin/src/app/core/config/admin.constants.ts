@@ -2,6 +2,7 @@ export const ADMIN_ROUTES = {
   login: 'login',
   product: 'pieza',
   newProduct: 'nueva',
+  post: 'publicacion',
   productIdParam: 'id',
 } as const;
 

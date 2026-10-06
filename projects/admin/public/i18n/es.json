@@ -40,7 +40,8 @@
     "serves": "{{from}} a {{to}} personas",
     "search": "Buscar por nombre",
     "noMatches": "Ninguna pieza coincide con «{{query}}».",
-    "reorder": "Mover «{{name}}», posición {{position}}. Arrastra o usa las flechas del teclado."
+    "reorder": "Mover «{{name}}», posición {{position}}. Arrastra o usa las flechas del teclado.",
+    "post": "Generar publicación"
   },
   "save": {
     "dirty": "Tienes cambios sin guardar.",
@@ -136,13 +137,44 @@
       "required": "Obligatorio"
     }
   },
+  "post": {
+    "title": "Publicación de {{name}}",
+    "lead": "Dos láminas de 1080 × 1350 para Instagram, con la foto y el texto de la pieza.",
+    "noPhotos": "Esta pieza todavía no tiene fotos. Añade una para generar su publicación.",
+    "addPhotos": "Añadir fotos",
+    "preparing": "Preparando las láminas…",
+    "failed": "No se pudieron preparar las láminas. Revisa la conexión y vuelve a cargar la página.",
+    "download": {
+      "piece": "Descargar lámina 1",
+      "about": "Descargar lámina 2"
+    },
+    "sections": {
+      "photo": "Foto",
+      "framing": "Encuadre",
+      "backdrop": "Fondo"
+    },
+    "zoom": "Acercar",
+    "zoomValue": "{{percent}} %",
+    "framingHint": "Arrastra la foto en la lámina 1 para moverla dentro del círculo.",
+    "centre": "Centrar",
+    "backdrops": {
+      "mango": "Amarillo Mango",
+      "coral": "Naranja Coral",
+      "crystal": "Azul Cristal",
+      "turquoise": "Turquesa Vital",
+      "mint": "Verde Menta",
+      "custom": "Otro color"
+    }
+  },
   "a11y": {
     "photoOf": "Foto de {{name}}",
     "photoAt": "{{name}}, foto {{position}}",
     "pieces": "Piezas del catálogo",
     "switchToDarkTheme": "Activar tema oscuro",
     "switchToLightTheme": "Activar tema claro",
-    "search": "Buscar piezas por nombre"
+    "search": "Buscar piezas por nombre",
+    "postPreview": "Vista previa de la lámina {{position}} de {{name}}",
+    "choosePhoto": "Usar la foto {{position}}"
   },
   "dialog": {
     "cancel": "Cancelar"

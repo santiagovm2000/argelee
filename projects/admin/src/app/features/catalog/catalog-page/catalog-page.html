@@ -157,6 +157,25 @@
               </label>
               <span class="flex items-center gap-2">
                 <a
+                  [routerLink]="row.postLink"
+                  class="control control--icon"
+                  [attr.aria-label]="translate(t.catalog.post)"
+                  [title]="translate(t.catalog.post)"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+                    <circle cx="12" cy="12" r="3.8" />
+                    <path stroke-linecap="round" d="M17 7h.01" />
+                  </svg>
+                </a>
+                <a
                   [routerLink]="row.editLink"
                   class="control control--icon"
                   [attr.aria-label]="translate(t.catalog.edit)"

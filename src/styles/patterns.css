@@ -311,6 +311,42 @@
   translate: 1rem 0;
 }
 
+/* The browser's colour picker as a round swatch, like the ones beside it: its own
+   square well and border are reset, which only these pseudo-elements can do. */
+.colour-well {
+  @apply block size-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0;
+}
+.colour-well::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.colour-well::-webkit-color-swatch {
+  border: 0;
+  border-radius: 50%;
+}
+.colour-well::-moz-color-swatch {
+  border: 0;
+  border-radius: 50%;
+}
+/* Until a colour of the owner's own is in use, the swatch is a wheel of the brand's
+   colours, which says "any colour" the way a picker does. */
+.colour-well--any {
+  background-image: conic-gradient(
+    var(--color-coral-400),
+    var(--color-mango-300),
+    var(--color-mint-400),
+    var(--color-turquoise-400),
+    var(--color-crystal-500),
+    var(--color-instagram),
+    var(--color-coral-400)
+  );
+}
+.colour-well--any::-webkit-color-swatch {
+  opacity: 0;
+}
+.colour-well--any::-moz-color-swatch {
+  opacity: 0;
+}
+
 /* The panel's quiet controls: a bordered pill for a short action, round for an icon. */
 .control {
   @apply inline-flex min-h-9 items-center gap-2 rounded-full border border-line-tint px-3.5 text-eyebrow font-bold text-ink transition-[border-color,background-color,color] duration-quick hover:border-accent-text hover:bg-surface-hover disabled:opacity-40 disabled:hover:border-line-tint disabled:hover:bg-transparent;

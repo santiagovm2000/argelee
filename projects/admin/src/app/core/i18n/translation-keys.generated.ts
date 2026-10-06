@@ -51,6 +51,7 @@ export const T = {
     search: 'catalog.search',
     noMatches: 'catalog.noMatches',
     reorder: 'catalog.reorder',
+    post: 'catalog.post',
   },
   save: {
     dirty: 'save.dirty',
@@ -146,6 +147,35 @@ export const T = {
       required: 'product.errors.required',
     },
   },
+  post: {
+    title: 'post.title',
+    lead: 'post.lead',
+    noPhotos: 'post.noPhotos',
+    addPhotos: 'post.addPhotos',
+    preparing: 'post.preparing',
+    failed: 'post.failed',
+    download: {
+      piece: 'post.download.piece',
+      about: 'post.download.about',
+    },
+    sections: {
+      photo: 'post.sections.photo',
+      framing: 'post.sections.framing',
+      backdrop: 'post.sections.backdrop',
+    },
+    zoom: 'post.zoom',
+    zoomValue: 'post.zoomValue',
+    framingHint: 'post.framingHint',
+    centre: 'post.centre',
+    backdrops: {
+      mango: 'post.backdrops.mango',
+      coral: 'post.backdrops.coral',
+      crystal: 'post.backdrops.crystal',
+      turquoise: 'post.backdrops.turquoise',
+      mint: 'post.backdrops.mint',
+      custom: 'post.backdrops.custom',
+    },
+  },
   a11y: {
     photoOf: 'a11y.photoOf',
     photoAt: 'a11y.photoAt',
@@ -153,6 +183,8 @@ export const T = {
     switchToDarkTheme: 'a11y.switchToDarkTheme',
     switchToLightTheme: 'a11y.switchToLightTheme',
     search: 'a11y.search',
+    postPreview: 'a11y.postPreview',
+    choosePhoto: 'a11y.choosePhoto',
   },
   dialog: {
     cancel: 'dialog.cancel',
@@ -160,4 +192,4 @@ export const T = {
 } as const;
 
 /** Every valid translation key, as a union of literal strings. */
-export type TranslationKey = 'app.title' | 'app.skipToContent' | 'nav.catalog' | 'nav.site' | 'nav.logout' | 'nav.menu' | 'nav.darkTheme' | 'login.title' | 'login.user' | 'login.password' | 'login.submit' | 'login.submitting' | 'login.failed' | 'login.tooMany' | 'login.offline' | 'login.tagline' | 'login.lead' | 'login.site' | 'catalog.title' | 'catalog.count' | 'catalog.new' | 'catalog.loading' | 'catalog.empty' | 'catalog.edit' | 'catalog.delete' | 'catalog.confirmDeleteTitle' | 'catalog.confirmDeleteBody' | 'catalog.published' | 'catalog.hidden' | 'catalog.noPhoto' | 'catalog.perUnit' | 'catalog.serves' | 'catalog.search' | 'catalog.noMatches' | 'catalog.reorder' | 'save.dirty' | 'save.action' | 'save.saving' | 'save.conflict' | 'save.reload' | 'save.invalid' | 'save.offline' | 'save.discard' | 'pdf.current' | 'pdf.stale' | 'pdf.staleAfterSave' | 'pdf.missing' | 'pdf.generate' | 'pdf.generating' | 'pdf.failed' | 'pdf.open' | 'product.newTitle' | 'product.editTitle' | 'product.back' | 'product.save' | 'product.saving' | 'product.missing' | 'product.sections.text' | 'product.sections.photos' | 'product.sections.size' | 'product.sections.flavours' | 'product.sections.fruits' | 'product.sections.pricing' | 'product.sections.visibility' | 'product.fields.spanish' | 'product.fields.name' | 'product.fields.note' | 'product.fields.noteHint' | 'product.fields.description' | 'product.fields.descriptionHint' | 'product.fields.published' | 'product.fields.publishedHint' | 'product.size.whole' | 'product.size.unit' | 'product.size.from' | 'product.size.to' | 'product.options.enabledFlavours' | 'product.options.enabledFruits' | 'product.options.offered' | 'product.pricing.mode' | 'product.pricing.fixed' | 'product.pricing.calculated' | 'product.pricing.cost' | 'product.pricing.marginKind' | 'product.pricing.percent' | 'product.pricing.amount' | 'product.pricing.marginValue' | 'product.pricing.price' | 'product.pricing.choice' | 'product.pricing.exact' | 'product.pricing.rounded' | 'product.pricing.effective' | 'product.photo.add' | 'product.photo.addFirst' | 'product.photo.firstIsCover' | 'product.photo.uploading' | 'product.photo.failed' | 'product.photo.overCap' | 'product.photo.full' | 'product.photo.hint' | 'product.photo.cover' | 'product.photo.makeCover' | 'product.photo.isCover' | 'product.photo.remove' | 'product.photo.confirmRemoveTitle' | 'product.photo.confirmRemoveBody' | 'product.photo.confirmRemove' | 'product.errors.title' | 'product.errors.required' | 'a11y.photoOf' | 'a11y.photoAt' | 'a11y.pieces' | 'a11y.switchToDarkTheme' | 'a11y.switchToLightTheme' | 'a11y.search' | 'dialog.cancel';
+export type TranslationKey = 'app.title' | 'app.skipToContent' | 'nav.catalog' | 'nav.site' | 'nav.logout' | 'nav.menu' | 'nav.darkTheme' | 'login.title' | 'login.user' | 'login.password' | 'login.submit' | 'login.submitting' | 'login.failed' | 'login.tooMany' | 'login.offline' | 'login.tagline' | 'login.lead' | 'login.site' | 'catalog.title' | 'catalog.count' | 'catalog.new' | 'catalog.loading' | 'catalog.empty' | 'catalog.edit' | 'catalog.delete' | 'catalog.confirmDeleteTitle' | 'catalog.confirmDeleteBody' | 'catalog.published' | 'catalog.hidden' | 'catalog.noPhoto' | 'catalog.perUnit' | 'catalog.serves' | 'catalog.search' | 'catalog.noMatches' | 'catalog.reorder' | 'catalog.post' | 'save.dirty' | 'save.action' | 'save.saving' | 'save.conflict' | 'save.reload' | 'save.invalid' | 'save.offline' | 'save.discard' | 'pdf.current' | 'pdf.stale' | 'pdf.staleAfterSave' | 'pdf.missing' | 'pdf.generate' | 'pdf.generating' | 'pdf.failed' | 'pdf.open' | 'product.newTitle' | 'product.editTitle' | 'product.back' | 'product.save' | 'product.saving' | 'product.missing' | 'product.sections.text' | 'product.sections.photos' | 'product.sections.size' | 'product.sections.flavours' | 'product.sections.fruits' | 'product.sections.pricing' | 'product.sections.visibility' | 'product.fields.spanish' | 'product.fields.name' | 'product.fields.note' | 'product.fields.noteHint' | 'product.fields.description' | 'product.fields.descriptionHint' | 'product.fields.published' | 'product.fields.publishedHint' | 'product.size.whole' | 'product.size.unit' | 'product.size.from' | 'product.size.to' | 'product.options.enabledFlavours' | 'product.options.enabledFruits' | 'product.options.offered' | 'product.pricing.mode' | 'product.pricing.fixed' | 'product.pricing.calculated' | 'product.pricing.cost' | 'product.pricing.marginKind' | 'product.pricing.percent' | 'product.pricing.amount' | 'product.pricing.marginValue' | 'product.pricing.price' | 'product.pricing.choice' | 'product.pricing.exact' | 'product.pricing.rounded' | 'product.pricing.effective' | 'product.photo.add' | 'product.photo.addFirst' | 'product.photo.firstIsCover' | 'product.photo.uploading' | 'product.photo.failed' | 'product.photo.overCap' | 'product.photo.full' | 'product.photo.hint' | 'product.photo.cover' | 'product.photo.makeCover' | 'product.photo.isCover' | 'product.photo.remove' | 'product.photo.confirmRemoveTitle' | 'product.photo.confirmRemoveBody' | 'product.photo.confirmRemove' | 'product.errors.title' | 'product.errors.required' | 'post.title' | 'post.lead' | 'post.noPhotos' | 'post.addPhotos' | 'post.preparing' | 'post.failed' | 'post.download.piece' | 'post.download.about' | 'post.sections.photo' | 'post.sections.framing' | 'post.sections.backdrop' | 'post.zoom' | 'post.zoomValue' | 'post.framingHint' | 'post.centre' | 'post.backdrops.mango' | 'post.backdrops.coral' | 'post.backdrops.crystal' | 'post.backdrops.turquoise' | 'post.backdrops.mint' | 'post.backdrops.custom' | 'a11y.photoOf' | 'a11y.photoAt' | 'a11y.pieces' | 'a11y.switchToDarkTheme' | 'a11y.switchToLightTheme' | 'a11y.search' | 'a11y.postPreview' | 'a11y.choosePhoto' | 'dialog.cancel';

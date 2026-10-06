@@ -160,6 +160,10 @@
                 "input": "public"
               },
               {
+                "glob": "icons/whatsapp.svg",
+                "input": "public"
+              },
+              {
                 "glob": "brand/*",
                 "input": "public"
               }

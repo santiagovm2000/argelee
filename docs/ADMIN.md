@@ -76,7 +76,8 @@ can be cached forever.
 ## The flow in the panel
 
 1. **List.** Order by drag (or arrow keys on the handle), a switch per piece for published/hidden,
-   pencil to edit, bin to delete, search by name. Reorder, visibility and deletion are edits of the
+   the round camera glyph to make its Instagram publication, pencil to edit, bin to delete, search
+   by name. Reorder, visibility and deletion are edits of the
    list and need **Guardar cambios**.
 2. **Piece.** Photos, visibility, price, texts, size and the flavour and fruit groups, saved in one
    go with **Guardar pieza**. The photos are a grid with the cover first and large: **Añadir
@@ -92,6 +93,8 @@ can be cached forever.
    field states the real margin the chosen price leaves.
 3. **PDF.** A save leaves the PDF behind; the bar says so and offers **Generar PDF**, which renders
    the price list from the saved document and stores it where `/ArGeles-catalogo.pdf` serves it.
+4. **Publication.** The two Instagram slides of a piece, painted and downloaded in the browser;
+   see below.
 
 The bar under the list shows one message and one next step at a time: unsaved changes → save;
 saved → generate the PDF; PDF generated → open it. A save conflict (someone saved from elsewhere, 412) offers to reload; a validation error lists the fields.
@@ -159,6 +162,36 @@ answers 503 and the panel says the PDF could not be generated.
 Locally, `bun run catalog-pdf` prints the same HTML from the snapshot with headless Edge to
 `dist/ArGeles-catalogo.pdf` and says how many pages came out; open it to check the layout.
 
+## The Instagram publication
+
+Each row of the list opens `/publicacion/<id>`: the two slides the brand posts for a piece, drawn
+live on two `<canvas>` elements at Instagram's 1080 × 1350 (4:5). The first is the logo, the piece
+in its round lid on the water with its name, sunflowers at the edges and the two ways to order
+(the WhatsApp line and the site's host); the second, in the same colours, is the name in script,
+the divider, the description and the piece rising from the foot. The words are the piece's own
+`text.es`, never typed again, and **no price is ever drawn**: prices change in the panel and a
+posted image does not.
+
+The owner chooses three things, none of them saved:
+
+- **Photo**: any photo of the piece's gallery; the cover is the default.
+- **Framing**: a zoom slider, and the photo dragged (or moved with the arrow keys) inside the
+  circle. `photoPlacement()` keeps the circle covered whatever is chosen.
+- **Backdrop**: the five colours of the brand book's palette at one click, or any colour from the
+  browser's own picker. Whatever would be lost on the chosen colour steps aside (`blendsInto()`):
+  the coral pill turns white on a coral slide, the sunflowers' petals on a mango one.
+  `inkToneOn()` gives a deep backdrop white ink and a light one navy, logo included.
+
+**Nothing is uploaded or stored.** `PostArtService` reads the brand drawings (`brand/*.svg`,
+`icons/whatsapp.svg`) as `Path2D` outlines and the photo as a bitmap, all from the panel's own
+origin so the canvas stays exportable; `post-painter.ts` paints; `downloadCanvas()` turns the
+canvas into a PNG blob and hands it to the browser as a download (`<slug>-1.png`,
+`<slug>-2.png`). No Worker route, no KV, no R2.
+
+The layout is numbers in `post.constants.ts`; changing how a slide looks is changing them and the
+painter, not a template. The pure parts (ink tone, wrapping, fitting, framing, the phone as it is
+dialled, the file name) are in `post-text.ts` and tested in `tests/admin/core/post/`.
+
 ## Setting it up once
 
 Cloudflare resources, created with `wrangler` (ids in the two `wrangler.jsonc` files):
@@ -222,10 +255,11 @@ and panel (4300), each proxying `/api`, `/photos` and the PDF to its Worker.
 | A piece's photo list                   | `src/app/core/catalog/gallery.ts`, cap in `catalog.constants.ts`           |
 | Price calculator                       | `src/app/core/catalog/costing.ts`, steps in `catalog.constants.ts`         |
 | PDF template and styles                | `src/app/core/catalog/pdf/`                                                |
+| Instagram publication                  | `projects/admin/src/app/core/post/`, editor in `features/post/`            |
 | Site Worker                            | `workers/site/`, config `wrangler.jsonc`                                   |
 | Admin Worker                           | `workers/admin/`, config `admin/wrangler.jsonc`                            |
 | Shared Worker code (stores, headers)   | `workers/shared/`                                                          |
 | The panel                              | `projects/admin/` (its own locale in `projects/admin/public/i18n/es.json`) |
 | Seed for a fresh account               | `assets-src/catalog/seed/`                                                 |
 | Scripts                                | `scripts/{catalog-seed,catalog-pull,admin-credentials,catalog-pdf,dev}.ts` |
-| Tests                                  | `tests/core/catalog/`, `tests/workers/`                                    |
+| Tests                                  | `tests/core/catalog/`, `tests/workers/`, `tests/admin/`                    |

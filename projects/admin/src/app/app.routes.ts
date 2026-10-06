@@ -26,6 +26,10 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/product/product-page/product-page').then((m) => m.ProductPage),
       },
+      {
+        path: `${ADMIN_ROUTES.post}/:${ADMIN_ROUTES.productIdParam}`,
+        loadComponent: () => import('./features/post/post-page/post-page').then((m) => m.PostPage),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

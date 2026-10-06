@@ -86,13 +86,15 @@ src/
 projects/admin/                  the panel: same styles, its own locale and translation keys
   src/app/
     core/                        session (login state, guard), catalog (AdminCatalogService, drafts,
-                                 photo upload, PdfService), config, i18n providers
+                                 photo upload, PdfService), post (the Instagram slides: constants,
+                                 painter, art loader, download), config, i18n providers
     layout/                      admin-header, admin-menu (site link, logout, theme), theme-toggle
     shared/ui/amount-input/      masked money / percent / count field
     features/
       login/                     the login page
       catalog/                   the list: order, visibility, search, the save bar
       product/                   the piece form and the option-group editor
+      post/                      a piece's Instagram publication: live preview, choices, download
   public/i18n/es.json            the panel's texts
 
 workers/

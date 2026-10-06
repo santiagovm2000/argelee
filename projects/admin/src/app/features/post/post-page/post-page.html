@@ -1,0 +1,235 @@
+<ng-container *transloco="let translate">
+  <section class="mx-auto max-w-content px-6 pt-10 pb-24 sm:px-10">
+    <a
+      [routerLink]="['/']"
+      class="inline-flex min-h-11 items-center gap-2 text-eyebrow font-bold text-ink-muted transition-colors duration-quick hover:text-ink"
+    >
+      <svg
+        class="size-3.5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m7-7-7 7 7 7" />
+      </svg>
+      {{ translate(t.product.back) }}
+    </a>
+
+    @if (!loaded()) {
+      <p class="mt-8 text-body text-ink-muted" aria-live="polite">
+        {{ translate(t.catalog.loading) }}
+      </p>
+    } @else if (product() === null) {
+      <p class="mt-8 text-body text-ink-muted">{{ translate(t.product.missing) }}</p>
+    } @else {
+      <h1 class="mt-4 font-display text-headline text-ink">
+        {{ translate(t.post.title, { name: name() }) }}
+      </h1>
+      <p class="mt-2 max-w-prose text-body-sm text-ink-muted">{{ translate(t.post.lead) }}</p>
+
+      @if (photo() === null) {
+        <p class="mt-10 text-body text-ink-muted">{{ translate(t.post.noPhotos) }}</p>
+        <a [routerLink]="editLink()" class="button button--secondary button--compact mt-6">
+          {{ translate(t.post.addPhotos) }}
+        </a>
+      } @else {
+        <div class="mt-10 grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(15rem,1fr)] lg:gap-14">
+          <div>
+            <p
+              class="min-h-6 text-body-sm"
+              [class.text-ink-muted]="!failed()"
+              [class.text-critical]="failed()"
+              [class.font-bold]="failed()"
+              role="status"
+              aria-live="polite"
+            >
+              @if (failed()) {
+                {{ translate(t.post.failed) }}
+              } @else if (!ready()) {
+                {{ translate(t.post.preparing) }}
+              }
+            </p>
+            <ol class="mt-3 grid gap-10 sm:grid-cols-2 sm:gap-6" role="list">
+              <li>
+                <canvas
+                  #pieceCanvas
+                  class="block h-auto w-full cursor-grab touch-none rounded-card bg-surface-tint shadow-raised active:cursor-grabbing"
+                  [width]="size.width"
+                  [height]="size.height"
+                  role="img"
+                  tabindex="0"
+                  [attr.aria-label]="translate(t.a11y.postPreview, { position: 1, name: name() })"
+                  (pointerdown)="grab($event)"
+                  (pointermove)="drag($event)"
+                  (pointerup)="release($event)"
+                  (pointercancel)="release($event)"
+                  (keydown.arrowLeft)="step($event, -1, 0)"
+                  (keydown.arrowRight)="step($event, 1, 0)"
+                  (keydown.arrowUp)="step($event, 0, -1)"
+                  (keydown.arrowDown)="step($event, 0, 1)"
+                ></canvas>
+                <button
+                  type="button"
+                  class="button button--primary button--compact mt-4 w-full"
+                  [disabled]="!ready()"
+                  (click)="download('piece')"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"
+                    />
+                  </svg>
+                  {{ translate(t.post.download.piece) }}
+                </button>
+              </li>
+              <li>
+                <canvas
+                  #aboutCanvas
+                  class="block h-auto w-full rounded-card bg-surface-tint shadow-raised"
+                  [width]="size.width"
+                  [height]="size.height"
+                  role="img"
+                  [attr.aria-label]="translate(t.a11y.postPreview, { position: 2, name: name() })"
+                ></canvas>
+                <button
+                  type="button"
+                  class="button button--primary button--compact mt-4 w-full"
+                  [disabled]="!ready()"
+                  (click)="download('about')"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"
+                    />
+                  </svg>
+                  {{ translate(t.post.download.about) }}
+                </button>
+              </li>
+            </ol>
+          </div>
+
+          <div class="flex flex-col gap-10 lg:sticky lg:top-24 lg:self-start">
+            <fieldset>
+              <legend class="text-eyebrow font-bold text-accent-text">
+                {{ translate(t.post.sections.photo) }}
+              </legend>
+              <div class="mt-4 grid grid-cols-4 gap-2 lg:grid-cols-3">
+                @for (item of photos(); track item.key; let index = $index) {
+                  <label
+                    class="relative block aspect-square cursor-pointer overflow-hidden rounded-control border-2 border-line-tint bg-surface-tint transition-colors duration-quick hover:border-accent-text has-checked:border-accent-text has-checked:ring-2 has-checked:ring-accent-text has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-surface"
+                  >
+                    <input
+                      type="radio"
+                      class="sr-only"
+                      name="post-photo"
+                      [checked]="item.key === photo()?.key"
+                      [attr.aria-label]="translate(t.a11y.choosePhoto, { position: index + 1 })"
+                      (change)="choose(item)"
+                    />
+                    <img
+                      [ngSrc]="item.key"
+                      fill
+                      [placeholder]="item.placeholder"
+                      sizes="6rem"
+                      class="object-cover"
+                      alt=""
+                    />
+                  </label>
+                }
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend class="text-eyebrow font-bold text-accent-text">
+                {{ translate(t.post.sections.framing) }}
+              </legend>
+              <label class="mt-4 block">
+                <span class="flex items-baseline justify-between gap-3">
+                  <span class="field-label mb-0">{{ translate(t.post.zoom) }}</span>
+                  <span class="text-caption text-ink-subtle">
+                    {{ translate(t.post.zoomValue, { percent: zoomPercent() }) }}
+                  </span>
+                </span>
+                <input
+                  type="range"
+                  class="mt-2 block h-11 w-full cursor-pointer accent-accent-text"
+                  [min]="zoomRange.min"
+                  [max]="zoomRange.max"
+                  [step]="zoomRange.step"
+                  [value]="framing().zoom"
+                  (input)="setZoom($event)"
+                />
+              </label>
+              <p class="field-hint">{{ translate(t.post.framingHint) }}</p>
+              <button type="button" class="control mt-4" (click)="centre()">
+                {{ translate(t.post.centre) }}
+              </button>
+            </fieldset>
+
+            <fieldset>
+              <legend class="text-eyebrow font-bold text-accent-text">
+                {{ translate(t.post.sections.backdrop) }}
+              </legend>
+              <div class="mt-4 flex flex-wrap items-center gap-2">
+                @for (option of backdrops; track option.id) {
+                  <label
+                    class="grid size-11 cursor-pointer place-items-center rounded-full border-2 border-transparent transition-colors duration-quick hover:border-line-tint has-checked:border-accent-text has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-surface"
+                    [title]="translate(option.labelKey)"
+                  >
+                    <input
+                      type="radio"
+                      class="sr-only"
+                      name="post-backdrop"
+                      [checked]="backdrop() === option.colour"
+                      [attr.aria-label]="translate(option.labelKey)"
+                      (change)="setBackdrop(option.colour)"
+                    />
+                    <span [class]="option.swatchClass"></span>
+                  </label>
+                }
+                <label class="inline-flex min-h-11 cursor-pointer items-center gap-1.5">
+                  <span
+                    class="grid size-11 place-items-center rounded-full border-2 transition-colors duration-quick has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-surface"
+                    [class.border-transparent]="!custom()"
+                    [class.border-accent-text]="custom()"
+                  >
+                    <input
+                      type="color"
+                      class="colour-well"
+                      [class.colour-well--any]="!custom()"
+                      [value]="customColour()"
+                      (input)="pickBackdrop($event)"
+                    />
+                  </span>
+                  <span class="text-caption font-bold text-ink-muted">
+                    {{ translate(t.post.backdrops.custom) }}
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      }
+    }
+  </section>
+</ng-container>
