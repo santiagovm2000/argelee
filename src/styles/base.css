@@ -4,6 +4,7 @@
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-surface-sunken: var(--surface-sunken);
+  --color-surface-disabled: var(--surface-disabled);
   --color-surface-tint: var(--surface-tint);
   --color-surface-selected: var(--surface-selected);
   --color-surface-hover: var(--surface-hover);
@@ -40,6 +41,7 @@
   --surface: var(--color-neutral-0);
   --surface-raised: var(--color-neutral-0);
   --surface-sunken: var(--color-neutral-50);
+  --surface-disabled: var(--color-neutral-100);
   --surface-tint: var(--color-turquoise-50);
   --surface-selected: var(--color-turquoise-100);
   --surface-hover: var(--color-turquoise-50);
@@ -69,6 +71,7 @@
   --surface: var(--color-neutral-950);
   --surface-raised: var(--color-neutral-800);
   --surface-sunken: var(--color-neutral-950);
+  --surface-disabled: var(--color-neutral-900);
   --surface-tint: var(--color-neutral-900);
   --surface-selected: var(--color-turquoise-900);
   --surface-hover: var(--color-neutral-800);

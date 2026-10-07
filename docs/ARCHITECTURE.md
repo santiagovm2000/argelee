@@ -34,7 +34,7 @@ core/       singletons and app-wide config: catalogue domain, i18n, theme, seo, 
 - `layout` may use `core` and `shared`.
 - The panel (`projects/admin/`) imports the site's `core/catalog`, `core/images`, `core/config` and
   `core/i18n` constants through the `@core/*` alias, and from `@shared/ui` only the brand's own
-  drawings (the logo, the water pattern), never a site feature, layout or page component. It has
+  drawing of the logo, never a site feature, layout or page component. It has
   its own `core/`, `layout/`, `shared/` and `features/` with the same rules.
 - `workers/` imports `core/catalog` and `core/config` only; Workers have no Angular and no DOM.
 
@@ -90,9 +90,8 @@ projects/admin/                  the panel: same styles, its own locale and tran
                                  photo upload, PdfService), post (the Instagram slides: constants,
                                  painter, art loader, download, publish), config, i18n providers
     layout/                      admin-header, admin-menu (site link, logout, theme), theme-toggle
-    shared/ui/                   amount-input (masked money / percent / count field), confirm-dialog and
-                                 toast (the one question and the one passing notice, asked for through
-                                 core/ui)
+    shared/ui/                   amount-input (masked money / percent / count field), confirm-dialog
+                                 (the one question, asked for through core/ui)
     features/
       login/                     the login page
       catalog/                   the list: order, visibility, search, the save bar

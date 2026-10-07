@@ -112,6 +112,7 @@ const PAGE_CHECKS: readonly Check[] = [
   ['--color-neutral-0', '--color-whatsapp-deep', 4.5, 'label on the WhatsApp button'],
   ['--color-neutral-0', '--color-instagram', 4.5, 'label on the Instagram button'],
   ['--color-neutral-0', '--color-instagram-hover', 4.5, 'label on the Instagram button, hovered'],
+  ['--color-neutral-950', '--color-mint-400', 4.5, 'label on a button whose action went through'],
 ];
 
 const SCENE_CHECKS: readonly Check[] = [

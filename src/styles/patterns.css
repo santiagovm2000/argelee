@@ -202,6 +202,23 @@
 .button--instagram {
   @apply bg-instagram text-neutral-0 hover:-translate-y-0.5 hover:bg-instagram-hover;
 }
+/* What a button turns into for a moment when its action has gone through: the
+   brand's Verde Menta, poured in by the button's own colour transition. It is
+   an answer, not a control, so it takes no click and does not lift. */
+.button--done {
+  @apply pointer-events-none bg-mint-400 text-neutral-950;
+}
+/* The tick that draws itself inside it: the stroke runs its length once, a beat
+   after the colour has started to change. Without motion it is simply there. */
+.tick {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--duration-deliberate) var(--ease-out-quart);
+}
+[data-phase='done'] .tick {
+  stroke-dashoffset: 0;
+  transition-delay: var(--duration-quick);
+}
 /* A thumb-sized button for a screen that is nothing but buttons. */
 .button--tall {
   @apply min-h-14;
@@ -288,7 +305,12 @@
 /* Form fields for the panel: one text-field look, one label, one switch, so
    every screen of the tool reads the same. */
 .field {
-  @apply block min-h-11 w-full rounded-control border border-line-strong bg-surface-raised px-3.5 py-2.5 text-body-sm text-ink transition-[border-color] duration-quick placeholder:text-ink-subtle hover:border-accent-text focus-visible:border-accent-text;
+  @apply block min-h-11 w-full rounded-control border border-line-strong bg-surface-raised px-3.5 py-2.5 text-body-sm text-ink transition-[border-color,background-color,color] duration-quick placeholder:text-ink-subtle hover:border-accent-text focus-visible:border-accent-text;
+}
+/* A field that cannot be typed in says so at a glance: it sinks into a grey
+   wash, loses its blue outline and its text fades, and the cursor refuses. */
+.field:disabled {
+  @apply cursor-not-allowed border-line bg-surface-disabled text-ink-subtle hover:border-line;
 }
 .field--area {
   @apply min-h-20 resize-y leading-relaxed;

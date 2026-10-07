@@ -180,6 +180,7 @@
       "ready": "Se publica en @{{account}}.",
       "action": "Publicar en Instagram",
       "sending": "Publicando…",
+      "done": "Publicada",
       "sendingNote": "Publicando en @{{account}}. Tarda unos segundos; no cierres esta página.",
       "published": "Publicada en @{{account}}.",
       "confirmTitle": "¿Publicar en @{{account}}?",

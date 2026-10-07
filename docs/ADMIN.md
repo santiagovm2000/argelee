@@ -206,8 +206,9 @@ connected to, with a caption the owner can edit first. The caption starts from a
 from the piece (`post.publish.suggestion` in the panel's locale: name, description, how to order,
 five hashtags); the counters show Instagram's limits, 2200 characters and five hashtags. A
 confirmation comes first, because a post cannot be taken back from the panel. When it goes
-through, a toast says so (`ToastService`, the app's one passing notice) and the block keeps a
-quiet line saying it was published; nothing about the post is kept, not even its link.
+through, the button itself says so: it turns green with a tick for a moment and is a button
+again, the caption still editable; the fields are only locked while the post is being sent.
+Nothing about the post is kept, not even its link.
 
 The token never reaches the browser. The panel talks to its Worker, and the Worker to Instagram:
 

@@ -2,6 +2,7 @@ import { NgOptimizedImage } from '@angular/common';
 import {
   Component,
   computed,
+  DestroyRef,
   effect,
   type ElementRef,
   inject,
@@ -26,8 +27,8 @@ import { PostArtService } from '../../../core/post/post-art.service';
 import { downloadCanvas } from '../../../core/post/post-download';
 import { paintAboutSlide, paintPieceSlide } from '../../../core/post/post-painter';
 import {
+  type FailedPost,
   hashtagCount,
-  type PublishOutcome,
   type PublishTrouble,
 } from '../../../core/post/post-publish';
 import { PostPublishService } from '../../../core/post/post-publish.service';
@@ -42,14 +43,15 @@ import {
   POST_FILE_EXTENSION,
   POST_SIZE,
   type PostBackdropId,
+  PUBLISHED_HOLD_MS,
   ZOOM,
 } from '../../../core/post/post.constants';
 import type { PhotoFraming, PostArt, PostContent } from '../../../core/post/post.model';
 import { ConfirmService } from '../../../core/ui/confirm.service';
-import { ToastService } from '../../../core/ui/toast.service';
 
 type Canvas = ElementRef<HTMLCanvasElement>;
 type Slide = 'piece' | 'about';
+type PublishPhase = 'idle' | 'sending' | 'done';
 
 interface Grip {
   readonly pointer: number;
@@ -93,7 +95,6 @@ export class PostPage {
   private readonly artist = inject(PostArtService);
   private readonly publisher = inject(PostPublishService);
   private readonly confirm = inject(ConfirmService);
-  private readonly toast = inject(ToastService);
   private readonly transloco = inject(TranslocoService);
   private readonly pieceCanvas = viewChild<Canvas>('pieceCanvas');
   private readonly aboutCanvas = viewChild<Canvas>('aboutCanvas');
@@ -159,25 +160,27 @@ export class PostPage {
   protected readonly captionFits = computed(() => this.caption().length <= CAPTION_MAX_LENGTH);
   protected readonly tagCount = computed(() => hashtagCount(this.caption()));
   protected readonly tagsFit = computed(() => this.tagCount() <= CAPTION_MAX_HASHTAGS);
-  protected readonly sending = signal(false);
-  private readonly outcome = linkedSignal<string, PublishOutcome | null>({
+  protected readonly phase = signal<PublishPhase>('idle');
+  protected readonly sending = computed(() => this.phase() === 'sending');
+  private doneTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly failure = linkedSignal<string, FailedPost | null>({
     source: this.id,
     computation: () => null,
   });
-  protected readonly published = computed(() => this.outcome()?.kind === 'published');
   protected readonly trouble = computed(() => {
-    const outcome = this.outcome();
-    if (outcome === null || outcome.kind === 'published') return null;
-    return { key: TROUBLE_KEYS[outcome.kind], detail: outcome.detail };
+    const failure = this.failure();
+    return failure === null ? null : { key: TROUBLE_KEYS[failure.kind], detail: failure.detail };
   });
   protected readonly publishable = computed(
-    () =>
-      this.ready() && this.instagram()?.state === 'ready' && this.captionFits() && !this.sending(),
+    () => this.ready() && this.instagram()?.state === 'ready' && this.captionFits(),
   );
 
   constructor() {
     if (!this.loaded()) void this.catalog.load();
     void this.publisher.check();
+    inject(DestroyRef).onDestroy(() => {
+      this.clearDoneTimer();
+    });
     void this.artist.load().then(
       (art) => {
         this.art.set(art);
@@ -289,11 +292,15 @@ export class PostPage {
     void this.publisher.check();
   }
 
-  /** Asks once, then sends both slides and the caption; a post cannot be taken back from here. */
+  /**
+   * Asks once, then sends both slides and the caption; a post cannot be taken
+   * back from here. The button itself says it went through, then is a button again.
+   */
   protected async publish(): Promise<void> {
     const piece = this.pieceCanvas()?.nativeElement;
     const about = this.aboutCanvas()?.nativeElement;
-    if (piece === undefined || about === undefined || !this.publishable()) return;
+    if (piece === undefined || about === undefined) return;
+    if (!this.publishable() || this.phase() !== 'idle') return;
     const agreed = await this.confirm.ask({
       titleKey: T.post.publish.confirmTitle,
       bodyKey: T.post.publish.confirmBody,
@@ -301,17 +308,24 @@ export class PostPage {
       params: { account: this.account() },
     });
     if (!agreed) return;
-    this.sending.set(true);
-    this.outcome.set(null);
-    try {
-      const outcome = await this.publisher.publish([piece, about], this.caption());
-      this.outcome.set(outcome);
-      if (outcome.kind === 'published') {
-        this.toast.show({ key: T.post.publish.published, params: { account: this.account() } });
-      }
-    } finally {
-      this.sending.set(false);
+    this.phase.set('sending');
+    this.failure.set(null);
+    const outcome = await this.publisher.publish([piece, about], this.caption());
+    if (outcome.kind !== 'published') {
+      this.failure.set(outcome);
+      this.phase.set('idle');
+      return;
     }
+    this.phase.set('done');
+    this.clearDoneTimer();
+    this.doneTimer = setTimeout(() => {
+      this.phase.set('idle');
+    }, PUBLISHED_HOLD_MS);
+  }
+
+  private clearDoneTimer(): void {
+    if (this.doneTimer !== null) clearTimeout(this.doneTimer);
+    this.doneTimer = null;
   }
 
   private nudge(dx: number, dy: number): void {

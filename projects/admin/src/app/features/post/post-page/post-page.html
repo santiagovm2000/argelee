@@ -256,7 +256,7 @@
                 class="field field--area mt-2"
                 rows="11"
                 [value]="caption()"
-                [disabled]="sending() || published()"
+                [disabled]="sending()"
                 (input)="setCaption($event)"
               ></textarea>
             </label>
@@ -274,7 +274,7 @@
                   })
                 }}
               </p>
-              @if (captionEdited() && !published()) {
+              @if (captionEdited()) {
                 <button
                   type="button"
                   class="control"
@@ -297,19 +297,12 @@
                 role="status"
                 aria-live="polite"
               >
-                @if (published()) {
-                  <svg
-                    class="mt-0.5 size-4 shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    aria-hidden="true"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m5 12 4.5 4.5L19 7" />
-                  </svg>
-                  <p>{{ translate(t.post.publish.published, { account: account() }) }}</p>
-                } @else if (sending()) {
+                @if (phase() === 'done') {
+                  <p class="sr-only">
+                    {{ translate(t.post.publish.published, { account: account() }) }}
+                  </p>
+                }
+                @if (sending()) {
                   <p>{{ translate(t.post.publish.sendingNote, { account: account() }) }}</p>
                 } @else if (trouble(); as failure) {
                   <svg
@@ -352,35 +345,82 @@
                 }
               </div>
 
-              @if (!published()) {
-                <div class="flex shrink-0 flex-wrap items-center gap-3">
-                  @if (instagram()?.state === 'unreachable') {
-                    <button type="button" class="control" (click)="recheck()">
-                      {{ translate(t.post.publish.retry) }}
-                    </button>
-                  }
-                  <button
-                    type="button"
-                    class="button button--instagram button--compact"
-                    [disabled]="!publishable()"
-                    (click)="publish()"
-                  >
-                    <svg
-                      class="size-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      aria-hidden="true"
-                    >
-                      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-                      <circle cx="12" cy="12" r="3.8" />
-                      <path stroke-linecap="round" d="M17 7h.01" />
-                    </svg>
-                    {{ translate(sending() ? t.post.publish.sending : t.post.publish.action) }}
+              <div class="flex shrink-0 flex-wrap items-center gap-3">
+                @if (instagram()?.state === 'unreachable') {
+                  <button type="button" class="control" (click)="recheck()">
+                    {{ translate(t.post.publish.retry) }}
                   </button>
-                </div>
-              }
+                }
+                <button
+                  type="button"
+                  class="group button button--compact"
+                  [class.button--instagram]="phase() !== 'done'"
+                  [class.button--done]="phase() === 'done'"
+                  [attr.data-phase]="phase()"
+                  [attr.aria-busy]="sending()"
+                  [disabled]="!publishable()"
+                  (click)="publish()"
+                >
+                  <span class="grid place-items-center">
+                    <span
+                      class="col-start-1 row-start-1 inline-flex items-center gap-2 opacity-0 transition-opacity duration-settled group-data-[phase=idle]:opacity-100"
+                      [attr.aria-hidden]="phase() !== 'idle'"
+                    >
+                      <svg
+                        class="size-4 scale-50 transition-[scale] duration-settled ease-out-quart group-data-[phase=idle]:scale-100"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        aria-hidden="true"
+                      >
+                        <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+                        <circle cx="12" cy="12" r="3.8" />
+                        <path stroke-linecap="round" d="M17 7h.01" />
+                      </svg>
+                      {{ translate(t.post.publish.action) }}
+                    </span>
+                    <span
+                      class="col-start-1 row-start-1 inline-flex items-center gap-2 opacity-0 transition-opacity duration-settled group-data-[phase=sending]:opacity-100"
+                      [attr.aria-hidden]="phase() !== 'sending'"
+                    >
+                      <svg
+                        class="size-4 group-data-[phase=sending]:animate-spin"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.25"
+                        aria-hidden="true"
+                      >
+                        <path stroke-linecap="round" d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5" />
+                      </svg>
+                      {{ translate(t.post.publish.sending) }}
+                    </span>
+                    <span
+                      class="col-start-1 row-start-1 inline-flex items-center gap-2 opacity-0 transition-opacity duration-settled group-data-[phase=done]:opacity-100"
+                      [attr.aria-hidden]="phase() !== 'done'"
+                    >
+                      <svg
+                        class="size-5 scale-50 transition-[scale] duration-settled ease-out-quart group-data-[phase=done]:scale-100"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        aria-hidden="true"
+                      >
+                        <path
+                          class="tick"
+                          pathLength="1"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m5 12.5 4.5 4.5L19 7.5"
+                        />
+                      </svg>
+                      {{ translate(t.post.publish.done) }}
+                    </span>
+                  </span>
+                </button>
+              </div>
             </div>
           </fieldset>
         </div>

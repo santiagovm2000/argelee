@@ -95,6 +95,7 @@ Roles, defined in `base.css` and exposed as utilities:
 | `text-critical`      | the panel's error messages                                      | the site                         |
 
 Surfaces and ink: `bg-surface`, `bg-surface-raised`, `bg-surface-tint`, `bg-surface-sunken`,
+`bg-surface-disabled` (a field that cannot be typed in),
 `text-ink`, `text-ink-muted`, `text-ink-subtle` (large text only).
 
 **Always use the semantic alias, never a raw scale step.** `bg-surface`, not `bg-neutral-0`.
@@ -175,12 +176,15 @@ There is no component library. The few shapes the site needs are ours:
   WhatsApp is not among them: the floating button is there for that. Below `2xl` the icons step in
   from the edge, because that button sits on that corner at the end of the page; on a phone the
   row stacks, the icons above the two lines of text.
-- **The toast** (panel only, `projects/admin/.../shared/ui/toast`): the passing notice that
-  something went well, as a drop of the brand's water: a `.water` pill with the pattern inside, the
-  white rim of the round lid around it and one sunflower proud of its left edge, which turns a
-  quarter as the pill rises. It answers an action, says one short sentence, and leaves on its own
-  (`TOAST_DURATION_MS`); with reduced motion it simply appears. Errors never go in it: they stay
-  where the action was, in `text-critical`.
+- **A button that answers** (panel only, the publish button of a piece's publication): the
+  confirmation lives in the button that was pressed, never in a toast. Its glyph and its label are
+  three states stacked in one place (`data-phase`: idle, sending, done), so they cross-fade and the
+  pill keeps its width: the Instagram glyph, an arc that turns while the post is being sent, and a
+  tick that draws itself (`.tick`) as the pill pours from Instagram's magenta into Verde Menta
+  (`.button--done`). After `PUBLISHED_HOLD_MS` it pours back and is a button again; nothing stays
+  locked. With reduced motion the states simply swap. Errors stay beside it, in `text-critical`.
+- **A field that is off**: `.field:disabled` sinks into `bg-surface-disabled`, loses its blue
+  outline and fades its text, so a locked field reads as locked at a glance.
 - **Quantity**: `shared/ui/quantity-input`, a native number field between our own minus and plus
   buttons in one pill, for pieces sold by the unit.
 - **Chips**: `shared/ui/choice-list` — pills, each with the fruit sticker of its flavour or fruit in

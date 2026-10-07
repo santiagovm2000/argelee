@@ -8,6 +8,8 @@ export const POST_IMAGE_TYPE = 'image/png';
 export const POST_FILE_EXTENSION = '.png';
 // Instagram takes JPEG only; at this quality the water and the script stay clean.
 export const SLIDE_JPEG_QUALITY = 0.92;
+// How long the publish button stays on its tick before it is a button again.
+export const PUBLISHED_HOLD_MS = 2800;
 
 export const HALF = 0.5;
 export const BOTH = 2;
