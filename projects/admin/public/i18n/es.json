@@ -153,9 +153,8 @@
       "framing": "Encuadre",
       "backdrop": "Fondo"
     },
-    "zoom": "Acercar",
+    "zoom": "Tamaño de la foto",
     "zoomValue": "{{percent}} %",
-    "framingHint": "Arrastra la foto en la lámina 1 para moverla dentro del círculo.",
     "centre": "Centrar",
     "backdrops": {
       "mango": "Amarillo Mango",

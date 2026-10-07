@@ -115,7 +115,7 @@ export function fileSlug(name: string): string {
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, value));
 
-/** A framing kept inside its limits, so the photo always covers its circle. */
+/** A framing kept inside its limits. */
 export function clampFraming(framing: PhotoFraming): PhotoFraming {
   return {
     zoom: clamp(framing.zoom, ZOOM.min, ZOOM.max),
@@ -124,7 +124,11 @@ export function clampFraming(framing: PhotoFraming): PhotoFraming {
   };
 }
 
-/** Where a photo is drawn, relative to its circle's box, so that it covers the circle. */
+/**
+ * Where a photo is drawn, relative to its circle's box. At a zoom of 1 its short
+ * side just covers the circle; a side with room to spare follows the nudge, and
+ * one that falls short of the circle stays centred in it.
+ */
 export function photoPlacement(photo: Size, diameter: number, framing: PhotoFraming): Rect {
   const scale = (diameter / Math.min(photo.width, photo.height)) * framing.zoom;
   const width = photo.width * scale;
@@ -132,8 +136,8 @@ export function photoPlacement(photo: Size, diameter: number, framing: PhotoFram
   const roomX = width - diameter;
   const roomY = height - diameter;
   return {
-    x: -roomX * HALF * (1 - framing.x),
-    y: -roomY * HALF * (1 - framing.y),
+    x: -roomX * HALF * (roomX > 0 ? 1 - framing.x : 1),
+    y: -roomY * HALF * (roomY > 0 ? 1 - framing.y : 1),
     width,
     height,
   };

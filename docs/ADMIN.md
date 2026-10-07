@@ -182,8 +182,10 @@ posted image does not.
 The owner chooses three things, none of them saved:
 
 - **Photo**: any photo of the piece's gallery; the cover is the default.
-- **Framing**: a zoom slider, and the photo dragged (or moved with the arrow keys) inside the
-  circle. `photoPlacement()` keeps the circle covered whatever is chosen.
+- **Framing**: a size slider, and the photo dragged (or moved with the arrow keys) inside the
+  circle. From 100 % up the photo covers the circle (`photoPlacement()`); below it, down to
+  `ZOOM.min`, more of the photo shows, whole and sharp, and what it does not reach is the plain
+  aqua the site frames its photos on.
 - **Backdrop**: the five colours of the brand book's palette at one click, or any colour from the
   browser's own picker. Whatever would be lost on the chosen colour steps aside (`blendsInto()`):
   the coral pill turns white on a coral slide, the sunflowers' petals on a mango one.

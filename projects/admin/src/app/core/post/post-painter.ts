@@ -162,7 +162,10 @@ function paintHead(ctx: Context, logo: Drawing, ink: string): void {
   );
 }
 
-/** The piece in its round lid: a white ring with its shadow, and the photo framed inside. */
+/**
+ * The piece in its round lid: a white ring with its shadow, and the photo framed
+ * inside on plain aqua, which shows only where a zoomed-out photo does not reach.
+ */
 function paintLid(ctx: Context, scene: PostScene, top: number, diameter: number): void {
   const radius = diameter * HALF;
   const left = (POST_SIZE.width - diameter) * HALF;
@@ -184,6 +187,8 @@ function paintLid(ctx: Context, scene: PostScene, top: number, diameter: number)
   ctx.beginPath();
   ctx.arc(centreX, centreY, radius, 0, FULL_CIRCLE);
   ctx.clip();
+  ctx.fillStyle = POST_COLOURS.frame;
+  ctx.fillRect(left, top, diameter, diameter);
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(scene.photo, left + place.x, top + place.y, place.width, place.height);
   ctx.restore();

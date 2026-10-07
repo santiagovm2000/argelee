@@ -155,6 +155,25 @@ describe('photoPlacement', () => {
   });
 });
 
+describe('a photo zoomed out', () => {
+  const small = { zoom: 0.75, x: 0, y: 0 };
+
+  it('sits centred in the circle with room around it', () => {
+    const place = photoPlacement(SQUARE, DIAMETER, small);
+    expect(place.width).toBeCloseTo(75);
+    expect(place.height).toBeCloseTo(75);
+    expect(place.x).toBeCloseTo(12.5);
+    expect(place.y).toBeCloseTo(12.5);
+  });
+
+  it('stays centred along a side it no longer covers, whatever the nudge', () => {
+    const nudged = photoPlacement(LANDSCAPE, DIAMETER, { zoom: 0.6, x: 1, y: 1 });
+    expect(nudged.y).toBe(20);
+    expect(nudged.x).toBe(-0);
+    expect(nudgedFraming(small, SQUARE, DIAMETER, 30, 30)).toEqual(small);
+  });
+});
+
 describe('nudgedFraming', () => {
   it('moves the photo by the distance it was dragged', () => {
     const framing = nudgedFraming(DEFAULT_FRAMING, LANDSCAPE, DIAMETER, 25, 0);

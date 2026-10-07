@@ -41,6 +41,7 @@ export const DEFAULT_CUSTOM_BACKDROP = '#0e223a';
 // Fixed colours of a slide, the same values tokens.css gives the site.
 export const POST_COLOURS = {
   paper: '#ffffff',
+  frame: 'oklch(0.975 0.015 200.7)',
   ink: 'oklch(0.2 0.044 253.5)',
   coral: BRAND.coral,
   crystal: BRAND.crystal,
@@ -67,7 +68,9 @@ export const MIN_SEPARATION = 0.08;
 // A backdrop darker than this takes white ink; a lighter one takes navy.
 export const LIGHT_INK_MAX_LUMINANCE = 0.3;
 
-export const ZOOM = { min: 1, max: 3, step: 0.01 } as const;
+// At 1 the photo just covers its circle. Below that more of it shows, whole and
+// sharp, and what the photo does not reach is the plain aqua the site frames photos on.
+export const ZOOM = { min: 0.6, max: 3, step: 0.01 } as const;
 export const NUDGE_STEP = 0.08;
 export const DEFAULT_FRAMING: PhotoFraming = { zoom: 1, x: 0, y: 0 };
 
