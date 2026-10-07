@@ -6,6 +6,8 @@ import type { Band, Flower, PhotoFraming, Size } from './post.model';
 export const POST_SIZE: Size = { width: 1080, height: 1350 };
 export const POST_IMAGE_TYPE = 'image/png';
 export const POST_FILE_EXTENSION = '.png';
+// Instagram takes JPEG only; at this quality the water and the script stay clean.
+export const SLIDE_JPEG_QUALITY = 0.92;
 
 export const HALF = 0.5;
 export const BOTH = 2;

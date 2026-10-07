@@ -16,7 +16,9 @@ export const HTTP_STATUS = {
   unprocessable: 422,
   payloadTooLarge: 413,
   tooManyRequests: 429,
+  badGateway: 502,
   serviceUnavailable: 503,
+  gatewayTimeout: 504,
 } as const;
 
 export const HEADER = {

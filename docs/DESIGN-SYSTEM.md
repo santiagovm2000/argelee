@@ -175,6 +175,12 @@ There is no component library. The few shapes the site needs are ours:
   WhatsApp is not among them: the floating button is there for that. Below `2xl` the icons step in
   from the edge, because that button sits on that corner at the end of the page; on a phone the
   row stacks, the icons above the two lines of text.
+- **The toast** (panel only, `projects/admin/.../shared/ui/toast`): the passing notice that
+  something went well, as a drop of the brand's water: a `.water` pill with the pattern inside, the
+  white rim of the round lid around it and one sunflower proud of its left edge, which turns a
+  quarter as the pill rises. It answers an action, says one short sentence, and leaves on its own
+  (`TOAST_DURATION_MS`); with reduced motion it simply appears. Errors never go in it: they stay
+  where the action was, in `text-critical`.
 - **Quantity**: `shared/ui/quantity-input`, a native number field between our own minus and plus
   buttons in one pill, for pieces sold by the unit.
 - **Chips**: `shared/ui/choice-list` — pills, each with the fruit sticker of its flavour or fruit in

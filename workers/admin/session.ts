@@ -14,14 +14,14 @@ const encoder = new TextEncoder();
 const HASH_PARTS = 4;
 const MS_PER_SECOND = 1000;
 
-function toBase64Url(bytes: Uint8Array): string {
+export function toBase64Url(bytes: Uint8Array): string {
   return btoa(String.fromCharCode(...bytes))
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=+$/, '');
 }
 
-function fromBase64Url(text: string): Uint8Array<ArrayBuffer> | null {
+export function fromBase64Url(text: string): Uint8Array<ArrayBuffer> | null {
   try {
     const binary = atob(text.replace(/-/g, '+').replace(/_/g, '/'));
     return Uint8Array.from(binary, (char) => char.charCodeAt(0));

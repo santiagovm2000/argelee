@@ -1,0 +1,27 @@
+<ng-container *transloco="let translate">
+  <div
+    class="pointer-events-none fixed inset-x-0 bottom-8 z-50 flex justify-center px-6"
+    role="status"
+    aria-live="polite"
+  >
+    @if (toast.message(); as message) {
+      <div
+        class="relative rounded-full bg-surface-raised p-1 shadow-overlay transition-[opacity,translate] duration-settled ease-out-quart starting:translate-y-4 starting:opacity-0"
+      >
+        <p
+          class="water relative isolate flex min-h-14 items-center overflow-clip rounded-full bg-surface py-3 pr-8 pl-20 text-body leading-snug font-bold text-ink"
+        >
+          <arg-caustics />
+          {{ translate(message.key, message.params) }}
+        </p>
+        <svg
+          class="absolute top-1/2 left-2 size-17 -translate-y-1/2 transition-[rotate,scale] duration-deliberate ease-out-quart starting:scale-75 starting:-rotate-90"
+          [attr.viewBox]="daisy.viewBox"
+          aria-hidden="true"
+        >
+          <use [attr.href]="daisy.href" />
+        </svg>
+      </div>
+    }
+  </div>
+</ng-container>

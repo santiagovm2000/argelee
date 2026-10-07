@@ -128,7 +128,9 @@
             </ol>
           </div>
 
-          <div class="flex flex-col gap-10 lg:sticky lg:top-24 lg:self-start">
+          <div
+            class="flex flex-col gap-10 lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start"
+          >
             <fieldset>
               <legend class="text-eyebrow font-bold text-accent-text">
                 {{ translate(t.post.sections.photo) }}
@@ -228,6 +230,159 @@
               </div>
             </fieldset>
           </div>
+
+          <fieldset class="min-w-0 lg:col-start-1 lg:row-start-2">
+            <legend class="text-eyebrow font-bold text-accent-text">
+              {{ translate(t.post.publish.section) }}
+            </legend>
+            <label class="mt-4 block">
+              <span class="flex flex-wrap items-baseline justify-between gap-x-3">
+                <span class="field-label mb-0">{{ translate(t.post.publish.caption) }}</span>
+                <span
+                  class="text-caption"
+                  [class.text-ink-subtle]="captionFits()"
+                  [class.text-critical]="!captionFits()"
+                  [class.font-bold]="!captionFits()"
+                >
+                  {{
+                    translate(t.post.publish.count, {
+                      count: caption().length,
+                      max: captionLimit,
+                    })
+                  }}
+                </span>
+              </span>
+              <textarea
+                class="field field--area mt-2"
+                rows="11"
+                [value]="caption()"
+                [disabled]="sending() || published()"
+                (input)="setCaption($event)"
+              ></textarea>
+            </label>
+            <div class="mt-2 flex min-h-9 flex-wrap items-center justify-between gap-x-4 gap-y-2">
+              <p
+                class="text-caption"
+                [class.text-ink-subtle]="tagsFit()"
+                [class.text-critical]="!tagsFit()"
+                [class.font-bold]="!tagsFit()"
+              >
+                {{
+                  translate(tagsFit() ? t.post.publish.tags : t.post.publish.tagsOver, {
+                    count: tagCount(),
+                    max: tagLimit,
+                  })
+                }}
+              </p>
+              @if (captionEdited() && !published()) {
+                <button
+                  type="button"
+                  class="control"
+                  [disabled]="sending()"
+                  (click)="restoreCaption()"
+                >
+                  {{ translate(t.post.publish.restore) }}
+                </button>
+              }
+            </div>
+
+            <div
+              class="mt-6 flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
+            >
+              <div
+                class="flex min-w-0 items-start gap-2 text-body-sm"
+                [class.text-ink-muted]="trouble() === null"
+                [class.text-critical]="trouble() !== null"
+                [class.font-bold]="trouble() !== null"
+                role="status"
+                aria-live="polite"
+              >
+                @if (published()) {
+                  <svg
+                    class="mt-0.5 size-4 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m5 12 4.5 4.5L19 7" />
+                  </svg>
+                  <p>{{ translate(t.post.publish.published, { account: account() }) }}</p>
+                } @else if (sending()) {
+                  <p>{{ translate(t.post.publish.sendingNote, { account: account() }) }}</p>
+                } @else if (trouble(); as failure) {
+                  <svg
+                    class="mt-0.5 size-4 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 9v4m0 4h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"
+                    />
+                  </svg>
+                  <div>
+                    <p>{{ translate(failure.key) }}</p>
+                    @if (failure.detail; as detail) {
+                      <p class="mt-1 text-caption font-normal">
+                        {{ translate(t.post.publish.failed.detail, { detail }) }}
+                      </p>
+                    }
+                  </div>
+                } @else {
+                  @switch (instagram()?.state) {
+                    @case ('ready') {
+                      <p>{{ translate(t.post.publish.ready, { account: account() }) }}</p>
+                    }
+                    @case ('unconfigured') {
+                      <p>{{ translate(t.post.publish.unconfigured) }}</p>
+                    }
+                    @case ('unreachable') {
+                      <p>{{ translate(t.post.publish.unreachable) }}</p>
+                    }
+                    @default {
+                      <p>{{ translate(t.post.publish.checking) }}</p>
+                    }
+                  }
+                }
+              </div>
+
+              @if (!published()) {
+                <div class="flex shrink-0 flex-wrap items-center gap-3">
+                  @if (instagram()?.state === 'unreachable') {
+                    <button type="button" class="control" (click)="recheck()">
+                      {{ translate(t.post.publish.retry) }}
+                    </button>
+                  }
+                  <button
+                    type="button"
+                    class="button button--instagram button--compact"
+                    [disabled]="!publishable()"
+                    (click)="publish()"
+                  >
+                    <svg
+                      class="size-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      aria-hidden="true"
+                    >
+                      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+                      <circle cx="12" cy="12" r="3.8" />
+                      <path stroke-linecap="round" d="M17 7h.01" />
+                    </svg>
+                    {{ translate(sending() ? t.post.publish.sending : t.post.publish.action) }}
+                  </button>
+                </div>
+              }
+            </div>
+          </fieldset>
         </div>
       }
     }

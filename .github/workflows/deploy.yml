@@ -8,7 +8,8 @@
 #   CLOUDFLARE_API_TOKEN   an "Edit Cloudflare Workers" token that can also read the CATALOG namespace
 #   CLOUDFLARE_ACCOUNT_ID  the account that owns the argelees.com zone
 # The panel's own secrets (ADMIN_USER, ADMIN_PASSWORD_HASH, SESSION_SECRET,
-# BROWSER_RENDERING_TOKEN) live in the Worker, set once with `wrangler secret put`.
+# BROWSER_RENDERING_TOKEN, INSTAGRAM_ACCESS_TOKEN) live in the Worker, set once with
+# `wrangler secret put`.
 name: Deploy to argelees.com
 
 on:

@@ -15,6 +15,8 @@ export const PHOTO_MIME_TYPE = 'image/jpeg';
 export const PLACEHOLDER_MIME_TYPE = 'image/webp';
 export const ACCEPTED_PHOTO_TYPES = 'image/jpeg,image/png,image/webp';
 
+export const TOAST_DURATION_MS = 6000;
+
 export const DEFAULT_SERVES: readonly [from: number, to: number] = [16, 20];
 export const DEFAULT_PRICE = 30;
 export const DEFAULT_MARGIN_PERCENT = 100;

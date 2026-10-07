@@ -3,7 +3,14 @@ import {
   type CatalogDocument,
   validateCatalogDocument,
 } from '../../src/app/core/catalog/catalog.document';
-import type { AdminStore, CatalogStore, ObjectStore, ObjectWriter } from './stores';
+import type {
+  AdminStore,
+  CatalogStore,
+  ObjectRemover,
+  ObjectStore,
+  ObjectWriter,
+  TextSlot,
+} from './stores';
 
 // The only place that touches KV and R2 directly. Everything else works
 // through the interfaces in stores.ts.
@@ -57,5 +64,29 @@ export function r2ObjectWriter(bucket: R2Bucket): ObjectWriter {
     async put(key, body, contentType) {
       await bucket.put(key, body, { httpMetadata: { contentType } });
     },
+  };
+}
+
+/** The bucket for objects that are removed once they have served. */
+export function r2ObjectRemover(bucket: R2Bucket): ObjectRemover {
+  return {
+    ...r2ObjectWriter(bucket),
+    async storedBefore(prefix, time) {
+      const listed = await bucket.list({ prefix });
+      return listed.objects
+        .filter((object) => object.uploaded.getTime() < time)
+        .map((object) => object.key);
+    },
+    async remove(keys) {
+      if (keys.length > 0) await bucket.delete([...keys]);
+    },
+  };
+}
+
+/** One KV key as a text value. */
+export function kvTextSlot(kv: KVNamespace, key: string): TextSlot {
+  return {
+    read: () => kv.get(key),
+    write: (value) => kv.put(key, value),
   };
 }

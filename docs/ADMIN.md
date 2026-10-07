@@ -24,9 +24,16 @@ admin.argelees.com          Worker "argelees-admin"  admin/wrangler.jsonc, worke
   PUT  /api/photos/<sha>.<ext>                       R2 put, key = content hash
   POST /api/pdf             Browser Rendering -> R2
   GET  /api/status          catalogue version vs PDF version
+  GET  /api/instagram       whether a token is set, and for which account
+  PUT  /api/instagram/slides/<uuid>.jpg              R2 put under posts/, for a few seconds
+  POST /api/instagram/publish                        Instagram API, then the slides are removed
+  GET  /posts/<uuid>.jpg    R2, no login: where Instagram fetches a parked slide
+  cron, Mondays             renews the Instagram token, removes any slide left parked
 
-shared                      KV namespace CATALOG (keys catalog, catalog:version, pdf:version)
-                            R2 bucket argelees-media (photos/*, catalog/ArGeles-catalogo.pdf)
+shared                      KV namespace CATALOG (keys catalog, catalog:version, pdf:version,
+                            instagram:token)
+                            R2 bucket argelees-media (photos/*, catalog/ArGeles-catalogo.pdf,
+                            posts/* while a publication is being sent)
 ```
 
 Both Workers only do I/O: read KV, stream R2, call one API. Hashing, image resizing and PDF
@@ -93,8 +100,8 @@ can be cached forever.
    field states the real margin the chosen price leaves.
 3. **PDF.** A save leaves the PDF behind; the bar says so and offers **Generar PDF**, which renders
    the price list from the saved document and stores it where `/ArGeles-catalogo.pdf` serves it.
-4. **Publication.** The two Instagram slides of a piece, painted and downloaded in the browser;
-   see below.
+4. **Publication.** The two Instagram slides of a piece, painted in the browser, then downloaded
+   or published straight to the account; see below.
 
 The bar under the list shows one message and one next step at a time: unsaved changes → save;
 saved → generate the PDF; PDF generated → open it. A save conflict (someone saved from elsewhere, 412) offers to reload; a validation error lists the fields.
@@ -182,15 +189,53 @@ The owner chooses three things, none of them saved:
   the coral pill turns white on a coral slide, the sunflowers' petals on a mango one.
   `inkToneOn()` gives a deep backdrop white ink and a light one navy, logo included.
 
-**Nothing is uploaded or stored.** `PostArtService` reads the brand drawings (`brand/*.svg`,
-`icons/whatsapp.svg`) as `Path2D` outlines and the photo as a bitmap, all from the panel's own
-origin so the canvas stays exportable; `post-painter.ts` paints; `downloadCanvas()` turns the
-canvas into a PNG blob and hands it to the browser as a download (`<slug>-1.png`,
+**A download uploads and stores nothing.** `PostArtService` reads the brand drawings
+(`brand/*.svg`, `icons/whatsapp.svg`) as `Path2D` outlines and the photo as a bitmap, all from the
+panel's own origin so the canvas stays exportable; `post-painter.ts` paints; `downloadCanvas()`
+turns the canvas into a PNG blob and hands it to the browser as a download (`<slug>-1.png`,
 `<slug>-2.png`). No Worker route, no KV, no R2.
 
 The layout is numbers in `post.constants.ts`; changing how a slide looks is changing them and the
 painter, not a template. The pure parts (ink tone, wrapping, fitting, framing, the phone as it is
 dialled, the file name) are in `post-text.ts` and tested in `tests/admin/core/post/`.
+
+### Publishing to Instagram
+
+Under the slides, **Publicar en Instagram** posts both as one carousel to the account the panel is
+connected to, with a caption the owner can edit first. The caption starts from a suggestion built
+from the piece (`post.publish.suggestion` in the panel's locale: name, description, how to order,
+five hashtags); the counters show Instagram's limits, 2200 characters and five hashtags. A
+confirmation comes first, because a post cannot be taken back from the panel. When it goes
+through, a toast says so (`ToastService`, the app's one passing notice) and the block keeps a
+quiet line saying it was published; nothing about the post is kept, not even its link.
+
+The token never reaches the browser. The panel talks to its Worker, and the Worker to Instagram:
+
+1. The page encodes each canvas as a JPEG (Instagram takes nothing else) and uploads it to
+   `PUT /api/instagram/slides/<uuid>.jpg`, which parks it in R2 under `posts/`.
+2. `POST /api/instagram/publish` names the parked slides and carries the caption. The Worker
+   (`workers/admin/instagram-api.ts`) creates one image container per slide, pointing Instagram at
+   `https://admin.argelees.com/posts/<uuid>.jpg`, then the carousel container, waits until Instagram
+   reports it `FINISHED` and publishes it.
+3. Whatever happened, the slides are removed from R2 before the Worker answers. `/posts/` is the
+   one address of the panel that needs no login, because Instagram has to read it; a slide lives
+   there for seconds under a random name and is served with `no-store`.
+
+A refusal comes back with Instagram's own explanation. A failure after the Worker asked Instagram
+to publish is reported apart (`instagram-uncertain`): the post may be live, so the panel says to
+look at the profile before trying again.
+
+`INSTAGRAM_ACCESS_TOKEN` is a Worker secret, a long-lived token of the Instagram API with Instagram
+Login (permissions `instagram_business_basic` and `instagram_business_content_publish`), generated
+in the Meta app dashboard for the account. It lasts sixty days, and a Worker cannot rewrite its
+own secrets, so a cron trigger trades it for a new one every Monday and keeps the result in KV
+(`instagram:token`) encrypted with a key derived from the secret (`instagram-token.ts`): what
+rests in KV is useless without the secret, and a secret the owner replaces takes over at once. The
+same cron removes any slide older than an hour, the safety net for a publication that was cut
+short. Without the secret the page says Instagram is not connected and the button stays off.
+
+Publishing only works on the deployed panel: Instagram must be able to fetch the slides, and it
+cannot reach `localhost`. The API allows about a hundred posts a day, far above any use here.
 
 ## Setting it up once
 
@@ -222,6 +267,10 @@ Then, in this order:
 
    (`bun run admin:credentials --remote` does both from a hidden prompt.)
 
+5. To publish to Instagram from the panel, the owner generates the account's token in the Meta app
+   dashboard and stores it himself, typed into wrangler's hidden prompt:
+   `bun run wrangler secret put INSTAGRAM_ACCESS_TOKEN --config admin/wrangler.jsonc`.
+
 The CI token needs to read the `CATALOG` namespace for `catalog:pull`.
 
 ## Working locally
@@ -245,6 +294,8 @@ and panel (4300), each proxying `/api`, `/photos` and the PDF to its Worker.
 | KV: 1k writes/day                      | two per save                                            |
 | Image transformations: 5k unique/month | a few hundred for the whole menu                        |
 | Browser Rendering: 10 min/day          | a PDF takes seconds                                     |
+| Workers: 50 subrequests per request    | a publication makes under twenty                        |
+| Cron triggers: 5 per account           | one, weekly                                             |
 | KV propagation: up to 60 s             | the panel says "visible in less than a minute"          |
 
 ## Where things live
@@ -256,6 +307,7 @@ and panel (4300), each proxying `/api`, `/photos` and the PDF to its Worker.
 | Price calculator                       | `src/app/core/catalog/costing.ts`, steps in `catalog.constants.ts`         |
 | PDF template and styles                | `src/app/core/catalog/pdf/`                                                |
 | Instagram publication                  | `projects/admin/src/app/core/post/`, editor in `features/post/`            |
+| Publishing it to Instagram             | `workers/admin/instagram-*.ts`, shared shapes in `workers/shared/`         |
 | Site Worker                            | `workers/site/`, config `wrangler.jsonc`                                   |
 | Admin Worker                           | `workers/admin/`, config `admin/wrangler.jsonc`                            |
 | Shared Worker code (stores, headers)   | `workers/shared/`                                                          |

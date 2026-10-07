@@ -6,23 +6,31 @@ import {
   type ElementRef,
   inject,
   input,
+  linkedSignal,
   signal,
   untracked,
   viewChild,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import type { ProductPhoto } from '@core/catalog/catalog.model';
 import { localizedText } from '@core/catalog/localized-text';
 import { SITE } from '@core/config/app.constants';
 import { DEPLOYMENT } from '@core/config/build-config.generated';
 import { DEFAULT_LANGUAGE } from '@core/i18n/i18n.constants';
+import { CAPTION_MAX_HASHTAGS, CAPTION_MAX_LENGTH } from '@workers/shared/instagram.constants';
 import { AdminCatalogService } from '../../../core/catalog/admin-catalog.service';
 import { ADMIN_ROUTES } from '../../../core/config/admin.constants';
 import { T, type TranslationKey } from '../../../core/i18n/translation-keys.generated';
 import { PostArtService } from '../../../core/post/post-art.service';
 import { downloadCanvas } from '../../../core/post/post-download';
 import { paintAboutSlide, paintPieceSlide } from '../../../core/post/post-painter';
+import {
+  hashtagCount,
+  type PublishOutcome,
+  type PublishTrouble,
+} from '../../../core/post/post-publish';
+import { PostPublishService } from '../../../core/post/post-publish.service';
 import { clampFraming, fileSlug, localPhone, nudgedFraming } from '../../../core/post/post-text';
 import {
   DEFAULT_BACKDROP,
@@ -37,6 +45,8 @@ import {
   ZOOM,
 } from '../../../core/post/post.constants';
 import type { PhotoFraming, PostArt, PostContent } from '../../../core/post/post.model';
+import { ConfirmService } from '../../../core/ui/confirm.service';
+import { ToastService } from '../../../core/ui/toast.service';
 
 type Canvas = ElementRef<HTMLCanvasElement>;
 type Slide = 'piece' | 'about';
@@ -55,13 +65,20 @@ const BACKDROP_LABELS: Readonly<Record<PostBackdropId, TranslationKey>> = {
   mint: T.post.backdrops.mint,
 };
 const SLIDE_SUFFIX: Readonly<Record<Slide, string>> = { piece: '-1', about: '-2' };
+const TROUBLE_KEYS: Readonly<Record<PublishTrouble, TranslationKey>> = {
+  rejected: T.post.publish.failed.rejected,
+  uncertain: T.post.publish.failed.uncertain,
+  slow: T.post.publish.failed.slow,
+  offline: T.post.publish.failed.offline,
+};
 const PERCENT = 100;
 const SWATCH_SHAPE = 'block size-8 rounded-full';
 
 /**
  * The Instagram publication of one piece: its two slides painted live from the
  * piece's own photo and words, with the photo, its framing and the backdrop left
- * to the owner, and a download for each slide. Nothing is saved anywhere.
+ * to the owner, and a download for each slide. Nothing is saved anywhere: a
+ * publication sent to Instagram passes through the Worker and is removed there.
  */
 @Component({
   selector: 'arg-post-page',
@@ -74,12 +91,18 @@ export class PostPage {
 
   private readonly catalog = inject(AdminCatalogService);
   private readonly artist = inject(PostArtService);
+  private readonly publisher = inject(PostPublishService);
+  private readonly confirm = inject(ConfirmService);
+  private readonly toast = inject(ToastService);
+  private readonly transloco = inject(TranslocoService);
   private readonly pieceCanvas = viewChild<Canvas>('pieceCanvas');
   private readonly aboutCanvas = viewChild<Canvas>('aboutCanvas');
 
   protected readonly t = T;
   protected readonly size = POST_SIZE;
   protected readonly zoomRange = ZOOM;
+  protected readonly captionLimit = CAPTION_MAX_LENGTH;
+  protected readonly tagLimit = CAPTION_MAX_HASHTAGS;
   protected readonly backdrops = POST_BACKDROPS.map((option) => ({
     ...option,
     labelKey: BACKDROP_LABELS[option.id],
@@ -123,8 +146,38 @@ export class PostPage {
   protected readonly ready = computed(() => this.art() !== null && this.bitmap() !== null);
   private grip: Grip | null = null;
 
+  protected readonly instagram = this.publisher.status;
+  protected readonly account = computed(() => this.instagram()?.username ?? '');
+  private readonly suggestion = computed(() => {
+    const content = this.content();
+    return content === null
+      ? ''
+      : this.transloco.translate(T.post.publish.suggestion, { ...content });
+  });
+  protected readonly caption = linkedSignal(() => this.suggestion());
+  protected readonly captionEdited = computed(() => this.caption() !== this.suggestion());
+  protected readonly captionFits = computed(() => this.caption().length <= CAPTION_MAX_LENGTH);
+  protected readonly tagCount = computed(() => hashtagCount(this.caption()));
+  protected readonly tagsFit = computed(() => this.tagCount() <= CAPTION_MAX_HASHTAGS);
+  protected readonly sending = signal(false);
+  private readonly outcome = linkedSignal<string, PublishOutcome | null>({
+    source: this.id,
+    computation: () => null,
+  });
+  protected readonly published = computed(() => this.outcome()?.kind === 'published');
+  protected readonly trouble = computed(() => {
+    const outcome = this.outcome();
+    if (outcome === null || outcome.kind === 'published') return null;
+    return { key: TROUBLE_KEYS[outcome.kind], detail: outcome.detail };
+  });
+  protected readonly publishable = computed(
+    () =>
+      this.ready() && this.instagram()?.state === 'ready' && this.captionFits() && !this.sending(),
+  );
+
   constructor() {
     if (!this.loaded()) void this.catalog.load();
+    void this.publisher.check();
     void this.artist.load().then(
       (art) => {
         this.art.set(art);
@@ -222,6 +275,43 @@ export class PostPage {
       `${fileSlug(this.name())}${SLIDE_SUFFIX[slide]}${POST_FILE_EXTENSION}`,
     );
     if (!saved) this.failed.set(true);
+  }
+
+  protected setCaption(event: Event): void {
+    if (event.target instanceof HTMLTextAreaElement) this.caption.set(event.target.value);
+  }
+
+  protected restoreCaption(): void {
+    this.caption.set(this.suggestion());
+  }
+
+  protected recheck(): void {
+    void this.publisher.check();
+  }
+
+  /** Asks once, then sends both slides and the caption; a post cannot be taken back from here. */
+  protected async publish(): Promise<void> {
+    const piece = this.pieceCanvas()?.nativeElement;
+    const about = this.aboutCanvas()?.nativeElement;
+    if (piece === undefined || about === undefined || !this.publishable()) return;
+    const agreed = await this.confirm.ask({
+      titleKey: T.post.publish.confirmTitle,
+      bodyKey: T.post.publish.confirmBody,
+      confirmKey: T.post.publish.confirm,
+      params: { account: this.account() },
+    });
+    if (!agreed) return;
+    this.sending.set(true);
+    this.outcome.set(null);
+    try {
+      const outcome = await this.publisher.publish([piece, about], this.caption());
+      this.outcome.set(outcome);
+      if (outcome.kind === 'published') {
+        this.toast.show({ key: T.post.publish.published, params: { account: this.account() } });
+      }
+    } finally {
+      this.sending.set(false);
+    }
   }
 
   private nudge(dx: number, dy: number): void {

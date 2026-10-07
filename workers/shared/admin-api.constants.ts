@@ -6,6 +6,9 @@ export const ADMIN_API = {
   status: '/api/status',
   photos: '/api/photos/',
   pdf: '/api/pdf',
+  instagram: '/api/instagram',
+  instagramSlides: '/api/instagram/slides/',
+  instagramPublish: '/api/instagram/publish',
 } as const;
 
 export const CSRF_HEADER_NAME = 'X-Requested-With';

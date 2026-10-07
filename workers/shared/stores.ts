@@ -30,3 +30,16 @@ export interface ObjectStore {
 export interface ObjectWriter extends ObjectStore {
   put(key: string, body: ReadableStream | ArrayBuffer, contentType: string): Promise<void>;
 }
+
+/** What short-lived objects need on top of writing: clearing up after themselves. */
+export interface ObjectRemover extends ObjectWriter {
+  /** The keys under a prefix stored before the given time. */
+  storedBefore(prefix: string, time: number): Promise<readonly string[]>;
+  remove(keys: readonly string[]): Promise<void>;
+}
+
+/** One private text value kept between requests. */
+export interface TextSlot {
+  read(): Promise<string | null>;
+  write(value: string): Promise<void>;
+}

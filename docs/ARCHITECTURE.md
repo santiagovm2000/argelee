@@ -33,8 +33,9 @@ core/       singletons and app-wide config: catalogue domain, i18n, theme, seo, 
   it moves down into `shared` (presentational) or `core` (state/services).
 - `layout` may use `core` and `shared`.
 - The panel (`projects/admin/`) imports the site's `core/catalog`, `core/images`, `core/config` and
-  `core/i18n` constants through the `@core/*` alias, never a site feature, layout or component. It
-  has its own `core/`, `layout/`, `shared/` and `features/` with the same rules.
+  `core/i18n` constants through the `@core/*` alias, and from `@shared/ui` only the brand's own
+  drawings (the logo, the water pattern), never a site feature, layout or page component. It has
+  its own `core/`, `layout/`, `shared/` and `features/` with the same rules.
 - `workers/` imports `core/catalog` and `core/config` only; Workers have no Angular and no DOM.
 
 ## Folder map
@@ -87,21 +88,26 @@ projects/admin/                  the panel: same styles, its own locale and tran
   src/app/
     core/                        session (login state, guard), catalog (AdminCatalogService, drafts,
                                  photo upload, PdfService), post (the Instagram slides: constants,
-                                 painter, art loader, download), config, i18n providers
+                                 painter, art loader, download, publish), config, i18n providers
     layout/                      admin-header, admin-menu (site link, logout, theme), theme-toggle
-    shared/ui/amount-input/      masked money / percent / count field
+    shared/ui/                   amount-input (masked money / percent / count field), confirm-dialog and
+                                 toast (the one question and the one passing notice, asked for through
+                                 core/ui)
     features/
       login/                     the login page
       catalog/                   the list: order, visibility, search, the save bar
       product/                   the piece form and the option-group editor
-      post/                      a piece's Instagram publication: live preview, choices, download
+      post/                      a piece's Instagram publication: live preview, choices, download,
+                                 caption and publish
   public/i18n/es.json            the panel's texts
 
 workers/
   site/                          argelees.com: /api/catalog, /photos, the PDF, sitemap, product shell, 404
-  admin/                         admin.argelees.com: session, catalogue PUT, photos PUT, PDF job, status
-  shared/                        HTTP helpers, security headers, store interfaces and their KV/R2 adapters
-admin/wrangler.jsonc             the admin Worker's config (assets, KV, R2, rate limit, domain)
+  admin/                         admin.argelees.com: session, catalogue PUT, photos PUT, PDF job, status,
+                                 Instagram (client, token renewal, slides and publish routes)
+  shared/                        HTTP helpers, security headers, store interfaces and their KV/R2 adapters,
+                                 and what the panel and its Worker agree on (API paths, Instagram shapes)
+admin/wrangler.jsonc             the admin Worker's config (assets, KV, R2, rate limit, cron, domain)
 wrangler.jsonc                   the site Worker's config
 
 public/
