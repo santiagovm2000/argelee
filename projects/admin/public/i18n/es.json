@@ -177,7 +177,7 @@
       "unconfigured": "Instagram no está conectado: falta guardar su token en el panel.",
       "unreachable": "Instagram no aceptó el acceso. Si el token venció, genera uno nuevo y guárdalo otra vez.",
       "retry": "Comprobar de nuevo",
-      "ready": "Se publican las dos láminas, en este orden y con este texto, en @{{account}}.",
+      "ready": "Se publica en @{{account}}.",
       "action": "Publicar en Instagram",
       "sending": "Publicando…",
       "sendingNote": "Publicando en @{{account}}. Tarda unos segundos; no cierres esta página.",
