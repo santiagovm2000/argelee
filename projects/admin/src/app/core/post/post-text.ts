@@ -115,6 +115,12 @@ export function fileSlug(name: string): string {
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, value));
 
+/** The largest size a photo takes inside a box without being cropped. */
+export function containedSize(photo: Size, box: Size): Size {
+  const scale = Math.min(box.width / photo.width, box.height / photo.height);
+  return { width: photo.width * scale, height: photo.height * scale };
+}
+
 /** A framing kept inside its limits. */
 export function clampFraming(framing: PhotoFraming): PhotoFraming {
   return {

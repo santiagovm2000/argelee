@@ -11,6 +11,7 @@ import {
   signal,
   untracked,
   viewChild,
+  viewChildren,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -19,13 +20,17 @@ import { localizedText } from '@core/catalog/localized-text';
 import { SITE } from '@core/config/app.constants';
 import { DEPLOYMENT } from '@core/config/build-config.generated';
 import { DEFAULT_LANGUAGE } from '@core/i18n/i18n.constants';
-import { CAPTION_MAX_HASHTAGS, CAPTION_MAX_LENGTH } from '@workers/shared/instagram.constants';
+import {
+  CAPTION_MAX_HASHTAGS,
+  CAPTION_MAX_LENGTH,
+  CAROUSEL_SLIDES,
+} from '@workers/shared/instagram.constants';
 import { AdminCatalogService } from '../../../core/catalog/admin-catalog.service';
 import { ADMIN_ROUTES } from '../../../core/config/admin.constants';
 import { T, type TranslationKey } from '../../../core/i18n/translation-keys.generated';
 import { PostArtService } from '../../../core/post/post-art.service';
 import { downloadCanvas } from '../../../core/post/post-download';
-import { paintAboutSlide, paintPieceSlide } from '../../../core/post/post-painter';
+import { paintAboutSlide, paintPhotoSlide, paintPieceSlide } from '../../../core/post/post-painter';
 import {
   type FailedPost,
   hashtagCount,
@@ -50,7 +55,6 @@ import type { PhotoFraming, PostArt, PostContent } from '../../../core/post/post
 import { ConfirmService } from '../../../core/ui/confirm.service';
 
 type Canvas = ElementRef<HTMLCanvasElement>;
-type Slide = 'piece' | 'about';
 type PublishPhase = 'idle' | 'sending' | 'done';
 
 interface Grip {
@@ -66,7 +70,6 @@ const BACKDROP_LABELS: Readonly<Record<PostBackdropId, TranslationKey>> = {
   turquoise: T.post.backdrops.turquoise,
   mint: T.post.backdrops.mint,
 };
-const SLIDE_SUFFIX: Readonly<Record<Slide, string>> = { piece: '-1', about: '-2' };
 const TROUBLE_KEYS: Readonly<Record<PublishTrouble, TranslationKey>> = {
   rejected: T.post.publish.failed.rejected,
   uncertain: T.post.publish.failed.uncertain,
@@ -74,12 +77,16 @@ const TROUBLE_KEYS: Readonly<Record<PublishTrouble, TranslationKey>> = {
   offline: T.post.publish.failed.offline,
 };
 const PERCENT = 100;
+const FIXED_SLIDES = 2;
+const FIRST_MIDDLE = 2;
+const MAX_MIDDLE = CAROUSEL_SLIDES.max - FIXED_SLIDES;
 const SWATCH_SHAPE = 'block size-8 rounded-full';
 
 /**
- * The Instagram publication of one piece: its two slides painted live from the
- * piece's own photo and words, with the photo, its framing and the backdrop left
- * to the owner, and a download for each slide. Nothing is saved anywhere: a
+ * The Instagram publication of one piece: its slides painted live from the
+ * piece's own photos and words — the cover, any photos the owner adds between,
+ * and the description — with the photos, the framing and the backdrop left to
+ * the owner, and a download for each slide. Nothing is saved anywhere: a
  * publication sent to Instagram passes through the Worker and is removed there.
  */
 @Component({
@@ -98,6 +105,7 @@ export class PostPage {
   private readonly transloco = inject(TranslocoService);
   private readonly pieceCanvas = viewChild<Canvas>('pieceCanvas');
   private readonly aboutCanvas = viewChild<Canvas>('aboutCanvas');
+  private readonly middleCanvases = viewChildren<Canvas>('middleCanvas');
 
   protected readonly t = T;
   protected readonly size = POST_SIZE;
@@ -134,6 +142,25 @@ export class PostPage {
 
   protected readonly name = computed(() => this.content()?.name ?? '');
 
+  protected readonly multiple = linkedSignal<string, boolean>({
+    source: this.id,
+    computation: () => false,
+  });
+  private readonly middleKeys = linkedSignal<string, readonly string[]>({
+    source: this.id,
+    computation: () => [],
+  });
+  protected readonly middles = computed<readonly ProductPhoto[]>(() => {
+    if (!this.multiple()) return [];
+    const photos = this.photos();
+    return this.middleKeys().flatMap((key) => photos.filter((item) => item.key === key));
+  });
+  protected readonly middlePosition = computed(
+    () => new Map(this.middles().map((item, index) => [item.key, index + FIRST_MIDDLE])),
+  );
+  protected readonly aboutPosition = computed(() => this.middles().length + FIXED_SLIDES);
+  private readonly middleBitmaps = signal<ReadonlyMap<string, ImageBitmap>>(new Map());
+
   protected readonly framing = signal<PhotoFraming>(DEFAULT_FRAMING);
   protected readonly zoomPercent = computed(() => Math.round(this.framing().zoom * PERCENT));
   protected readonly backdrop = signal<string>(DEFAULT_BACKDROP);
@@ -144,7 +171,12 @@ export class PostPage {
   protected readonly failed = signal(false);
   private readonly art = signal<PostArt | null>(null);
   private readonly bitmap = signal<ImageBitmap | null>(null);
-  protected readonly ready = computed(() => this.art() !== null && this.bitmap() !== null);
+  protected readonly ready = computed(
+    () =>
+      this.art() !== null &&
+      this.bitmap() !== null &&
+      this.middles().every((item) => this.middleBitmaps().has(item.key)),
+  );
   private grip: Grip | null = null;
 
   protected readonly instagram = this.publisher.status;
@@ -200,21 +232,53 @@ export class PostPage {
     });
 
     effect(() => {
+      const wanted = this.middles();
+      untracked(() => {
+        const decoded = this.middleBitmaps();
+        for (const item of wanted) {
+          if (!decoded.has(item.key)) void this.decodeMiddle(item.key);
+        }
+      });
+    });
+
+    effect(() => {
       const art = this.art();
       const photo = this.bitmap();
       const content = this.content();
+      const middles = this.middles();
+      const middleBitmaps = this.middleBitmaps();
+      const middleCanvases = this.middleCanvases();
       const piece = this.pieceCanvas()?.nativeElement.getContext('2d');
       const about = this.aboutCanvas()?.nativeElement.getContext('2d');
       if (art === null || photo === null || content === null) return;
       if (piece === null || piece === undefined || about === null || about === undefined) return;
-      const scene = { art, photo, content, backdrop: this.backdrop(), framing: this.framing() };
+      const backdrop = this.backdrop();
+      const scene = { art, photo, content, backdrop, framing: this.framing() };
       paintPieceSlide(piece, scene);
-      paintAboutSlide(about, scene);
+      middles.forEach((item, index) => {
+        const ctx = middleCanvases[index]?.nativeElement.getContext('2d');
+        const bitmap = middleBitmaps.get(item.key);
+        if (ctx === null || ctx === undefined || bitmap === undefined) return;
+        paintPhotoSlide(ctx, { art, photo: bitmap, backdrop }, index + 1);
+      });
+      paintAboutSlide(about, scene, middles.length);
     });
   }
 
   protected choose(photo: ProductPhoto): void {
     this.chosenKey.set(photo.key);
+  }
+
+  protected setMultiple(event: Event): void {
+    if (event.target instanceof HTMLInputElement) this.multiple.set(event.target.checked);
+  }
+
+  /** Puts a photo between the cover and the description, or takes it out; the order is the order of the taps. */
+  protected toggleMiddle(photo: ProductPhoto): void {
+    this.middleKeys.update((keys) => {
+      if (keys.includes(photo.key)) return keys.filter((key) => key !== photo.key);
+      return keys.length < MAX_MIDDLE ? [...keys, photo.key] : keys;
+    });
   }
 
   protected setBackdrop(colour: string): void {
@@ -270,12 +334,13 @@ export class PostPage {
     );
   }
 
-  protected async download(slide: Slide): Promise<void> {
-    const canvas = (slide === 'piece' ? this.pieceCanvas() : this.aboutCanvas())?.nativeElement;
+  /** Downloads one slide, named after the piece and its place in the carousel. */
+  protected async download(position: number): Promise<void> {
+    const canvas = this.slides()?.[position - 1];
     if (canvas === undefined || !this.ready()) return;
     const saved = await downloadCanvas(
       canvas,
-      `${fileSlug(this.name())}${SLIDE_SUFFIX[slide]}${POST_FILE_EXTENSION}`,
+      `${fileSlug(this.name())}-${String(position)}${POST_FILE_EXTENSION}`,
     );
     if (!saved) this.failed.set(true);
   }
@@ -293,13 +358,12 @@ export class PostPage {
   }
 
   /**
-   * Asks once, then sends both slides and the caption; a post cannot be taken
+   * Asks once, then sends every slide and the caption; a post cannot be taken
    * back from here. The button itself says it went through, then is a button again.
    */
   protected async publish(): Promise<void> {
-    const piece = this.pieceCanvas()?.nativeElement;
-    const about = this.aboutCanvas()?.nativeElement;
-    if (piece === undefined || about === undefined) return;
+    const slides = this.slides();
+    if (slides === null) return;
     if (!this.publishable() || this.phase() !== 'idle') return;
     const agreed = await this.confirm.ask({
       titleKey: T.post.publish.confirmTitle,
@@ -310,7 +374,7 @@ export class PostPage {
     if (!agreed) return;
     this.phase.set('sending');
     this.failure.set(null);
-    const outcome = await this.publisher.publish([piece, about], this.caption());
+    const outcome = await this.publisher.publish(slides, this.caption());
     if (outcome.kind !== 'published') {
       this.failure.set(outcome);
       this.phase.set('idle');
@@ -321,6 +385,25 @@ export class PostPage {
     this.doneTimer = setTimeout(() => {
       this.phase.set('idle');
     }, PUBLISHED_HOLD_MS);
+  }
+
+  /** The slides in the order they are posted: the cover, the photos between, the description. */
+  private slides(): readonly HTMLCanvasElement[] | null {
+    const piece = this.pieceCanvas()?.nativeElement;
+    const about = this.aboutCanvas()?.nativeElement;
+    const middles = this.middleCanvases().map((canvas) => canvas.nativeElement);
+    if (piece === undefined || about === undefined) return null;
+    if (middles.length !== this.middles().length) return null;
+    return [piece, ...middles, about];
+  }
+
+  private async decodeMiddle(key: string): Promise<void> {
+    try {
+      const bitmap = await this.artist.photo(key);
+      this.middleBitmaps.update((decoded) => new Map(decoded).set(key, bitmap));
+    } catch {
+      this.failed.set(true);
+    }
   }
 
   private clearDoneTimer(): void {

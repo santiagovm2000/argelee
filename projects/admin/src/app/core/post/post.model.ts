@@ -53,6 +53,9 @@ export interface PostArt {
   readonly whatsapp: Drawing;
 }
 
+/** One photo slide to paint: the art, the photo and the backdrop it shares with the rest. */
+export type PhotoSlideScene = Pick<PostScene, 'art' | 'photo' | 'backdrop'>;
+
 /** One publication to paint: the art, the piece's photo and words, and the owner's choices. */
 export interface PostScene {
   readonly art: PostArt;

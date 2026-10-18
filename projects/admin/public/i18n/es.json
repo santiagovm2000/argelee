@@ -139,15 +139,16 @@
   },
   "post": {
     "title": "Publicación de {{name}}",
-    "lead": "Dos láminas de 1080 × 1350 para Instagram, con la foto y el texto de la pieza.",
+    "lead": "Láminas de 1080 × 1350 para Instagram, con las fotos y el texto de la pieza.",
     "noPhotos": "Esta pieza todavía no tiene fotos. Añade una para generar su publicación.",
     "addPhotos": "Añadir fotos",
     "preparing": "Preparando las láminas…",
     "failed": "No se pudieron preparar las láminas. Revisa la conexión y vuelve a cargar la página.",
     "download": {
-      "piece": "Descargar lámina 1",
-      "about": "Descargar lámina 2"
+      "slide": "Descargar lámina {{position}}"
     },
+    "multiple": "Varias fotos",
+    "middle": "Fotos del medio",
     "sections": {
       "photo": "Foto",
       "framing": "Encuadre",
@@ -183,7 +184,7 @@
       "sendingNote": "Publicando en @{{account}}. Tarda unos segundos; no cierres esta página.",
       "published": "Publicada en @{{account}}.",
       "confirmTitle": "¿Publicar en @{{account}}?",
-      "confirmBody": "Se publican las dos láminas con el texto tal como está. Desde el panel no se puede deshacer: para quitarla hay que borrarla en Instagram.",
+      "confirmBody": "Se publican las láminas con el texto tal como está. Desde el panel no se puede deshacer: para quitarla hay que borrarla en Instagram.",
       "confirm": "Publicar",
       "failed": {
         "rejected": "Instagram no aceptó la publicación.",
@@ -202,7 +203,8 @@
     "switchToLightTheme": "Activar tema claro",
     "search": "Buscar piezas por nombre",
     "postPreview": "Vista previa de la lámina {{position}} de {{name}}",
-    "choosePhoto": "Usar la foto {{position}}"
+    "choosePhoto": "Usar la foto {{position}}",
+    "addPhoto": "Poner la foto {{position}} entre la portada y la descripción"
   },
   "dialog": {
     "cancel": "Cancelar"

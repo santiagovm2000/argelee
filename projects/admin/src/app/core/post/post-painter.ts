@@ -14,6 +14,7 @@ import {
   HEAD_LOGO,
   LID,
   NAME_PILL,
+  PHOTO_FRAME,
   PIECE_FLOWERS,
   POST_COLOURS,
   POST_SIZE,
@@ -24,8 +25,15 @@ import {
   WATER_LAYERS,
   WAYS,
 } from './post.constants';
-import type { Band, Drawing, Flower, PostScene } from './post.model';
-import { blendsInto, fittingSize, inkToneOn, photoPlacement, wrapLines } from './post-text';
+import type { Band, Drawing, Flower, PhotoSlideScene, PostScene } from './post.model';
+import {
+  blendsInto,
+  containedSize,
+  fittingSize,
+  inkToneOn,
+  photoPlacement,
+  wrapLines,
+} from './post-text';
 
 type Context = CanvasRenderingContext2D;
 
@@ -150,6 +158,12 @@ function paintFlowers(
   }
 }
 
+/** The sunflower across the seam after a slide, counting the one after the cover as 0. */
+function seam(index: number): readonly Flower[] {
+  const flower = SEAM_FLOWERS[index % SEAM_FLOWERS.length];
+  return flower === undefined ? [] : [flower];
+}
+
 /** The logo every slide carries in the same place, top centre. */
 function paintHead(ctx: Context, logo: Drawing, ink: string): void {
   paintDrawing(
@@ -191,6 +205,38 @@ function paintLid(ctx: Context, scene: PostScene, top: number, diameter: number)
   ctx.fillRect(left, top, diameter, diameter);
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(scene.photo, left + place.x, top + place.y, place.width, place.height);
+  ctx.restore();
+}
+
+/** A photo whole, under the logo, in a rounded frame with the lid's white rim and shadow. */
+function paintFrame(ctx: Context, photo: ImageBitmap): void {
+  const room = { width: PHOTO_FRAME.maxWidth, height: PHOTO_FRAME.bottom - PHOTO_FRAME.top };
+  const { width, height } = containedSize(photo, room);
+  const left = (POST_SIZE.width - width) * HALF;
+  const top = PHOTO_FRAME.top + (room.height - height) * HALF;
+
+  ctx.save();
+  ctx.shadowColor = POST_COLOURS.shade;
+  ctx.shadowBlur = RING.shadowBlur;
+  ctx.shadowOffsetY = RING.shadowDrop;
+  ctx.fillStyle = POST_COLOURS.paper;
+  ctx.beginPath();
+  ctx.roundRect(
+    left - RING.width,
+    top - RING.width,
+    width + RING.width * BOTH,
+    height + RING.width * BOTH,
+    PHOTO_FRAME.radius + RING.width,
+  );
+  ctx.fill();
+  ctx.restore();
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(left, top, width, height, PHOTO_FRAME.radius);
+  ctx.clip();
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(photo, left, top, width, height);
   ctx.restore();
 }
 
@@ -429,7 +475,7 @@ export function paintPieceSlide(ctx: Context, scene: PostScene): void {
   reset(ctx);
   paintWater(ctx, scene.art.caustics, scene.backdrop, false, [HEAD_BAND]);
   paintFlowers(ctx, scene.art.daisy, PIECE_FLOWERS, scene.backdrop);
-  paintFlowers(ctx, scene.art.daisy, SEAM_FLOWERS, scene.backdrop);
+  paintFlowers(ctx, scene.art.daisy, seam(0), scene.backdrop);
   paintHead(ctx, scene.art.logo, light ? POST_COLOURS.paper : POST_COLOURS.ink);
   paintLid(ctx, scene, LID.top, LID.diameter);
   paintName(ctx, scene.content.name);
@@ -437,16 +483,34 @@ export function paintPieceSlide(ctx: Context, scene: PostScene): void {
 }
 
 /**
- * Paints the second slide, in the first one's colours: the logo, the piece's
- * name in script, the divider, its description, and the piece rising from the foot.
+ * Paints a slide between the cover and the description: the logo, and one of the
+ * piece's photos whole in a frame with the lid's white rim. `position` counts
+ * these slides from 1; it picks the sunflowers that cross the seams on either
+ * side and turns the water every other slide.
  */
-export function paintAboutSlide(ctx: Context, scene: PostScene): void {
+export function paintPhotoSlide(ctx: Context, scene: PhotoSlideScene, position: number): void {
+  const light = inkToneOn(scene.backdrop) === 'light';
+  reset(ctx);
+  paintWater(ctx, scene.art.caustics, scene.backdrop, position % BOTH === 1, [HEAD_BAND]);
+  paintFlowers(ctx, scene.art.daisy, seam(position - 1), scene.backdrop, POST_SIZE.width);
+  paintFlowers(ctx, scene.art.daisy, seam(position), scene.backdrop);
+  paintHead(ctx, scene.art.logo, light ? POST_COLOURS.paper : POST_COLOURS.ink);
+  paintFrame(ctx, scene.photo);
+}
+
+/**
+ * Paints the last slide, in the first one's colours: the logo, the piece's
+ * name in script, the divider, its description, and the piece rising from the
+ * foot. `seamIn` says which seam's sunflower it continues: the number of photo
+ * slides before it.
+ */
+export function paintAboutSlide(ctx: Context, scene: PostScene, seamIn = 0): void {
   const light = inkToneOn(scene.backdrop) === 'light';
   const ink = light ? POST_COLOURS.paper : POST_COLOURS.ink;
   reset(ctx);
   paintWater(ctx, scene.art.caustics, scene.backdrop, true, [ABOUT_BAND]);
   paintFlowers(ctx, scene.art.daisy, ABOUT_FLOWERS, scene.backdrop);
-  paintFlowers(ctx, scene.art.daisy, SEAM_FLOWERS, scene.backdrop, POST_SIZE.width);
+  paintFlowers(ctx, scene.art.daisy, seam(seamIn), scene.backdrop, POST_SIZE.width);
   paintHead(ctx, scene.art.logo, ink);
 
   let top = ABOUT.top;

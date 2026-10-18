@@ -74,7 +74,7 @@
                   type="button"
                   class="button button--primary button--compact mt-4 w-full"
                   [disabled]="!ready()"
-                  (click)="download('piece')"
+                  (click)="download(1)"
                 >
                   <svg
                     class="size-4"
@@ -90,9 +90,45 @@
                       d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"
                     />
                   </svg>
-                  {{ translate(t.post.download.piece) }}
+                  {{ translate(t.post.download.slide, { position: 1 }) }}
                 </button>
               </li>
+              @for (item of middles(); track item.key; let index = $index) {
+                <li>
+                  <canvas
+                    #middleCanvas
+                    class="block h-auto w-full rounded-card bg-surface-tint shadow-raised"
+                    [width]="size.width"
+                    [height]="size.height"
+                    role="img"
+                    [attr.aria-label]="
+                      translate(t.a11y.postPreview, { position: index + 2, name: name() })
+                    "
+                  ></canvas>
+                  <button
+                    type="button"
+                    class="button button--primary button--compact mt-4 w-full"
+                    [disabled]="!ready()"
+                    (click)="download(index + 2)"
+                  >
+                    <svg
+                      class="size-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"
+                      />
+                    </svg>
+                    {{ translate(t.post.download.slide, { position: index + 2 }) }}
+                  </button>
+                </li>
+              }
               <li>
                 <canvas
                   #aboutCanvas
@@ -100,13 +136,15 @@
                   [width]="size.width"
                   [height]="size.height"
                   role="img"
-                  [attr.aria-label]="translate(t.a11y.postPreview, { position: 2, name: name() })"
+                  [attr.aria-label]="
+                    translate(t.a11y.postPreview, { position: aboutPosition(), name: name() })
+                  "
                 ></canvas>
                 <button
                   type="button"
                   class="button button--primary button--compact mt-4 w-full"
                   [disabled]="!ready()"
-                  (click)="download('about')"
+                  (click)="download(aboutPosition())"
                 >
                   <svg
                     class="size-4"
@@ -122,7 +160,7 @@
                       d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"
                     />
                   </svg>
-                  {{ translate(t.post.download.about) }}
+                  {{ translate(t.post.download.slide, { position: aboutPosition() }) }}
                 </button>
               </li>
             </ol>
@@ -159,6 +197,53 @@
                   </label>
                 }
               </div>
+              <label
+                class="mt-5 inline-flex min-h-11 cursor-pointer items-center gap-3 text-body-sm text-ink"
+              >
+                <span class="switch">
+                  <input
+                    type="checkbox"
+                    class="sr-only"
+                    [checked]="multiple()"
+                    (change)="setMultiple($event)"
+                  />
+                </span>
+                {{ translate(t.post.multiple) }}
+              </label>
+              @if (multiple()) {
+                <p class="field-label mt-4">{{ translate(t.post.middle) }}</p>
+                <div class="grid grid-cols-4 gap-2 lg:grid-cols-3">
+                  @for (item of photos(); track item.key; let index = $index) {
+                    <label
+                      class="relative block aspect-square cursor-pointer overflow-hidden rounded-control border-2 border-line-tint bg-surface-tint transition-colors duration-quick hover:border-accent-text has-checked:border-accent-text has-checked:ring-2 has-checked:ring-accent-text has-focus-visible:ring-2 has-focus-visible:ring-focus-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-surface"
+                    >
+                      <input
+                        type="checkbox"
+                        class="sr-only"
+                        [checked]="middlePosition().has(item.key)"
+                        [attr.aria-label]="translate(t.a11y.addPhoto, { position: index + 1 })"
+                        (change)="toggleMiddle(item)"
+                      />
+                      <img
+                        [ngSrc]="item.key"
+                        fill
+                        [placeholder]="item.placeholder"
+                        sizes="6rem"
+                        class="object-cover"
+                        alt=""
+                      />
+                      @if (middlePosition().get(item.key); as position) {
+                        <span
+                          class="absolute top-1.5 right-1.5 grid size-6 place-items-center rounded-full bg-accent-text text-caption font-bold text-ink-inverse shadow-raised"
+                          aria-hidden="true"
+                        >
+                          {{ position }}
+                        </span>
+                      }
+                    </label>
+                  }
+                </div>
+              }
             </fieldset>
 
             <fieldset>

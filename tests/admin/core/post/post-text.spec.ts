@@ -4,6 +4,7 @@ import {
   blendsInto,
   clampFraming,
   colourDistance,
+  containedSize,
   fileSlug,
   fittingSize,
   inkToneOn,
@@ -127,6 +128,19 @@ describe('fileSlug', () => {
   it('turns a name into a lower-case, accent-free file name', () => {
     expect(fileSlug('Espiral de parchita')).toBe('espiral-de-parchita');
     expect(fileSlug('  Pie de limón (mini) ')).toBe('pie-de-limon-mini');
+  });
+});
+
+describe('containedSize', () => {
+  it('fits a photo whole inside a box, by its width or by its height', () => {
+    expect(containedSize(LANDSCAPE, { width: 200, height: 200 })).toEqual({
+      width: 200,
+      height: 100,
+    });
+    expect(containedSize({ width: 100, height: 400 }, { width: 200, height: 200 })).toEqual({
+      width: 50,
+      height: 200,
+    });
   });
 });
 

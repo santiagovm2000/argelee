@@ -171,13 +171,17 @@ Locally, `bun run catalog-pdf` prints the same HTML from the snapshot with headl
 
 ## The Instagram publication
 
-Each row of the list opens `/publicacion/<id>`: the two slides the brand posts for a piece, drawn
-live on two `<canvas>` elements at Instagram's 1080 × 1350 (4:5). The first is the logo, the piece
+Each row of the list opens `/publicacion/<id>`: the slides the brand posts for a piece, drawn
+live on `<canvas>` elements at Instagram's 1080 × 1350 (4:5). The first is the logo, the piece
 in its round lid on the water with its name, sunflowers at the edges and the two ways to order
-(the WhatsApp line and the site's host); the second, in the same colours, is the name in script,
-the divider, the description and the piece rising from the foot. The words are the piece's own
-`text.es`, never typed again, and **no price is ever drawn**: prices change in the panel and a
-posted image does not.
+(the WhatsApp line and the site's host); the last, in the same colours, is the name in script,
+the divider, the description and the piece rising from the foot. With **Varias fotos** on, the
+owner picks more photos of the piece, in the order he taps them, and each becomes a slide between
+the two (`paintPhotoSlide()`): the logo and the photo whole, never cropped, in a frame with the
+lid's white rim. A sunflower crosses every seam, so the carousel reads as one strip; Instagram's
+limit of ten slides leaves room for eight, as many photos as a piece can have. The words are the
+piece's own `text.es`, never typed again, and **no price is ever drawn**: prices change in the
+panel and a posted image does not.
 
 The owner chooses three things, none of them saved:
 
@@ -203,7 +207,7 @@ dialled, the file name) are in `post-text.ts` and tested in `tests/admin/core/po
 
 ### Publishing to Instagram
 
-Under the slides, **Publicar en Instagram** posts both as one carousel to the account the panel is
+Under the slides, **Publicar en Instagram** posts them all as one carousel to the account the panel is
 connected to, with a caption the owner can edit first. The caption starts from a suggestion built
 from the piece (`post.publish.suggestion` in the panel's locale: name, description, how to order,
 five hashtags); the counters show Instagram's limits, 2200 characters and five hashtags. A

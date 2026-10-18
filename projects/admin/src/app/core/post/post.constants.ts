@@ -165,5 +165,12 @@ export const PIECE_FLOWERS: readonly Flower[] = [
   [150, 1232, 170, 18],
 ];
 export const ABOUT_FLOWERS: readonly Flower[] = [[936, 1000, 250, 18]];
-// The sunflower that runs across the seam, so the two slides read as one when swiped.
-export const SEAM_FLOWERS: readonly Flower[] = [[944, 850, 236, -16]];
+// The sunflower that runs across a seam, so the slides read as one strip when swiped: the
+// seam after the cover keeps its place, and the seams after photos alternate with a lower one.
+export const SEAM_FLOWERS: readonly Flower[] = [
+  [944, 850, 236, -16],
+  [952, 1150, 210, 22],
+];
+// A photo between the cover and the description: whole, never cropped, in a frame with the
+// lid's white rim, fitted into the room under the logo.
+export const PHOTO_FRAME = { top: 270, bottom: 1290, maxWidth: 820, radius: 40 } as const;
