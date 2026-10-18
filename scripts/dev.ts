@@ -9,7 +9,13 @@
  * with ECONNREFUSED and the shelf shows no photos, so both start here and both
  * stop together on Ctrl+C. Once each one reports ready, a summary names every
  * URL there is, so nobody has to fish them out of the two logs.
+ *
+ * The panel's Worker starts only once the site's is ready. Both persist to the
+ * same local state, and Ctrl+C on Windows leaves its SQLite files to be
+ * recovered by the next opener: two workerd processes opening them at the same
+ * moment crash one with SQLITE_BUSY_RECOVERY.
  */
+import type { Subprocess } from 'bun';
 import { existsSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
@@ -30,6 +36,7 @@ interface Service {
   readonly command: readonly string[];
   /** The line the process prints when it accepts requests. */
   readonly readyMarker: string;
+  readonly startsAfter?: string;
 }
 
 const SERVICES: readonly Service[] = [
@@ -62,6 +69,7 @@ const SERVICES: readonly Service[] = [
       STATE_DIR,
     ],
     readyMarker: 'Ready on',
+    startsAfter: 'worker',
   },
   {
     name: 'site',
@@ -84,6 +92,8 @@ for (const dir of ASSET_DIRS) {
 }
 
 const ready = new Set<string>();
+const children: Subprocess[] = [];
+const { promise: firstExit, resolve: onExit } = Promise.withResolvers<number>();
 
 function printSummary(): void {
   console.log(`
@@ -100,7 +110,10 @@ ${RULE}
 `);
 }
 
-/** Forwards a process's output as is and watches it, colours stripped, for the ready line. */
+/**
+ * Forwards a process's output as is and watches it, colours stripped, for the ready line;
+ * on it, starts every service that was waiting for this one.
+ */
 async function relay(service: Service, stream: ReadableStream<Uint8Array>): Promise<void> {
   const decoder = new TextDecoder();
   for await (const chunk of stream) {
@@ -108,12 +121,14 @@ async function relay(service: Service, stream: ReadableStream<Uint8Array>): Prom
     const text = Bun.stripANSI(decoder.decode(chunk));
     if (!ready.has(service.name) && text.includes(service.readyMarker)) {
       ready.add(service.name);
+      for (const next of SERVICES) if (next.startsAfter === service.name) start(next);
       if (ready.size === SERVICES.length) printSummary();
     }
   }
 }
 
-const children = SERVICES.map((service) => {
+/** Spawns a service and relays its output; its exit, like any other, ends the stack. */
+function start(service: Service): void {
   const child = Bun.spawn([...service.command], {
     cwd: ROOT,
     stdin: 'inherit',
@@ -121,9 +136,12 @@ const children = SERVICES.map((service) => {
     stderr: 'inherit',
     env: { ...process.env, FORCE_COLOR: '1' },
   });
+  children.push(child);
+  void child.exited.then(onExit);
   void relay(service, child.stdout);
-  return child;
-});
+}
+
+for (const service of SERVICES) if (service.startsAfter === undefined) start(service);
 
 /** Windows keeps workerd alive when its parent dies, so the whole tree is taken down. */
 function stop(): void {
@@ -148,6 +166,6 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
-// If either process ends on its own, the other has no reason to keep running.
-await Promise.race(children.map((child) => child.exited));
+// If any process ends on its own, the others have no reason to keep running.
+await firstExit;
 stop();
