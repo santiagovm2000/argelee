@@ -115,6 +115,15 @@ export function fileSlug(name: string): string {
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, value));
 
+/** Whether a point falls inside a circle, edge included. */
+export function withinCircle(
+  point: { readonly x: number; readonly y: number },
+  centre: { readonly x: number; readonly y: number },
+  radius: number,
+): boolean {
+  return Math.hypot(point.x - centre.x, point.y - centre.y) <= radius;
+}
+
 /** The largest size a photo takes inside a box without being cropped. */
 export function containedSize(photo: Size, box: Size): Size {
   const scale = Math.min(box.width / photo.width, box.height / photo.height);

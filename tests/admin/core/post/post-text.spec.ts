@@ -12,6 +12,7 @@ import {
   luminance,
   nudgedFraming,
   photoPlacement,
+  withinCircle,
   wrapLines,
 } from '@admin/core/post/post-text';
 
@@ -128,6 +129,15 @@ describe('fileSlug', () => {
   it('turns a name into a lower-case, accent-free file name', () => {
     expect(fileSlug('Espiral de parchita')).toBe('espiral-de-parchita');
     expect(fileSlug('  Pie de limón (mini) ')).toBe('pie-de-limon-mini');
+  });
+});
+
+describe('withinCircle', () => {
+  it('takes a point inside or on the edge and leaves one beyond it', () => {
+    const centre = { x: 540, y: 661 };
+    expect(withinCircle({ x: 540, y: 661 }, centre, 385)).toBe(true);
+    expect(withinCircle({ x: 925, y: 661 }, centre, 385)).toBe(true);
+    expect(withinCircle({ x: 160, y: 300 }, centre, 385)).toBe(false);
   });
 });
 

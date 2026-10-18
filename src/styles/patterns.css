@@ -378,6 +378,10 @@
 .control--icon {
   @apply size-9 justify-center px-0;
 }
+/* A control that switches a mode on shows it is on: filled in the accent. */
+.control--on {
+  @apply border-accent-text bg-accent-text text-ink-inverse hover:border-accent-text hover:bg-accent-text;
+}
 .control--danger {
   @apply hover:border-critical hover:text-critical;
 }

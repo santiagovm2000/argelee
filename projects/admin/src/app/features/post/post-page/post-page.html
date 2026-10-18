@@ -53,23 +53,73 @@
             </p>
             <ol class="mt-3 grid gap-10 sm:grid-cols-2 sm:gap-6" role="list">
               <li>
-                <canvas
-                  #pieceCanvas
-                  class="block h-auto w-full cursor-grab touch-none rounded-card bg-surface-tint shadow-raised active:cursor-grabbing"
-                  [width]="size.width"
-                  [height]="size.height"
-                  role="img"
-                  tabindex="0"
-                  [attr.aria-label]="translate(t.a11y.postPreview, { position: 1, name: name() })"
-                  (pointerdown)="grab($event)"
-                  (pointermove)="drag($event)"
-                  (pointerup)="release($event)"
-                  (pointercancel)="release($event)"
-                  (keydown.arrowLeft)="step($event, -1, 0)"
-                  (keydown.arrowRight)="step($event, 1, 0)"
-                  (keydown.arrowUp)="step($event, 0, -1)"
-                  (keydown.arrowDown)="step($event, 0, 1)"
-                ></canvas>
+                <div class="relative">
+                  <canvas
+                    #pieceCanvas
+                    class="block h-auto w-full rounded-card bg-surface-tint shadow-raised ring-accent-text ring-offset-4 ring-offset-surface transition-shadow duration-quick active:cursor-grabbing"
+                    [class.cursor-grab]="overLid() || moving()"
+                    [class.touch-none]="moving()"
+                    [class.ring-4]="moving()"
+                    [width]="size.width"
+                    [height]="size.height"
+                    role="img"
+                    tabindex="0"
+                    [attr.aria-label]="translate(t.a11y.postPreview, { position: 1, name: name() })"
+                    (pointerdown)="grab($event)"
+                    (pointermove)="drag($event)"
+                    (pointerup)="release($event)"
+                    (pointercancel)="release($event)"
+                    (pointerleave)="leave()"
+                    (keydown.arrowLeft)="step($event, -1, 0)"
+                    (keydown.arrowRight)="step($event, 1, 0)"
+                    (keydown.arrowUp)="step($event, 0, -1)"
+                    (keydown.arrowDown)="step($event, 0, 1)"
+                  ></canvas>
+                  <span class="absolute top-3 right-3 hidden pointer-coarse:block">
+                    <button
+                      type="button"
+                      class="control bg-surface-raised shadow-raised"
+                      [class.control--on]="moving()"
+                      [attr.aria-pressed]="moving()"
+                      [disabled]="!ready()"
+                      (click)="toggleMoving()"
+                    >
+                      @if (moving()) {
+                        <svg
+                          class="size-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.75"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m5 12.5 4.5 4.5L19 7.5"
+                          />
+                        </svg>
+                        {{ translate(t.post.moveDone) }}
+                      } @else {
+                        <svg
+                          class="size-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3v18M3 12h18M12 3 9.5 5.5M12 3l2.5 2.5M12 21l-2.5-2.5M12 21l2.5-2.5M3 12l2.5-2.5M3 12l2.5 2.5M21 12l-2.5-2.5M21 12l-2.5 2.5"
+                          />
+                        </svg>
+                        {{ translate(t.post.move) }}
+                      }
+                    </button>
+                  </span>
+                </div>
                 <button
                   type="button"
                   class="button button--primary button--compact mt-4 w-full"

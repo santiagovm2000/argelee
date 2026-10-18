@@ -37,11 +37,18 @@ import {
   type PublishTrouble,
 } from '../../../core/post/post-publish';
 import { PostPublishService } from '../../../core/post/post-publish.service';
-import { clampFraming, fileSlug, localPhone, nudgedFraming } from '../../../core/post/post-text';
+import {
+  clampFraming,
+  fileSlug,
+  localPhone,
+  nudgedFraming,
+  withinCircle,
+} from '../../../core/post/post-text';
 import {
   DEFAULT_BACKDROP,
   DEFAULT_CUSTOM_BACKDROP,
   DEFAULT_FRAMING,
+  HALF,
   LID,
   NUDGE_STEP,
   POST_BACKDROPS,
@@ -77,6 +84,9 @@ const TROUBLE_KEYS: Readonly<Record<PublishTrouble, TranslationKey>> = {
   offline: T.post.publish.failed.offline,
 };
 const PERCENT = 100;
+const TOUCH = 'touch';
+const LID_CENTRE = { x: POST_SIZE.width * HALF, y: LID.top + LID.diameter * HALF };
+const LID_RADIUS = LID.diameter * HALF;
 const FIXED_SLIDES = 2;
 const FIRST_MIDDLE = 2;
 const MAX_MIDDLE = CAROUSEL_SLIDES.max - FIXED_SLIDES;
@@ -178,6 +188,11 @@ export class PostPage {
       this.middles().every((item) => this.middleBitmaps().has(item.key)),
   );
   private grip: Grip | null = null;
+  protected readonly overLid = signal(false);
+  protected readonly moving = linkedSignal<ProductPhoto | null, boolean>({
+    source: this.photo,
+    computation: () => false,
+  });
 
   protected readonly instagram = this.publisher.status;
   protected readonly account = computed(() => this.instagram()?.username ?? '');
@@ -301,17 +316,33 @@ export class PostPage {
     this.framing.set(DEFAULT_FRAMING);
   }
 
+  /**
+   * On a touch screen the slide scrolls like the page until the owner asks to
+   * move the photo. The mode holds nothing back: each move is painted at once,
+   * so leaving it, by "Listo", a download or publishing, loses nothing.
+   */
+  protected toggleMoving(): void {
+    this.moving.update((moving) => !moving);
+  }
+
+  /**
+   * Takes hold of the photo, but only on the lid itself; a finger needs the
+   * move mode first, so a scroll that lands on the slide never shifts the framing.
+   */
   protected grab(event: PointerEvent): void {
     if (!(event.currentTarget instanceof HTMLCanvasElement)) return;
+    if (event.pointerType === TOUCH && !this.moving()) return;
+    if (!this.onLid(event, event.currentTarget)) return;
     event.currentTarget.setPointerCapture(event.pointerId);
     this.grip = { pointer: event.pointerId, x: event.clientX, y: event.clientY };
   }
 
-  /** Moves the photo with the pointer, at the scale the canvas is shown at. */
+  /** Moves the photo with the pointer, at the scale the canvas is shown at; shows the hand over the lid. */
   protected drag(event: PointerEvent): void {
+    if (!(event.currentTarget instanceof HTMLCanvasElement)) return;
+    if (event.pointerType !== TOUCH) this.overLid.set(this.onLid(event, event.currentTarget));
     const grip = this.grip;
     if (grip?.pointer !== event.pointerId) return;
-    if (!(event.currentTarget instanceof HTMLCanvasElement)) return;
     const shown = event.currentTarget.getBoundingClientRect().width;
     const scale = shown > 0 ? POST_SIZE.width / shown : 1;
     this.nudge((event.clientX - grip.x) * scale, (event.clientY - grip.y) * scale);
@@ -320,6 +351,10 @@ export class PostPage {
 
   protected release(event: PointerEvent): void {
     if (this.grip?.pointer === event.pointerId) this.grip = null;
+  }
+
+  protected leave(): void {
+    this.overLid.set(false);
   }
 
   /** Arrow keys on the first slide move the photo one step, for anyone who cannot drag. */
@@ -338,6 +373,7 @@ export class PostPage {
   protected async download(position: number): Promise<void> {
     const canvas = this.slides()?.[position - 1];
     if (canvas === undefined || !this.ready()) return;
+    this.moving.set(false);
     const saved = await downloadCanvas(
       canvas,
       `${fileSlug(this.name())}-${String(position)}${POST_FILE_EXTENSION}`,
@@ -365,6 +401,7 @@ export class PostPage {
     const slides = this.slides();
     if (slides === null) return;
     if (!this.publishable() || this.phase() !== 'idle') return;
+    this.moving.set(false);
     const agreed = await this.confirm.ask({
       titleKey: T.post.publish.confirmTitle,
       bodyKey: T.post.publish.confirmBody,
@@ -409,6 +446,17 @@ export class PostPage {
   private clearDoneTimer(): void {
     if (this.doneTimer !== null) clearTimeout(this.doneTimer);
     this.doneTimer = null;
+  }
+
+  /** Whether a pointer is over the lid, measured in the slide's own pixels. */
+  private onLid(event: PointerEvent, canvas: HTMLCanvasElement): boolean {
+    const box = canvas.getBoundingClientRect();
+    if (box.width === 0 || box.height === 0) return false;
+    const point = {
+      x: ((event.clientX - box.left) * POST_SIZE.width) / box.width,
+      y: ((event.clientY - box.top) * POST_SIZE.height) / box.height,
+    };
+    return withinCircle(point, LID_CENTRE, LID_RADIUS);
   }
 
   private nudge(dx: number, dy: number): void {

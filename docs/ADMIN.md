@@ -188,9 +188,13 @@ The owner chooses three things, none of them saved:
 
 - **Photo**: any photo of the piece's gallery; the cover is the default.
 - **Framing**: a size slider, and the photo dragged (or moved with the arrow keys) inside the
-  circle. From 100 % up the photo covers the circle (`photoPlacement()`); below it, down to
-  `ZOOM.min`, more of the photo shows, whole and sharp, and what it does not reach is the plain
-  aqua the site frames its photos on.
+  circle. A drag only starts on the lid itself. On a touch screen a finger on the slide scrolls the
+  page as anywhere else; **Mover foto**, in the slide's corner, turns the move on (the slide gets a
+  ring and the button becomes **Listo**), so a scroll never shifts the framing by accident. Every
+  move is painted at once, so nothing waits for **Listo**: it only ends the mode, and downloading or
+  publishing ends it too. From 100 % up the photo covers the circle (`photoPlacement()`); below it,
+  down to `ZOOM.min`, more of the photo shows, whole and sharp, and what it does not reach is the
+  plain aqua the site frames its photos on.
 - **Backdrop**: the five colours of the brand book's palette at one click, or any colour from the
   browser's own picker. Whatever would be lost on the chosen colour steps aside (`blendsInto()`):
   the coral pill turns white on a coral slide, the sunflowers' petals on a mango one.

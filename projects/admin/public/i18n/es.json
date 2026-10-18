@@ -157,6 +157,8 @@
     "zoom": "Tamaño de la foto",
     "zoomValue": "{{percent}} %",
     "centre": "Centrar",
+    "move": "Mover foto",
+    "moveDone": "Listo",
     "backdrops": {
       "mango": "Amarillo Mango",
       "coral": "Naranja Coral",
