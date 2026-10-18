@@ -211,7 +211,7 @@ function art(id: string, className: string): string {
   return `<svg class="${className}" aria-hidden="true"><use href="#${ART_PREFIX}${id}"/></svg>`;
 }
 
-/** The brand's water behind a block: its lighter shapes and its bright channels. */
+/** The brand's water behind a block: its two layers of shapes, deeper than the field. */
 function waterMarkup(): string {
   return `<div class="water">${CAUSTIC_LAYERS.map((layer) => art(`caustics-${layer}`, `water-${layer}`)).join('')}</div>`;
 }

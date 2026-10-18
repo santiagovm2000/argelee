@@ -94,10 +94,11 @@
 }
 
 /* The top bar on the landing: transparent over the water at rest, the logo
-   large and white; over the first stretch of scroll the band fills in and the
-   logo rises and shrinks into it, turning brand blue. One element moves —
-   there is no second logo to cross-fade. `from` only: the `to` state is the
-   bar's own settled style in patterns.css. */
+   large and white, the navigation white; over the first stretch of scroll the
+   band fills in and the logo rises and shrinks into it, turning brand blue
+   while the navigation settles to ink. One element moves — there is no second
+   logo to cross-fade. `from` only: the `to` state is the bar's own settled
+   style in patterns.css. */
 @keyframes topbar-settle {
   from {
     opacity: 0;
@@ -107,6 +108,11 @@
   from {
     translate: 0 var(--mark-drop);
     scale: var(--mark-scale);
+    color: var(--color-neutral-0);
+  }
+}
+@keyframes nav-settle {
+  from {
     color: var(--color-neutral-0);
   }
 }
@@ -203,9 +209,10 @@
       height: calc(var(--mark-room) - var(--spacing-header));
     }
     :root:has(.hero-stage) .topbar::before,
-    :root:has(.hero-stage) .topbar__mark {
+    :root:has(.hero-stage) .topbar__mark,
+    :root:has(.hero-stage) .topbar__nav {
       animation-timeline: scroll(root);
-      animation-range: 0 var(--mark-travel);
+      animation-range: 0 var(--mark-drop);
       animation-fill-mode: both;
       animation-timing-function: linear;
     }
@@ -214,6 +221,9 @@
     }
     :root:has(.hero-stage) .topbar__mark {
       animation-name: mark-rise;
+    }
+    :root:has(.hero-stage) .topbar__nav {
+      animation-name: nav-settle;
     }
   }
 }

@@ -147,7 +147,8 @@ cost nothing at this size.
 
 `src/app/core/catalog/pdf/catalog-pdf.ts` renders the whole price list as one A4 HTML document
 from the public projection and the site's own locale, dressed like the site: a cover laid out like
-the brand's business card (the Azul Cristal water, sunflowers down the edge, the white logo, the
+the brand's business card (the Azul Cristal water a step deeper so its white text reads at AA,
+sunflowers down the edge, the white logo, the
 cover of the first published piece in a round lid with the brand's seal), pieces grouped by how
 many people they serve (largest first, the unit piece last as a wide block) with a round price
 label on each cover photo

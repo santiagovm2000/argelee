@@ -3,8 +3,10 @@ import { PDF_DESCRIPTION_LINES, PDF_NAME_LINES } from './catalog-pdf.constants';
 // The print stylesheet of the price list, in the brand's dress: the cover is its
 // business card (the Azul Cristal water, sunflowers down the edge, the white
 // logo), the inner pages are white paper with round price labels, and the order
-// box closes on the same water. The colours are the site's tokens written out
-// (src/styles/tokens.css), because the printer has no stylesheet of ours.
+// box closes on the same water. Text on the water is white and the water sits
+// one step deeper than the book's blue, where white reads at AA, as on the
+// site's .water; dark text is for the paper. The colours are the site's tokens
+// written out (src/styles/tokens.css), because the printer has no stylesheet of ours.
 // The cover and the conditions are page-sized; the pieces flow, and the
 // browser breaks them into pages: a card or a row of cards never splits, a band
 // heading never ends a page, and long texts are clamped so a card keeps its
@@ -15,6 +17,7 @@ export const CATALOG_PDF_STYLES = `
 :root {
   --paper: #FFFFFF; --tint: #ECFAFB; --tint-line: #AFEBEE;
   --crystal: #008AFF; --crystal-text: #005AAA; --mango: #FFCA00; --coral: #FF9001;
+  --water: #0071D2; --water-deep: #004484;
   --ink: #0E223A; --ink-muted: #445D7A; --navy: #071729; --white: #FFFFFF;
   --body: 'Lato', 'Segoe UI', sans-serif;
   --script: 'Great Vibes', cursive;
@@ -27,12 +30,12 @@ body { font-family: var(--body); font-weight: 400; color: var(--ink); font-size:
 svg { display: block; }
 
 .water { position: absolute; inset: 0; overflow: hidden; }
-.water svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: var(--white); }
+.water svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: var(--water-deep); }
 .water-light { opacity: 0.14; }
 .water-glint { opacity: 0.3; }
 .daisy { width: 100%; height: auto; aspect-ratio: 360 / 387; }
 
-.cover { width: 210mm; height: 297mm; overflow: hidden; position: relative; background: var(--crystal); color: var(--navy); break-after: page; }
+.cover { width: 210mm; height: 297mm; overflow: hidden; position: relative; background: var(--water); color: var(--white); break-after: page; }
 .cover-daisies { position: absolute; left: -16mm; top: -6mm; bottom: -6mm; width: 52mm; }
 .cover-daisies .daisy { position: absolute; }
 .cover-daisies .daisy:nth-child(1) { top: 0; left: 6mm; width: 36mm; rotate: 12deg; }
@@ -105,7 +108,7 @@ svg { display: block; }
 .condition-list li { position: relative; padding-left: 4mm; color: var(--ink-muted); font-size: 9.5pt; line-height: 1.5; }
 .condition-list li::before { content: ''; position: absolute; left: 0; top: 2.2mm; width: 1.6mm; height: 1.6mm; border-radius: 50%; background: var(--coral); }
 
-.order { position: relative; overflow: hidden; margin-top: auto; border-radius: 7mm; background: var(--crystal); color: var(--navy); padding: 9mm 10mm; display: flex; align-items: center; gap: 8mm; min-height: 58mm; }
+.order { position: relative; overflow: hidden; margin-top: auto; border-radius: 7mm; background: var(--water); color: var(--white); padding: 9mm 10mm; display: flex; align-items: center; gap: 8mm; min-height: 58mm; }
 .order-daisies { position: absolute; right: -6mm; top: -8mm; bottom: -8mm; width: 44mm; }
 .order-daisies .daisy { position: absolute; }
 .order-daisies .daisy:nth-child(1) { top: 0; right: 4mm; width: 30mm; rotate: 14deg; }

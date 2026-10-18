@@ -20,7 +20,9 @@ itself against the pastel-pink, children's-party look of its competitors.
   **Turquesa Vital** `#00C1CA` (the lagoon band, the menu's pale aqua), **Amarillo Mango**
   `#FFCA00` (the sunflowers and the round price labels), **Naranja Coral** `#FF9000` (the one call
   to action), **Verde Menta** `#00CB7E` (kept in the scale; WhatsApp's own green does its job).
-  The page is white, like the brand's paper; text is a deep-water navy, never black.
+  The page is white, like the brand's paper; text on it is a deep-water navy, never black. Text on
+  a colour (the water, the lagoon) is white; dark text is only for white and near-white grounds,
+  and for the coral button, the mango labels and the mint "done" state, where white cannot reach AA.
 - **Shape.** Poured, not cut. Buttons and chips are full pills, cards `rounded-card`, photo frames
   `rounded-photo`, and a section that slides over another has a deep `rounded-t-sheet` top. The
   brand's circles recur where they mean something: the round lid the hero jelly turns in, the
@@ -107,13 +109,17 @@ every template.
 Two classes in `base.css` redefine the same roles for a stretch of brand world, so what is inside
 keeps writing `bg-surface text-ink` and simply reads right:
 
-- **`.water`** — the Azul Cristal field of the hero, the footer and the link hub. Text is the deep
-  navy of the brand's posts (white by night, on a deeper blue); the logo is white.
-- **`.lagoon`** — the Turquesa Vital band of the brand's promise.
+- **`.water`** — the Azul Cristal field of the hero, the footer and the link hub, one step deeper
+  than the book's blue (`crystal-600`), because that is where white text reaches AA. Text, links,
+  outlines, focus ring and logo are white, as on the brand's cover and posts.
+- **`.lagoon`** — the Turquesa Vital band of the brand's promise, likewise one step deeper
+  (`turquoise-600`) with white text.
 
 Over a scene, `arg-caustics` draws the brand's water pattern in `--caustic`, which always moves
-away from the text colour (white over the day water, navy over the night water), so the pattern can
-only raise contrast. `bun run contrast` checks that too.
+away from the text colour (the scene's own hue a few steps deeper by day, navy by night), so the
+pattern can only raise contrast. `bun run contrast` checks that too. Raw CSS inside a scene reads
+the role (`var(--caustic)`, `var(--focus-ring)`), never `var(--color-…)`: those are computed on
+`:root` and would carry the page's value into the scene.
 
 `bun run contrast` resolves the real token values and fails below the AA floor on every surface,
 both themes and both scenes. It is part of `bun run verify`, so a retuned colour cannot quietly
@@ -155,8 +161,8 @@ There is no component library. The few shapes the site needs are ours:
   only ever for the link to the profile), composed in `patterns.css`.
 - **The script voice**: `.script` on a heading. Section titles ("Catálogo", "Antes de encargar")
   and the brand's key message; never body text, never a label, never part of a sentence.
-- **The water**: `shared/ui/caustics` — two layers of the traced pattern (its lighter shapes at 14 %,
-  its bright channels at 30 %), oversized by `--overhang` so they can drift without an edge showing.
+- **The water**: `shared/ui/caustics` — two layers of the traced pattern (its broad shapes at 14 %,
+  its channels at 30 %), oversized by `--overhang` so they can drift without an edge showing.
   `motion` picks how they move: `depth` (the hero), `drift` (a scene further down) or `still`.
 - **Sunflowers**: `shared/ui/bloom` — a spray of the traced daisy as one SVG, from the arrangements
   in `bloom.data.ts` (`pair`, `trio`, `column`), so a scene moves the whole spray as one layer.
@@ -229,8 +235,9 @@ There is no component library. The few shapes the site needs are ours:
   without a hover state.
 - **Icons**: inline SVG, `stroke-width` 2 on the site, sized with `size-*`. No icon font.
 - **The top bar**: fixed. At rest on the landing it is not there at all — the logo rests large and
-  white on the water, the navigation is ink. Over the first stretch of scroll (`--mark-travel`) the
-  white band fills in and the one logo rises and shrinks into it, turning Azul Cristal. Its resting
+  white on the water, the navigation is ink. Over as much scroll as the logo has to climb
+  (`--mark-drop`, so it keeps pace with the page and the headline never runs into it) the white
+  band fills in and the one logo rises and shrinks into it, turning Azul Cristal. Its resting
   CSS is the settled state, so Firefox and reduced-motion visitors get the readable bar from the
   start, and the hero only reserves room for the resting logo (`.hero-mark-room`, `--mark-room`)
   when the animation runs. Its focus ring follows its text colour, which reads on both.

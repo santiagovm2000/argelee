@@ -28,12 +28,13 @@
 
 /* Where the logo and the landing's top bar meet: the logo rests large over the
    hero and rises into the bar (motion.css). Scale and drop size the resting
-   logo; the hero keeps --mark-room free under the bar for it. */
+   logo, and the drop is also the scroll the rise takes, so the logo keeps pace
+   with the page and the headline never catches it; the hero keeps --mark-room
+   free under the bar for it. */
 :root {
   --mark-scale: 2.1;
   --mark-drop: 5rem;
   --mark-room: 10rem;
-  --mark-travel: 45vh;
 }
 @media (min-width: 40rem) {
   :root {
@@ -259,8 +260,9 @@
 }
 
 /* The water pattern over a scene: two layers of the brand's caustics, drawn in
-   --caustic. Each overhangs the scene by more than any drift in motion.css
-   (measured in the same screen units), so no edge ever shows. */
+   the scene's own --caustic (read directly: var(--color-caustic) would carry
+   the page's, computed on :root). Each overhangs the scene by more than any
+   drift in motion.css (measured in the same screen units), so no edge ever shows. */
 .caustics {
   --overhang: 20svh;
   position: absolute;
@@ -276,7 +278,7 @@
   width: calc(100% + var(--overhang) * 2);
   max-width: none;
   height: calc(100% + var(--overhang) * 2);
-  fill: var(--color-caustic);
+  fill: var(--caustic);
 }
 
 /* Theme change: the new theme spreads from the toggle as a circle. ThemeService

@@ -100,35 +100,38 @@
 /* The brand's two waters. A scene redefines the same roles, so everything
    inside it keeps writing text-ink or bg-surface and simply reads right.
    .water is the Azul Cristal field of the hero, the footer and the link hub,
-   with the white logo of the brand's own cover; ink on it is the deep navy of
-   the brand's posts. .lagoon is the Turquesa Vital band. By night both deepen
-   and the text turns white. Declared after the themes so a scene wins. */
+   .lagoon the Turquesa Vital band. Text on a colour is white, as on the
+   brand's own cover and posts; dark text is kept for white and near-white
+   grounds. White only reaches AA one step deeper than each book colour, so
+   the fields sit there, and their ripples are the same hue deeper still,
+   never lighter than the text's ground. By night both deepen further.
+   Declared after the themes so a scene wins. */
 .water {
-  --surface: var(--color-crystal-500);
+  --surface: var(--color-crystal-600);
   --surface-raised: var(--color-neutral-0);
-  --surface-hover: var(--color-crystal-400);
-  --ink: var(--color-neutral-950);
-  --ink-muted: var(--color-neutral-950);
-  --line-tint: var(--color-crystal-300);
-  --line-strong: var(--color-neutral-950);
-  --accent-text: var(--color-neutral-950);
-  --focus-ring: var(--color-neutral-950);
+  --surface-hover: var(--color-crystal-700);
+  --ink: var(--color-neutral-0);
+  --ink-muted: var(--color-neutral-0);
+  --line-tint: var(--color-crystal-400);
+  --line-strong: var(--color-neutral-0);
+  --accent-text: var(--color-neutral-0);
+  --focus-ring: var(--color-neutral-0);
   --wordmark: var(--color-neutral-0);
-  --caustic: var(--color-neutral-0);
+  --caustic: var(--color-crystal-800);
 }
 
 .lagoon {
-  --surface: var(--color-turquoise-400);
+  --surface: var(--color-turquoise-600);
   --surface-raised: var(--color-neutral-0);
-  --surface-hover: var(--color-turquoise-300);
-  --ink: var(--color-neutral-950);
-  --ink-muted: var(--color-neutral-800);
-  --line-tint: var(--color-turquoise-200);
-  --line-strong: var(--color-neutral-950);
-  --accent-text: var(--color-neutral-950);
-  --focus-ring: var(--color-neutral-950);
-  --wordmark: var(--color-neutral-950);
-  --caustic: var(--color-neutral-0);
+  --surface-hover: var(--color-turquoise-700);
+  --ink: var(--color-neutral-0);
+  --ink-muted: var(--color-neutral-0);
+  --line-tint: var(--color-turquoise-400);
+  --line-strong: var(--color-neutral-0);
+  --accent-text: var(--color-neutral-0);
+  --focus-ring: var(--color-neutral-0);
+  --wordmark: var(--color-neutral-0);
+  --caustic: var(--color-turquoise-800);
 }
 
 .arg-dark .water {
@@ -212,9 +215,11 @@
     cursor: pointer;
   }
 
-  /* Keyboard focus is always visible. Restyle it here, never remove it. */
+  /* Keyboard focus is always visible. Restyle it here, never remove it. The
+     role is read where the focus is, so a scene's own ring applies inside it;
+     var(--color-focus-ring) would carry the page's, computed on :root. */
   :focus-visible {
-    outline: 2px solid var(--color-focus-ring);
+    outline: 2px solid var(--focus-ring);
     outline-offset: 3px;
     border-radius: 0.5rem;
   }
